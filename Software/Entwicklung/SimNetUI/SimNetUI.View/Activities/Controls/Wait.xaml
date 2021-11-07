@@ -1,0 +1,170 @@
+﻿<base:ActivityDelayBase x:Class="SimNetUI.Activities.Controls.Wait"
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:base="clr-namespace:SimNetUI.Activities.Base"
+                        xmlns:con="clr-namespace:SimNetUI.Activities.ControlParts.Connection" mc:Ignorable="d"
+                        DataContext="{Binding RelativeSource={RelativeSource Self}}" ToolTipService.ShowDuration="120000">
+  <base:ActivityDelayBase.Resources>
+    <ResourceDictionary Source="Themes\Generic.xaml" />
+  </base:ActivityDelayBase.Resources>
+    <base:ActivityDelayBase.VisualAppearanceTemplate>
+        <Border Name="border" Height="36" Width="36" BorderThickness="2">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="BorderBrush" Value="Black" />
+                    <Style.Triggers>
+
+
+                        <DataTrigger
+Binding="{Binding Path=Statistics.IsProcessing,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}" Value="true">
+                            <Setter Property="BorderBrush" Value="Red" />
+
+                        </DataTrigger>
+
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Offset="0" Color="DarkGreen" />
+                    <GradientStop Offset="0.3" Color="DarkGreen" />
+                    <GradientStop Offset="1" Color="White" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="W" Foreground="White"
+                   FontSize="22" FontStretch="ExtraExpanded" Width="21" Height="32" />
+        </Border>
+    </base:ActivityDelayBase.VisualAppearanceTemplate>
+
+   <base:ActivityDelayBase.Content>
+
+
+    <Grid>
+
+      <Grid.RowDefinitions>
+        <RowDefinition Height="10" />
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="10" />
+      </Grid.RowDefinitions>
+
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="10" />
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="10" />
+      </Grid.ColumnDefinitions>
+
+      <ContentPresenter Grid.Row="1" Grid.Column="1" Content="{Binding VisualAppearanceTemplate,UpdateSourceTrigger=PropertyChanged}" />
+
+      <con:InConnector x:Name="In" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"
+                       VerticalAlignment="Center" />
+      <con:OutConnector x:Name="Out" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"
+                        VerticalAlignment="Center" />
+
+    </Grid>
+
+  </base:ActivityDelayBase.Content>
+  <base:ActivityDelayBase.ToolTip>
+    <ToolTip Style="{StaticResource ToolTipStyle}">
+
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="120" />
+          <ColumnDefinition Width="60" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+       </Grid.RowDefinitions>
+
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Currently processing:" />
+        <TextBlock Grid.Column="1" Grid.Row="0"
+                   Text="{Binding 
+                            Mode=OneWay,
+                            Path=Statistics.InWork
+                          }" />
+
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Currently in queue:" />
+        <TextBlock Grid.Column="1" Grid.Row="1"
+                   Text="{Binding 
+                            Mode=OneWay,
+                            Path=Statistics.InQueue
+                          }" />
+
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="Maximum processing:" />
+        <TextBlock Grid.Column="1" Grid.Row="2"
+                   Text="{Binding 
+                            Mode=OneWay,
+                            Path=Statistics.MaxInWork
+                          }" />
+
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="Maximum in queue:" />
+        <TextBlock Grid.Column="1" Grid.Row="3"
+                   Text="{Binding 
+                            Mode=OneWay,
+                            Path=Statistics.MaxInQueue
+                          }" />
+
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="Average processing:" />
+        <TextBlock Grid.Column="1" Grid.Row="4"
+            Text="{Binding 
+                    Mode=OneWay,
+                    Path=Statistics.AverageInWork,
+                    StringFormat={}{0:0.0000}
+                    }" />
+
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="Average in queue:" />
+        <TextBlock Grid.Column="1" Grid.Row="5"
+                   Text="{Binding 
+                            Mode=OneWay,
+                            Path=Statistics.AverageInQueue,
+                            StringFormat={}{0:0.0000}
+                          }" />
+
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="Processed:" />
+        <TextBlock Grid.Column="1" Grid.Row="6"
+                   Text="{Binding 
+                            Mode=OneWay,
+                            Path=Statistics.Processed
+                          }" />
+
+        <TextBlock Grid.Column="0" Grid.Row="7" Text="Working time:" />
+        <TextBlock Grid.Column="1" Grid.Row="7"
+                   Text="{Binding 
+                            Mode=OneWay,
+                            Path=Statistics.WorkingTime,
+                            StringFormat={}{0:0.0000}
+                          }" />
+
+        <TextBlock Grid.Column="0" Grid.Row="8" Text="Off time:" />
+        <TextBlock Grid.Column="1" Grid.Row="8"
+                   Text="{Binding 
+                            Mode=OneWay,
+                            Path=Statistics.OffTime,
+                            StringFormat={}{0:0.0000}
+                          }" />
+
+        <TextBlock Grid.Column="0" Grid.Row="9" Text="Busy:" />
+        <TextBlock Grid.Column="1" Grid.Row="9"
+                   Text="{Binding 
+                            Mode=OneWay,
+                            Path=Statistics.Busy,
+                            StringFormat={}{0:0.0000}
+                          }" />
+
+
+      </Grid>
+
+
+    </ToolTip>
+  </base:ActivityDelayBase.ToolTip>
+</base:ActivityDelayBase>

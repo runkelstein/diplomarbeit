@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  
+  <TemplateData>
+    <Name>SimNetUIApplication</Name>
+    <Description>&lt;No description available&gt;</Description>
+    <Icon>SimNetUI.ProjectTemplate.ico</Icon>
+    <TemplateID>255692b1-b133-43d2-b126-e113095b7cc1</TemplateID>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <SortOrder>1000</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>SimNetUIApplication</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="WPFApplication.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="Properties\Resources.resx">Resources.resx</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\Resources.Designer.cs">Resources.Designer.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="Properties\Settings.settings">Settings.settings</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\Settings.Designer.cs">Settings.Designer.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">MainWindow.xaml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">MainWindow.xaml.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">App.xaml</ProjectItem>
+      <ProjectItem ReplaceParameters="true">App.xaml.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">App.config</ProjectItem>
+      <!--<ProjectItem ReplaceParameters="false" TargetFileName="SimNetLib\SimNet.dll">Lib\SimNet.dll</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="SimNetLib\SimNetUI.ModelLogic.dll">Lib\SimNetUI.ModelLogic.dll</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="SimNetLib\SimNetUI.dll">Lib\SimNetUI.dll</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="SimNetLib\SimNetUI.VisualStudio.Design.dll">Lib\SimNetUI.VisualStudio.Design.dll</ProjectItem>--> 
+    </Project>
+  </TemplateContent>
+</VSTemplate>

@@ -1,0 +1,151 @@
+\begin{appendix}
+
+\chapter{Projektmappe Übersicht}
+
+Die CD, die dieser Diplomarbeit beiliegt, enthält eine Projektmappe für Visual Studio mit Projekten, welche bei der Bearbeitung des Diplomthemas {\em Konzeption einer grafischen Nutzeroberfläche zur prozessorientierten Modellierung und Simulation} erstellt bzw. bearbeitet worden sind.
+
+\section{SimNet}
+
+Das Projekt SimNet ist eine angepasste Version der SimNet-Bibliothek welche Ursprünglich aus der Diplomarbeit {\em Untersuchung zur Einbettung von Sprachelementen der prozessorientierten Simulation in C\# unter .Net} hervorgegangen ist und seit dem am Fachbereich Informatik der HTW-Dresden weiterentwickelt wird. Dieses Projekt wird separat von der SimNetUI-Bibliothek entwickelt. 
+Als diese Diplomarbeit ausgearbeitet wurde, war bereits eine aktualisierte Version der SimNet-Bibliothek in Arbeit.
+Daher handelt es sich bei der derzeit verwendeten Version nicht um die aller neueste Version. Ziel muss es sein, für künftige Versionen der SimNetUI-Bibliothek auf eine neue angepasste Version der SimNet-Bibliothek zu setzen.
+
+\section{Enhancer}
+
+Der Enhancer ist ein ergänzender Bestandteil der SimNet-Bibliothek. Dieser wird verwendet um den IL-Code von Projekten zu erweitern, welche die SimNet-Bibliothek verwenden.
+
+\section{SimNetUI}
+
+Die Ansichtsschicht der SimNetUI-Bibliothek ist im Projekt SimNetUI implementiert. Über die Ansichtsschicht werden Benutzersteuerelemente für die WPF bereitgestellt, mit deren Hilfe sich sehr einfach Simulationsmodelle entwerfen lassen.\footnote{Ausführliche Informationen zur Verwendung der Ansichtsschicht für Applikationsentwickler sind im Kapitel \ref{kap_konzeption} zu finden. Informationen der Implementation betreffend können im Kapitel \ref{kap4_realisierung} nachgelesen werden.} 
+
+\section{SimNetUI.ModelLogic}
+
+Bei der Modellschicht handelt es sich um eine Softwareschicht, die sich um Implementationsdetails kümmert, die für Applikationsentwickler nicht einsehbar sein sollen. Die Modellschicht besitzt ebenso wie die Ansichtsschicht zur Laufzeit ein eigene Modellrepräsentation. Der Programmcode, der sich um die Simulationsaspekte kümmert ist in der Modellschicht unter Verwendung der SimNet-Bibliothek implementiert worden. Der IL-Code der Modellschicht wird zusätzlich durch den Enhancer erweitert.\footnote{Umfassende Informationen zur Implementation der Modellschicht sind im Kapitel \ref{kap4_realisierung} festgehalten worden.}.
+
+\section{SimNetUI.VisualStudio.Design}
+
+Das Erweiterungsprojekt zur Ansichtsschicht stellt zusätzliche Werkzeuge für den Visual Studio WPF Designer {\em Cider} zur Verfügung.
+
+\section{SimNetUI.ProjectTemplate}
+
+Um einen schnellen Einstieg in die Entwicklung mit der SimNetUI-Bibliothek zu ermöglichen, ist ein Projekttemplate erstellt worden, welches beim Anlegen eines neuen Projektes als Vorlage verwendet werden kann.
+
+\section{SimNetUI.ProjectTemplate.Setup}
+
+Die Installation des Projekttemplates erfolgt über eine VSIX-Paket-Datei, welche das Projekttemplate als Addon für Visual Studio installiert. Nach der Installation ist die Projektvorlage im Dialog {\em Neues Projekt} auswählbar.
+\section{Example.Phonecell}
+
+Das Projekt {\em Example.Pohnecell} demonstriert den Einsatz der SimNetUI-Bibliothek. 
+
+Simuliert wird die Belegung von 4 Telefonzellen. In einem Zeitraum von 500 Minuten treffen mit einer Gleichverteilung ({\em UniformDouble}) von 30 Sekunden bis 10 Minuten neue Anrufer ein. Betritt ein neuer Anrufer die Simulation, wählt dieser eine leere Telefonzelle aus oder stellt sich bei der Telefonzelle mit der kürzesten Warteschlange an. Gibt es mehr als eine Telefonzelle mit einer kürzesten Warteschlange, so stellt sich der Anrufer zufällig bei einer dieser Telefonzellen an. Ein Anrufer telefoniert gemäß einer Gleichverteilung({\em UniformDouble}) zwischen 5,5 bis 30 Minuten. Die Simulation ist beendet, wenn kein Anrufer mehr telefoniert und neue Anrufer nicht mehr eintreffen.
+
+Dieses Projekt eignet sich hervorragend, um sich mit der SimNetUI-Bibliothek vertraut zu machen. Eintreffende Anrufer betreten die Simulation über eine Generator-Aktivität. Telefonzellen werden durch Wait-Aktivitäten repräsentiert. Über eine Exit-Aktivität verlassen Anrufer die Simulation. Die Generator- und die Exit-Aktivität sowie Verbindungslinien zwischen den Aktivitäten werden zur Laufzeit der Simulationsapplikation ausgeblendet. Zu jeder Wait-Aktivität existiert ein Begleitobjekt vom Typ {\em QueueCompanion} welches mit der zugehörigen Warteschlange über eine Datenbindung verknüpft ist.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{pic_simnetui_phonecell}
+	\caption{Screenshot der Beispielanwendung Example.Phonecell während eines Simulationslaufes}
+  \label{fig:pic_simnetui_phonecell}
+\end{figure}
+
+\section{Example.MarketPlace}
+
+Das Projekt {\em Example.MarketPlace} ist ein weiteres Beispiel, welches die Verwendung der SimNetUI-Bibliothek demonstriert.
+Simuliert wird ein Geschäft welches von 8 Uhr Früh bis 20 Uhr Abends geöffnet hat. Während dieser Zeit treffen neue Kunden gemäß einer Exponentialverteilung mit 
+{\em Alpha = 2 Minuten} ein. Für Geschäftskunden stehen insgesamt 15 Einkaufswagen zur Verfügung. Jeder Kunde der das Geschäft betritt, nimmt einen solchen Einkaufsagen mit. Sollten nicht genug Einkaufswagen zur Verfügung stehen, müssen eintreffende Kunden warten, bis andere Kunden ihren Einkaufswagen wieder abgegeben haben. Die Einkaufsdauer von Kunden wird über eine Dreiecksverteilung mit einem Minimalwert von 2 Minuten, einem Mittelwert von 12 Minuten und einen Maximalwert von 25 Minuten bestimmt. Es stehen 3 Kassen zur Verfügung. Wenn alle 3 Kassen belegt sind, wählt sich der Kunde die Kasse mit der kürzesten Warteschlange aus. Das Kassieren wird durch eine Gleichverteilung von 1 bis 3 Minuten beschrieben. Kunden die abkassiert worden sind, geben ihren Einkaufswagen ab und verlassen das Geschäft.
+
+Dieses Beispiel ist besonders Interessant, da es die Verwendung von Ressourcen demonstriert. In dieser Simulation stellen Entitäten die Geschäftskunden dar. Neue Entitäten beträten die Simulation über eine {\em Generator}-Aktivität. Eine Ressource, die die Bezeichnung {\em shopping cart} trägt, wird an Entitäten gebunden, wenn diese nach Eintritt in das Geschäft eine Aktivität vom Typ {\em Assign Ressource} durchlaufen. Um das Einkaufen von Kunden zu simulieren, wird eine Aktivität vom Typ {\em Wait} verwendet. Damit mehrere Kunden gleichzeitig einkaufen können, wird der Wert {\em Proccessing Capacity} bei dieser Aktivität auf einen nicht erreichbaren Wert erhöht. Die drei Kassen werden durch 3 {\em Wait}-Aktivitäten repräsentiert. Nach dem kassieren durchlaufen alle Entitäten eine Aktivität vom Typ {\em Release Ressource}, um die Ressource {\em shopping cart} wieder freizugeben. Letztendlich verlassen Kunden das Geschäft über eine Exit-Aktivität. Die Verbindungslinien zwischen den Aktivitäten werden zur Laufzeit ausgeblendet.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{pic_simnetui_marketplace.png}
+	\caption{Screenshot der Beispielanwendung Example.MarketPlace während eines Simulationslaufes}
+  \label{fig:pic_simnetui_marketplace}
+\end{figure}
+
+
+\section{Example.Test}
+
+Das {\em Example.Text} Projekt ist ein Spielwiese, um die Funktionsweise der SimNetUI-Bibliothek zu testen.
+
+\chapter{Debugging}
+
+\section{Projektmappe Debugeinstellungen}
+
+\begin{longtable}{p{35mm}|p{110mm}}\hline
+\footnotesize\textbf{Einstellung} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Debugeinstellungen}
+\label{tab:Debugeinstellungen}%
+
+\endfoot
+
+Debug & Alle Projekte in der Projektmappe werden mit den Standard-Debugeinstellungen kompiliert. Der IL-Programmcode der Modellschicht wird nicht durch den Enhancer erweitert. Daher sind Computersimulationen bei Verwendung dieser Einstellung nicht ausführbar. Diese Einstellung eignet sich, um Fehler im Programmcode der Modellschicht zu finden, da nach der Erweiterung des IL-Codes nur noch dieser lesbar ist. Denn der IL-Programmcode ist wesentlich unlesbarer als der C\#-Programmcode und eignet sich daher nicht in jedem Fall zum Debuggen.\tabularnewline\hline
+DebugEnhance &  Alle Projekte in der Projektmappe werden mit Standard-Debugeinstellungen kompiliert. Für die Modellschicht wird der Enhancer zusätzlich zur Erweiterung des IL-Codes verwendet. Computersimulationen sind mit dieser Einstellung daher ausführbar.\tabularnewline\hline
+Release & Alle Projekte in der Projektmappe werden mit Standard-Releaseeinstellungen kompiliert.  Der IL-Programmcode der Modellschicht wird nicht durch den Enhancer erweitert. Somit können Computersimulationen bei Wahl dieser Einstellung nicht ausgeführt werden.\tabularnewline\hline
+ReleaseEnhance & Alle Projekte in der Projektmappe werden mit den Standard-Releaseeinstellungen kompiliert. Für die Modellschicht wird der Enhancer zur Erweiterung des IL-Codes verwendet. Computersimulationen sind mit dieser Einstellung daher ausführbar.
+Diese Einstellung ist für die endgültige Auslieferung einer neuen Version der SimNetUI-Bibliothek zu wählen.\tabularnewline\hline
+\end{longtable}
+
+\section{Erweiterungsprojekt}
+
+Um das Erweiterungsprojekt {\em SimNetUI.VisualStudio.Desing} für die Ansichtsschicht zu debuggen, muss dieses als Startprojekt im Projektmappen-Explorer der Visual Studio IDE definiert worden sein. Zum Debuggen wird eine 2. Instanz der Visual Studio IDE gestartet. In dieser Instanz sollte nun ein Projekt geöffnet werden, welches die SimNetUI-Bibliothek verwendet.
+
+\chapter{Einrichtung eines Arbeitsumfeldes zur Fortentwicklung der SimNetUI-Bibliothek}
+
+
+Die Vorgehensweise zur Installation der notwendigen Entwicklungswerkzeuge, mit deren Hilfe eine Weiterentwicklung der SimNetUI-Bibliothek möglich wird, soll hier in aller Kürze beschrieben werden.
+
+\begin{enumerate}
+	\item Installation der Entwicklungsumgebung Visual Studio 2010. Gegebenenfalls muss noch ein Servicepack eingespielt werden.
+	\item Installation des Visual Studio 2010 \Gls{sdk}. Hierbei ist zwingend darauf zu achten, die richtige Version mit dem korrekten Service Pack zu installieren.
+	\item Zur Disassemblierung sowie Assemblierung benötigt der Enhancer die beiden Hilfsprogramm {\em ildasm.exe} und {\em ilasm.exe}. Der Programmpfad beider Applikationen muss dem Windows Systempfad hinzugefügt werden.
+
+Die Programmpfade, unter welchen beiden Anwendungen zu finden sind, können je nach Installation variieren. Bei einer Windows 7 64 Bit Installation unter Verwendung von .Net 4.0 und Visual Studio 2010 sind die Anwendungen unter folgenden Programmpfaden zu finden: 
+\begin{itemize}
+	\item ildasm.exe: C:\textbackslash{}Windows\textbackslash{}Microsoft.NET\textbackslash{}Framework\textbackslash{}v4.0.30319
+	\item ilasm.exe: C:\textbackslash{}Program Files (x86)\textbackslash{}Microsoft SDKs\textbackslash{}Windows\textbackslash{}v7.0A\textbackslash{}Bin\textbackslash{}NETFX 4.0 Tools\textbackslash{}x64
+\end{itemize}.
+
+Unter Windows 7 kann der Dialog zur Bearbeitung der Umgebungsvariablen auf folgendem Weg erreicht werden:
+\begin{enumerate}
+	\item Den Pfad {\em Systemsteuerung\textbackslash{}System und Sicherheit\textbackslash{}System} in die Adressbar des Windows-Explorer kopieren
+	\item Den Dialog für Erweiterte Systemeinstellungen durch einen Klick auf gleichnamigen Link öffnen
+	\item Den Reiter {\em Erweitert} anwählen.
+	\item Die Schaltfläche {\em Umgebungsvariablen} betätigen
+\end{enumerate}
+
+
+\end{enumerate}
+
+
+\chapter{Installationsleitung für die SimNetUI-Bibliothek}
+
+Applikationsentwickler, die auf Grundlage der SimNetUI-Bibliothek Computersimulationen entwickeln, soll ein Einstieg in die Materie nach aller Möglichkeit erleichtert werden. Eine Nahtlose Integration in die Visual Studio 2010 IDE ist dabei Voraussetzung. Auf der dieser Diplomarbeit beiliegenden CD befinden sich im Ordner {\em Software\textbackslash{}Anwendung} die für die Installation notwendigen Dateien.
+
+\begin{enumerate}
+	\item Die DLLs, die sich im Ordner {\em Software\textbackslash{}Anwendung\textbackslash{}Bibliotheken} auf der beiliegenden CD befinden, sind in das Verzeichnis {\em C:\textbackslash{}Program Files\textbackslash{}SimNetUI} zu kopieren. Wenn das Verzeichnis noch nicht existiert, ist dieses zu erstellen.
+	\item Eine Projektvorlage wird über die Datei {\em Software\textbackslash{}Anwendungg\textbackslash{}SimNetUI.Pro-jectTemplate.Setup.vsix} als Erweiterung für Visual Studio installiert. Eine Deinstallation ist über den {\em Erweiterungs-Manager} in Visual Studio jederzeit möglich.
+	\item Bei der ersten Verwendung der Projektvorlage sind die Benutzersteuerelemente aus der SimNetUI-Bibliothek der Toolbox in Visual Studio noch hinzuzufügen. Die folgende Anleitung erklärt, wie dies in der deutschen Version von Visual Studio 2010 zu bewerkstelligen ist.
+	
+\begin{enumerate}
+	\item Mauszeiger über die Toolbox bewegen und mit rechter Maustaste das Kontextmenü öffnen. Jetzt den Eintrag {\em Registerkarte hinzufügen} auswählen. Die neue Registerkarte sollte idealerweise mit der Bezeichnung {\em SimNetUI} versehen werden.
+	\item Die Registerkarte {\em SimNetUI} aufklappen. Den Mauszeiger über den leeren Bereich innerhalb der SimNetUI-Gruppe bewegen und mit rechter Maustaste das Kontextmenü öffnen. Im Kontextmenü auf den Eintrag {\em Elemente auswählen ...} klicken. Im Dialogfenster {\em Toolboxelemente auswählen} die Registerkarte {\em WPF-Komponenten} auswählen. Durch betätigen der Schaltfläche {\em Durchsuchen} wird ein Dialog zur Auswahl von Dateien geöffnet. In diesem Dialog die Datei {\em C:\textbackslash{}Program Files\textbackslash{}SimNetUI\textbackslash{}SimNetUI.DLL} auswählen. Abschließend sollte noch kontrolliert werden, ob alle Steuerelemente der SimNetUI-Bibliothek tatsächlich ausgewählt worden sind. Das Dialogfenster {\em Toolboxelemente auswählen} kann nun durch betätigen der Schaltfläche OK geschlossen werden.
+		
+	\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{pic_simnetui_toolbox}
+	\caption{Screenshot des {\em Toolboxelemente auswählen} Dialogs.}
+  \label{fig:pic_simnetui_toolbox}
+\end{figure}
+	
+\end{enumerate}
+	
+	
+	
+\end{enumerate}
+
+
+\end{appendix}

@@ -1,0 +1,38 @@
+\newglossaryentry{Thread}{name={Thread}, description={Ein Thread bezeichnet als Teil eines Prozess einen Ausführungsstrang eines Programms. Ein Prozess kann aus mehreren Threads bestehen, welche zeitgleich und unabhängig voneinander arbeiten können. Alle Threads eines Prozesses teilen sich den selben Hauptspeicher .}}
+\newglossaryentry{SimNet}{name={SimNet}, description={SimNet ist der Name einer Programmbibliothek, welche an der HTW-Dresden im Rahmen einer früheren Diplomarbeit entwickelt worden ist. Diese Bibliothek dient als Grundlage für die aus dieser Arbeit resultierte Eigenentwicklung der Programmbibliothek SimNetUI. Die SimNet-Bibliothek integriert neue Sprachelemente in C\#, die die Programmierung von ereignisorientierten Simulationen  ermöglichen. Als Vorbild für eigene Spracherweiterungen dient die Programmiersprache Modsim III.}}
+\newglossaryentry{SimNetUI}{name={SimNetUI}, description={Die zu dieser Diplomarbeit zugehörige Programmbibliothek für die grafische Modellierung/Entwicklung von ereignisorientierten Simulationen. Da die SimNetUI-Bibliothek aus mehreren Softwareschichten besteht, welche alle als separate Assembly realisiert worden sind, wird diese Bezeichnung als ein Überbegriff für die Zusammenfassung der Gesamtheit der hier aufgelisteten Komponenten genutzt.
+\begin{itemize}
+\item  SimNetUI.DLL
+\item  SimNetUI.ModelLogic.DLL
+\item  SimNetUI.VisualStudio.Design.DLL
+\end{itemize}}}
+\newglossaryentry{Enhancer}{name={Enhancer}, description={Ein Programm, welches den IL-Code von Anwendungen, die auf die SimNet-Bibliothek zurückgreifen, erweitert.}}
+\newglossaryentry{DataBinding}{name={Data-Binding}, description={Eine Technologie, die in der WPF eingesetzt wird, um zwischen beliebigen Properties eine Datenbindung aufzubauen, wodurch beide Properties stets die selben Daten besitzen. Es wird zwischen einer Quelle und einem Ziel unterschieden. Änderungen an der Quelle bewirken zugleich auch immer Änderungen am Ziel. Je nach Einstellung kann dieser Prozess auch umgekehrt werden und ebenso für beide Seiten gleichzeitig geltend gemacht werden.}}
+
+\newglossaryentry{Aktivitaet}
+{name={Aktivität},
+description={Knotenpunkt im Modellnetzwerk, welcher von Entitäten durchlaufen werden kann. Durch Interaktion mit durchlaufenden Entitäten, ist eine Einflussnahme auf Simulationszustände möglich.},
+plural={Aktivitäten}}
+\newglossaryentry{Entitaet}{name={Entität}, description={Objekt, welches sich durch ein Modellnetzwerk während einer Simulation bewegt. Die grafische Darstellung von Entitäten kann variieren und wird gerne als Mittel genutzt, um unterschiedliche Zustände anzuzeigen. Das Simulationspaket Simul8 verwendet statt der Bezeichnung Entität den Begriff {\em Work-Item}.},
+plural={Entitäten}}
+\newglossaryentry{Ansichtsschicht}{name={Ansichtsschicht}, description={Über die Ansichtsschicht werden WPF-Benutzersteuerelemente, aus welchen sich komplexe Simulationsmodelle zusammensetzen lassen, bereitgestellt. Streng genommen handelt es sich hierbei um die Assembly {\em SimNetUI.DLL}.} Applikationsentwickler kommen nur mit der Ansichtsschicht in Berührung.}
+\newglossaryentry{Modellschicht}{name={Modellschicht}, description={Bei der Programmbibliothek {\em SimNetUI.ModelLogic.DLL} handelt es sich um eine Softwareschicht der SimNetUI-Bibliothek, welche Applikationsentwicklern verborgen bleiben soll. Die Modellschicht besitzt ihre eigene Repräsentation des Simulationsmodells und dessen Zustände und enthält Programmcode, der für die Ausführung von Computersimulationen notwendig ist.}}
+\newglossaryentry{DESL}{name={Diskrete Event Simulation}, description={Bei der (diskreten) ereignisorientierten Simulation wird ein System durch eine Folge von Ereignissen modelliert. Es werden somit nur Zeitpunkte erfasst, bei welchen sich der Zustand eines Systems verändert hat.\footnote{Vgl. \cite{ROB2004} S. 15}}}
+\newglossaryentry{Assembly}{name={Assembly}, description={Die Assembly ist das Ergebnis aus der Kompilierung des C\# Programmcodes und liegt als IL-Code vor.	Eine Assembly kann sowohl eine DLL- oder auch eine EXE-Datei sein. Erst zur Laufzeit wird der IL-Code der Assembly durch den sogenannten Jitter in nativen Maschinencode übersetzt.\footnote{Vgl. \cite{Kueh2010} Kapitel 1.3}}}
+\newglossaryentry{DependencyObject}{name={Dependency-Object}, description={Die Klasse {\em DependencyObject} ist eine wichtige Basisklasse in der WPF, da sie die Verwendung von Dependency-Properties ermöglicht. Alle Klassen in der WPF erben von {\em DependencyObject}.\footnote{Vgl. \cite{Nath2010} S. 74}},
+plural={Dependency-Objects}}
+\newglossaryentry{DependencyProperty}{name={Dependency-Property}, description={Dependency-Properties werden überall in der WPF verwendet und ermöglichen die Nutzung von Styles, Data-Binding sowie Animationen. In der Praxis handelt es sich hierbei um normale .Net Properties, die unter Verwendung der WPF-API in die Infrastruktur der WPF integriert sind.\footnote{Vgl. \cite{Nath2010} S. 80-81}}}
+\newglossaryentry{Deadlock}{name={Deadlock}, description={Ein Deadlock tritt auf, wenn zwei Aufgaben (Tasks) oder mehr gegenseitig voneinander abhängig sind, indem jede Aufgabe auf die Fertigstellung der jeweilig anderen Aufgabe wartet. Die Folge ist eine Blockade aller abhängigen Aufgaben.\footnote{Vgl. \cite{FRE2010} S.}}} 
+
+
+
+
+\newacronym{des}{DES}{Discrete Event Simulation}
+\newacronym{wpf}{WPF}{Windows Presentation Foundation}
+\newacronym{htw}{HTW}{Hochschule für Technik und Wirtschaft}
+\newacronym{fifo}{FIFO}{First In First Out}
+\newacronym{lifo}{LIFO}{Last In First Out}
+\newacronym{xml}{XML}{Extensible Markup Language}
+\newacronym{xaml}{XAML}{Extensible Application Markup Language}
+\newacronym{il}{IL}{Intermediate Language}
+\newacronym{sdk}{SDK}{Software Development Kit}

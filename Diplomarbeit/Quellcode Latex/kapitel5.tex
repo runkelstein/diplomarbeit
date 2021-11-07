@@ -1,0 +1,85 @@
+\chapter{Zusammenfassung und Ausblick}
+
+\section{Ziellstellung}
+
+Mit dieser Diplomarbeit sollte untersucht werden, wie sich ein Programmierwerkzeug für die grafische Modellierung ereignisorientierter Systeme und der Simulation dieser Systeme in das Entwicklungsumfeld von Visual Studio 2010 optimal integrieren lässt. 
+
+\section{Vorgehensweise}
+
+Da es auch für diesen speziell abgegrenzten Bereich der Computersimulation für eine Reihe von Aspekten unterschiedliche Konzepte gibt, ist eine umfassende Analyse notwendig gewesen. Hierzu sind einige am Markt etablierte Softwarelösungen betrachtet worden. Die Ergebnisse dieser Analyse sind ausgewertet worden, woraufhin eigene Konzepte für die Realisierung des Programmierwerkzeugs unter Berücksichtigung der Besonderheiten des gewählten Entwicklungsumfeldes entwickelt worden sind.
+
+\section{Ergebnis}
+
+Das Resultat, was aufgrund dieser Vorbereitungen erarbeitet worden ist, ist eine .Net-Bibliothek, die auf Basis der WPF-Technologie von Microsoft, Funktionalitäten bereitstellt, die eine einfache und unkomplizierte Entwicklung von ereignisorientierten Simulationen mit dem Entwicklungswerkzeug Visual Studio 2010 ermöglichen. Eine Stärke dieser Lösung ist unter anderem die ausdrucksstarke Präsentation von Modellzuständen über den Verlauf einer Simulation. Computersimulationen können ohne Bereitstellung der Entwicklungssoftware als Windows Anwendungen verbreitetet werden. Eine Möglichkeit, die die Eigenentwicklung von den untersuchten Simulationspaketen unterscheidet.
+
+Der Text dieser Diplomarbeit soll als Grundlage für das Studium des erarbeiteten Resultates dienen.
+
+\section{Ansätze für künftige Erweiterungen}
+
+In der derzeitigen Form der Programmbibliothek, die als Resultat aus dieser Diplomarbeit hervorgegangen ist, ist diese nur für eine eingeschränkte Anzahl von Anwendungsfällen sinnvoll einsetzbar. Mit dieser Arbeit wurde daher lediglich eine Grundlage geschaffen. Auf diesem bereiteten Fundament kann aber eine Fortentwicklung stattfinden, um die Software vielseitiger einsetzbar zu gestalten. In diesem Zusammenhang ist zu erwähnen, dass es eine Anzahl von Anknüpfungspunkten gibt, die bestehende Softwarelösung zu erweitern. 
+
+Einige Bereiche in denen Erweiterungen oder Verbesserungen möglich sind, sollen nun aufgezählt werden.
+
+\subsection{Integration einer aktualisierten Version der SimNet-Bibliothek}
+
+Zeitgleich zur Entwicklung der SimNetUI-Bibliothek ist im Rahmen einer weiteren Diplomarbeit an der HTW-Dresden die SimNet-Bibliothek erneuert worden. Dies erklärt den Umstand, warum für die SimNetUI-Bibliothek bei Abschluss des Projektes nicht die neueste Version der SimNet-Bibliothek als Grundlage dient. Daher sollte für eine künftige Weiterentwicklung der SimNetUI-Bibliothek mit oberster Priorität die Integration der jeweiligen aktuellsten Version der SimNet-Bibliothek angestrebt werden.
+
+Neben wichtigen Restrukturierungsmaßnahmen ist die SimNet-Bibliothek, im Rahmen der erwähnten Diplomarbeit, um Fähigkeiten ergänzt worden, von welchen insbesondere die SimNetUI-Bibliothek profitieren sollte. Beispielsweise ist die Möglichkeit geschaffen worden, Simulationen zu unterbrechen, um diese zu einen späteren Zeitpunkt wieder fortzusetzen. Ein großer Teil der Refaktorierungsmaßnahmen zielte auch auf die Beseitigung von Programmfehlern in der alten Version der SimNet-Bibliothek ab. Hier muss erwähnt werden, dass die Ursprüngliche Version der SimNet-Bibliothek bereits im Jahre 2005 entwickelt worden ist. Mittlerweile ist die Entwicklung der Programmiersprache C\# weiter vorangeschritten, sodass Schwierigkeiten bei der Verwendung von neueren Programmiertechniken, welche 2005 noch nicht präsent waren, aufgetreten sind. 
+
+Weil einige Programmfehler in der alten SimNet-Version den Einsatz teilweise unmöglich gemacht haben, wurde die für dieses Projekt verwendete ursprüngliche SimNet-Version von einem Teil kritischer Programmfehler befreit. Da es einen regen Austausch zwischen dem Studenten, der die SimNet-Bibliothek weiterentwickelt hat, gab, sind all diese Änderungen auch in der überarbeiten Version der SimNet-Bibliothek mit eingeflossen. 
+
+Zur Ausgangssituation kann also zusammenfassend gesagt werden, dass zwei grundverschiedene Versionen der SimNet-Bibliothek existieren. Eine Integration der überarbeiteten Version wird somit zwangsläufig Änderungen des Programmcodes der SimNetUI-Bibliothek insbesondere in der Modellschicht nach sich ziehen. Weiterhin wird es ebenso eine Notwendigkeit sein, dass die zu integrierende Version der SimNet-Bibliothek angepasst werden muss, um ein besseres Zusammenspiel mit der SimNetUI-Bibliothek zu erlauben. Generell wäre es eine Überlegung Wert, das  {\em INotifyPropertyChanged}-Interface für Klassen der SimNet-Bibliothek zu implementieren, welche nach außen Properties zur Verfügung stellen. Für die Klasse {\em RessourceObj} aus der derzeitig verwendeten Version ist das {\em  INotifyPropertyChanged}-Interface implementiert worden. Diese Änderung müsste in jedem Fall auch in die überarbeitete SimNet-Bibliothek übernommen werden.
+
+\subsection{Subnetzwerke}
+
+Computermodelle für ereignisorientierte Simulationen können im professionellen Umfeld schnell sehr große Dimensionen annehmen. In der Programmierung ist es von je her eine gewöhnliche Vorgehensweise, Probleme in Teilbereiche mit unterschiedlichen Aufgabenstellungen zu gliedern. Denn nach diesem Prinzip wird es sehr viel einfacher, komplexe Sachverhalte zu verwalten. Ist erst einmal eine Abgrenzung in verschiedene Teilaufgaben erfolgt, ist es außerdem möglich Redundanzen zu vermeiden, wenn an verschiedenen Stellen im Modell die selben Abläufe beschrieben werden.
+
+Eine Implementation von Subnetzwerken in die bestehende Softwarelösung ist eine umfangreiche Aufgabe und erfordert ein teilweise Refaktorierung des gegenwärtigen Programmcodes, welcher der erstellten Software zu Grunde liegt.
+
+Ein Ansatz der für eine nähere Betrachtung in Frage kommt, ist die Implementation von Subnetzwerken in Form eines eigenen {\em UserControls}. Benutzersteuerelemente spielen in der WPF bereits eine bedeutende Rolle und sind das Mittel der Wahl, um spezialisierte Elemente für die Oberfläche einer Anwendung zu entwickeln. Um eine flüssige Entwicklung zu gewährleisten, ist in diesem Fall aber auch die Verwendung von Erweiterungsmöglichkeiten der Visual Studio IDE sinnvoll. Die optimale Lösung wäre die Bereitstellung einer Vorlage, welche als neues Element über die üblichen Dialoge der Visual Studio IDE einem Projekt hinzugefügt werden könnte.
+
+
+
+\subsection{Aktivitäten}
+
+\subsubsection{Verbesserungen bestehender Aktivitäten}
+
+Die Funktionalität bestehender Aktivitäten kann unter Umständen ausgebaut werden. Als sinnvolle Erweiterung kann für Generatoren die Möglichkeit geschaffen werden, zu einem Zeitpunkt {\em mehrere} Entitäten in das Simulationsmodell {\em gleichzeitig} eintreten zu lassen.
+Hier bietet es sich an, die selben Verteilungsfunktionen zu verwenden, wie auch bereits für die Planung von neuen Ereignissen.
+
+\subsubsection{Ergänzung neuer Aktivitäten}
+
+Nur eine begrenzte Auswahl von Aktivitäten sind für die Ursprungsversion der \Gls{SimNetUI}-Bibliothek realisiert worden. Allerdings gibt es viel Raum, um neue Aktivitäten zu implementieren. Eine erhöhte Vielseitigkeit in diesem Zusammenhang würde sich positiv in einer Erweiterung möglicher Einsatzgebiete bemerkbar machen. Als Grundlage für Aktivitäten, die für eine Fortentwicklung der Software in Betracht gezogen werden können, bietet sich das Studium der Analyse, deren Ergebnisse in dieser Diplomarbeit schriftliche festgehalten worden sind, an.
+
+Folgende Aktivitäten, stellen sinnvolle Erweiterungen für den bereits bestehenden Satz dar.
+
+\begin{itemize}
+	\item Eine Assemble-Aktivität, die sich an der Lösung aus der Software Simprocess orientieren kann. Sinnvoll wäre es, wenn sich diese Aktivität von der Basisklasse {\em ActivityDelayBase} herleiten würde.
+	\item Eine Aktivität für das Klonen von Entitäten.
+	\item Eine Aktivität zum Verschachteln oder Zusammenfassen von Entitäten.
+\end{itemize}
+
+\subsection{Statistiken}
+
+\subsection{Erfassung neuer Statistiken}
+
+Im Kapitel \ref{kap3_statistiken} ist bereits erwähnt worden, dass zum gegenwärtigen Zeitpunkt keine Statistiken über Entitäten erfasst werden. Folgende statistischen Werte sind aber von Interesse:
+
+\begin{itemize}
+	\item Wartezeit in Warteschlangen insgesamt
+	\item Mittlere Verweilzeit in Warteschlangen
+	\item Kürzeste Wartezeit in einer Warteschlange
+	\item Längste Wartezeit in einer Warteschlange
+	\item Bearbeitungszeit insgesamt
+	\item Mittlere Bearbeitungszeit
+	\item Kürzeste Bearbeitungszeit
+	\item Längste Bearbeitungszeit
+\end{itemize}
+
+Darüber hinaus sollten alle Statistiken, die über Ressourcen in der \Gls{SimNet}-Bibliothek erfasst werden, auch für die Verwendung in der \Gls{SimNetUI}-Bibliothek zur Verfügung gestellt werden. Zur Zeit der Niederschrift dieser Diplomarbeit, werden noch nicht alle Statistiken über die \Gls{SimNetUI}-Bibliothek Anwendungsentwicklern zur Verfügung gestellt.
+
+\subsection{Werkzeuge zur Auswertung einer Simulation}
+
+Bisher ist eine abschließende Auswertung von Simulationen alleinige Aufgabe des Programmierers, der sich der \Gls{SimNetUI}-Bibliothek bedient. Denkbar wäre die Bereitstellung eines Report-Controls, welches über eine Datenbindung mit dem Simulationscontainer verbunden ist. Nach einem Simulationslauf kann eine Analyse des Modells erfolgen, dessen Ergebnis in übersichtlicher Art und Weise in Form eines Reports tabellarisch aufbereitet werden kann. So können auch Statistiken von Entitäten dargestellt werden, die sonst während des Simulationslaufs für Simulationsentwickler nur schwer abgreifbar wären.
+
+Die Analyse der Statistiken muss aber keineswegs am Ende der Simulation geschehen. Wenn beispielsweise die Anforderung gestellt ist, für einen festgelegten Zeitraum und einer Auswahl von Aktivitäten eine Zusammenfassung eines ausgewählten statistischen Wertes zu berechnen, ist eine kontinuierliche Analyse oder Sammlung von Daten erforderlich. Eine flexible Lösung für diese Problemstellung zu entwickeln, ist mit Sicherheit eine Herausforderung. 

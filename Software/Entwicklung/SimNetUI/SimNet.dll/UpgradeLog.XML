@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="SimNet">
+</Property><Property Name="Projektmappendatei" Value="C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\SimNet.sln">
+</Property><Property Name="Benutzeroptionendatei" Value="C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\SimNet.suo">
+</Property><Property Name="Date" Value="Montag, 1. November 2010">
+</Property><Property Name="Time" Value="21:08">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="SimNet.sln" Description="Datei wurde erfolgreich als &quot;C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\Backup\SimNet.sln&quot; gesichert">
+</Event><Event ErrorLevel="0" Project="" Source="SimNet.suo" Description="Datei wurde erfolgreich als &quot;C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\Backup\SimNet.suo&quot; gesichert">
+</Event><Event ErrorLevel="0" Project="SimNet" Source="SimNet.csproj" Description="Projektdatei erfolgreich gesichert als C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\Backup\SimNet.csproj">
+</Event><Event ErrorLevel="0" Project="SimNet" Source="SimNet.csproj.user" Description="Die Projektbenutzerdatei wurde erfolgreich als &quot;C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\Backup\SimNet.csproj.user&quot; gesichert.">
+</Event><Event ErrorLevel="0" Project="SimNet" Source="AssemblyInfo.cs" Description="Datei erfolgreich gesichert als C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\Backup\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="SimNet" Source="Attribute.cs" Description="Datei erfolgreich gesichert als C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\Backup\Attribute.cs">
+</Event><Event ErrorLevel="0" Project="SimNet" Source="RandomObj.cs" Description="Datei erfolgreich gesichert als C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\Backup\RandomObj.cs">
+</Event><Event ErrorLevel="0" Project="SimNet" Source="ResObj.cs" Description="Datei erfolgreich gesichert als C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\Backup\ResObj.cs">
+</Event><Event ErrorLevel="0" Project="SimNet" Source="ResourceObj.cs" Description="Datei erfolgreich gesichert als C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\Backup\ResourceObj.cs">
+</Event><Event ErrorLevel="0" Project="SimNet" Source="Scheduler.cs" Description="Datei erfolgreich gesichert als C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\Backup\Scheduler.cs">
+</Event><Event ErrorLevel="0" Project="SimNet" Source="SimObj.cs" Description="Datei erfolgreich gesichert als C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\Backup\SimObj.cs">
+</Event><Event ErrorLevel="0" Project="SimNet" Source="Simulation.cs" Description="Datei erfolgreich gesichert als C:\Users\dpm\Documents\Visual Studio 2010\Projects\SimNet\SimNet.dll\Backup\Simulation.cs">
+</Event><Event ErrorLevel="1" Project="SimNet" Source="SimNet.csproj" Description="Das Projekt ist für .NET Framework 2.0 oder 3.0 konzipiert. Wenn für das Projekt Assemblys verwendet werden, die eine neuere Version von .NET Framework erfordern, kann das Projekt nicht erstellt werden. Die .NET Framework-Version kann durch Klicken auf &quot;Eigenschaften&quot; im Projektmenü und durch anschließendes Auswählen einer neuen Version im Dropdownfeld &quot;.NET Framework&quot; geändert werden. (In Visual Basic befindet sich dieses Feld auf der Registerkarte &quot;Kompilieren&quot;. Klicken Sie auf die Schaltfläche &quot;Erweiterte Compileroptionen...&quot;.)">
+</Event><Event ErrorLevel="0" Project="SimNet" Source="SimNet.csproj" Description="Projekt erfolgreich konvertiert">
+</Event><Event ErrorLevel="3" Project="SimNet" Source="SimNet.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="SimNet.sln" Description="Die Projektmappe wurde erfolgreich konvertiert.">
+</Event><Event ErrorLevel="3" Project="" Source="SimNet.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="SimNet" Source="SimNet.csproj" Description="Überprüfung abgeschlossen: Upgrade der Projektdateien nicht erforderlich.">
+</Event></UpgradeLog>

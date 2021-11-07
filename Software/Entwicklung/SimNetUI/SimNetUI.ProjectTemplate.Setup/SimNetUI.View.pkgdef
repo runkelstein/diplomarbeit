@@ -1,0 +1,4 @@
+﻿[$RootKey$\SimNetUI\SimNetUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL]
+@="Discrete Event Simulation"
+"Codebase"="$PackageFolder$\SimNetUI.dll"
+"WPFControls"="1"

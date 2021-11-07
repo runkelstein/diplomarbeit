@@ -1,0 +1,99 @@
+[FILES]
+Filter1a.gif
+filter1b.gif
+filter1c.gif
+Requirements1a.gif
+requirements1b.gif
+requirements1c.gif
+seealso1a.gif
+seealso1b.gif
+seealso1c.gif
+SimNet.html
+SimNetHierarchy.html
+SimNet.RandomObj.html
+SimNet.RandomObjMembers.html
+SimNet.RandomObjConstructor.html
+SimNet.RandomObjMethods.html
+SimNet.RandomObj.GenerateSeedBySystemTime.html
+SimNet.RandomObj.Random.html
+SimNet.RandomObj.SetSeed.html
+SimNet.RandomObj.UniformDouble.html
+SimNet.RandomObj.UniformInt.html
+SimNet.ResourceObj.html
+SimNet.ResourceObjMembers.html
+SimNet.ResourceObjConstructor.html
+SimNet.ResourceObjMethods.html
+SimNet.ResourceObj.CreateResource.html
+SimNet.ResourceObj.GetResource.html
+SimNet.ResourceObj.Give.html
+SimNet.ResourceObj.IncrementResources.html
+SimNet.ResourceObj.PriorityGive.html
+SimNet.ResourceObj.TakeBack.html
+SimNet.ResourceObj.TimedGive.html
+SimNet.Scheduler.html
+SimNet.SchedulerMembers.html
+SimNet.SchedulerConstructor.html
+SimNet.SchedulerProperties.html
+SimNet.Scheduler.SimTime.html
+SimNet.SchedulerMethods.html
+SimNet.Scheduler.AddInterruptObj.html
+SimNet.Scheduler.AddNewSchedObj.html
+SimNet.Scheduler.AddWaitForObj.html
+SimNet.Scheduler.GetCurrentSchedObj.html
+SimNet.Scheduler.GetSchedObjects.html
+SimNet.Scheduler.RemoveSchedObj.html
+SimNet.Scheduler.ScheduleObject.html
+SimNet.Scheduler.Simulation.html
+SimNet.Scheduler.SortSchedObjects.html
+SimNet.Scheduler.Stop.html
+SimNet.SimObj.html
+SimNet.SimObjMembers.html
+SimNet.SimObjConstructor.html
+SimNet.SimObjProperties.html
+SimNet.SimObj.FutureTime.html
+SimNet.SimObj.Interrupt.html
+SimNet.SimObj.Label.html
+SimNet.SimObj.Locals.html
+SimNet.SimObj.Method.html
+SimNet.SimObj.Params.html
+SimNet.SimObj.Priority.html
+SimNet.SimObj.Waitfor.html
+SimNet.Simulation.html
+SimNet.SimulationMembers.html
+SimNet.SimulationConstructor.html
+SimNet.SimulationMethods.html
+SimNet.Simulation.Interrupt.html
+SimNet.Simulation.InterruptAll.html
+SimNet.Simulation.SimTime.html
+SimNet.Simulation.StartSimulation.html
+SimNet.Simulation.StopSimulation.html
+SimNet.Simulation.Tell.html
+SimNet.Simulation.Wait.html
+SimNet.Simulation.WaitFor.html
+SimNet.TELLAttribute.html
+SimNet.TELLAttributeMembers.html
+SimNet.TELLAttributeConstructor.html
+SimNet.TellMethod.html
+SimNet.WAITFORAttribute.html
+SimNet.WAITFORAttributeMembers.html
+SimNet.WAITFORAttributeConstructor.html
+
+[OPTIONS]
+Title=SimNet
+Auto Index=Yes
+Binary TOC=Yes
+Compatibility=1.1 or later
+Compiled file=SimNet.chm
+Default Window=MsdnHelp
+Default topic=SimNet.html
+Display compile progress=No
+Error log file=SimNet.log
+Full-text search=Yes
+Index file=SimNet.hhk
+Language=0x409 Englisch (USA)
+Contents file=SimNet.hhc
+
+[WINDOWS]
+MsdnHelp="SimNet Help","SimNet.hhc","SimNet.hhk","SimNet.html","SimNet.html",,,,,0x62520,220,0x387e,[86,51,872,558],,,,,,,0
+
+[INFOTYPES]

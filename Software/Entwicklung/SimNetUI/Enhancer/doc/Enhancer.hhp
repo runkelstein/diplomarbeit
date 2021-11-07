@@ -1,0 +1,107 @@
+[FILES]
+Filter1a.gif
+filter1b.gif
+filter1c.gif
+Requirements1a.gif
+requirements1b.gif
+requirements1c.gif
+seealso1a.gif
+seealso1b.gif
+seealso1c.gif
+Enhancer.html
+EnhancerHierarchy.html
+Enhancer.ILAsm.html
+Enhancer.ILAsmMembers.html
+Enhancer.ILAsmConstructor.html
+Enhancer.ILAsmMethods.html
+Enhancer.ILAsm.DoIt.html
+Enhancer.ILAssemblyExternElement.html
+Enhancer.ILAssemblyExternElementMembers.html
+Enhancer.ILAssemblyExternElementConstructor.html
+Enhancer.ILAssemblyExternElementMethods.html
+Enhancer.ILAssemblyExternElement.ReadToEnd.html
+Enhancer.ILDasm.html
+Enhancer.ILDasmMembers.html
+Enhancer.ILDasmConstructor.html
+Enhancer.ILDasmMethods.html
+Enhancer.ILDasm.DoIt.html
+Enhancer.ILFile.html
+Enhancer.ILFileMembers.html
+Enhancer.ILFileConstructor.html
+Enhancer.ILFileProperties.html
+Enhancer.ILFile.ExternAssemblies.html
+Enhancer.ILFile.Lines.html
+Enhancer.ILFile.Methods.html
+Enhancer.ILFileMethods.html
+Enhancer.ILFile.AnalyzeFile.html
+Enhancer.ILFile.RemoveShortOffset.html
+Enhancer.ILFile.Write.html
+Enhancer.ILLineElement.html
+Enhancer.ILLineElementMembers.html
+Enhancer.ILLineElementConstructor.html
+Enhancer.ILLineElementProperties.html
+Enhancer.ILLineElement.Line.html
+Enhancer.ILMethodElement.html
+Enhancer.ILMethodElementMembers.html
+Enhancer.ILMethodElementConstructor.html
+Enhancer.ILMethodElementProperties.html
+Enhancer.ILMethodElement.Declaration.html
+Enhancer.ILMethodElement.EndElement.html
+Enhancer.ILMethodElement.IsPInvoke.html
+Enhancer.ILMethodElement.KindOfMethod.html
+Enhancer.ILMethodElement.LastLocalInitElement.html
+Enhancer.ILMethodElement.MaxStackElement.html
+Enhancer.ILMethodElement.Name.html
+Enhancer.ILMethodElement.NamesOfLocalVar.html
+Enhancer.ILMethodElement.ReturnElement.html
+Enhancer.ILMethodElement.TypesOfLocalVar.html
+Enhancer.ILMethodElement.WaitCalls.html
+Enhancer.ILMethodElementMethods.html
+Enhancer.ILMethodElement.AdjustMaxStack.html
+Enhancer.ILMethodElement.ReadToEnd.html
+Enhancer.ILSimNetExtensions.html
+Enhancer.ILSimNetExtensionsMembers.html
+Enhancer.ILSimNetExtensionsConstructor.html
+Enhancer.ILSimNetExtensionsProperties.html
+Enhancer.ILSimNetExtensions.CheckLabelExt.html
+Enhancer.ILSimNetExtensions.LocalVarExt.html
+Enhancer.ILSimNetExtensions.NopRetExt.html
+Enhancer.ILSimNetExtensions.RemoveCurrSchedObjExt.html
+Enhancer.ILSimNetExtensions.RestoreLocalVarExt.html
+Enhancer.ILSimNetExtensions.StoreLocalVarExt.html
+Enhancer.ILSimNetExtensions.StoreParamsExt.html
+Enhancer.ILSimNetExtensionsMethods.html
+Enhancer.ILSimNetExtensions.AfterWaitLabelExt.html
+Enhancer.ILSimNetExtensions.CreateTypesOfLocalVar.html
+Enhancer.ILSimNetExtensions.GetOpcodeNameForType.html
+Enhancer.ILSimNetExtensions.InitAfterWaitLabelExtension.html
+Enhancer.ILSimNetExtensions.InitCheckLabelExtension.html
+Enhancer.ILSimNetExtensions.InitLocalVarExtension.html
+Enhancer.ILSimNetExtensions.InitNopRetExtension.html
+Enhancer.ILSimNetExtensions.InitRemoveCurrSchedObjExtension.html
+Enhancer.ILSimNetExtensions.InitRestoreLocalVarExtension.html
+Enhancer.ILSimNetExtensions.InitStoreLocalVarExtension.html
+Enhancer.ILSimNetExtensions.InitStoreParamsExtension.html
+Enhancer.ILSimNetExtensions.InitStoreWaitLabelExtension.html
+Enhancer.ILSimNetExtensions.SetLabels.html
+Enhancer.ILSimNetExtensions.StoreWaitLabelExt.html
+
+[OPTIONS]
+Title=Enhancer
+Auto Index=Yes
+Binary TOC=Yes
+Compatibility=1.1 or later
+Compiled file=Enhancer.chm
+Default Window=MsdnHelp
+Default topic=Enhancer.html
+Display compile progress=No
+Error log file=Enhancer.log
+Full-text search=Yes
+Index file=Enhancer.hhk
+Language=0x409 Englisch (USA)
+Contents file=Enhancer.hhc
+
+[WINDOWS]
+MsdnHelp="Enhancer Help","Enhancer.hhc","Enhancer.hhk","Enhancer.html","Enhancer.html",,,,,0x62520,220,0x387e,[86,51,872,558],,,,,,,0
+
+[INFOTYPES]

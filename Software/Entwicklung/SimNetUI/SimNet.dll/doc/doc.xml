@@ -1,0 +1,769 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SimNet</name>
+    </assembly>
+    <members>
+        <member name="T:SimNet.SimObj">
+            <summary>
+            In dieser Klasse werden die Aktivitäten gekapselt.
+            Abgespeichert wird die TELL-Methode, sowie deren
+            Parameter (Startzeit, Priorität und die Parameterliste).
+            Weiterhin werden in dieser Klasse die lokalen Variablen
+            zwischengespeichert. Ebenso existiert ein Member zum
+            abspeichern des aktuellen Labels zum Wiedereintritt in
+            die Methode. Ausserdem existiert ein Interrupt-Flag falls 
+            die Methode unterbrochen wurde. Weiterhin gibt es noch ein
+            Member zum abspeichern des Objektes welches mittels
+            WAITFOR gestartet wurde. 
+            </summary>
+        </member>
+        <member name="M:SimNet.SimObj.#ctor">
+            <summary>
+            Konstruktur.
+            Initialisierung der Member.
+            </summary>
+        </member>
+        <member name="P:SimNet.SimObj.Method">
+            <summary>
+            TELL-Methode
+            </summary>
+        </member>
+        <member name="P:SimNet.SimObj.Locals">
+            <summary>
+            Lokale Variablen
+            </summary>
+        </member>
+        <member name="P:SimNet.SimObj.Params">
+            <summary>
+            nutzerspezifische Parameterliste
+            </summary>
+        </member>
+        <member name="P:SimNet.SimObj.Label">
+            <summary>
+            aktuelles Label zum Wiedereintritt in die Methode
+            </summary>
+        </member>
+        <member name="P:SimNet.SimObj.Priority">
+            <summary>
+            Priorität der Methode
+            </summary>
+        </member>
+        <member name="P:SimNet.SimObj.FutureTime">
+            <summary>
+            Startzeit der Methode
+            </summary>
+        </member>
+        <member name="P:SimNet.SimObj.Interrupt">
+            <summary>
+            Interrupt-Flag, wird auf true gesetzt wenn Methode unterbrochen wurde.
+            </summary>
+        </member>
+        <member name="P:SimNet.SimObj.Waitfor">
+            <summary>
+            Objekt auf das gewartet wird. Dieses Objekt wurde mittels WAITFOR gestartet.
+            </summary>
+        </member>
+        <member name="T:SimNet.Scheduler">
+            <summary>
+            Der Scheduler verwaltet die Listen der Aktivitäten, der wartenden Objekte, der unterbrochen Objekte
+            und der auf Ressourcen wartenden Objekte.
+            Der Scheduler führt die Abarbeitung dieser Listen durch. Sind zu einem Zeitpunkt alle Liste abgearbeitet
+            und keine Aktivitäten mehr vorhanden, so wird die Simulationszeit auf den nächsten Zeitpunkt, an dem
+            wieder Aktivitäten ausstehen, gesetzt.
+            </summary>
+        </member>
+        <member name="M:SimNet.Scheduler.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:SimNet.Scheduler.GetCurrentSchedObj">
+            <summary>
+            Gibt aktuelles Objekt zurück.
+            </summary>
+            <returns>Erstes Element in der Schedulerliste.</returns>
+        </member>
+        <member name="M:SimNet.Scheduler.GetSchedObjects">
+            <summary>
+            Gibt Schedulerliste zurück.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SimNet.Scheduler.AddNewSchedObj(SimNet.SimObj)">
+            <summary>
+            Fügt neues Objekt in die Schedulerliste ein.
+            Anschlißend wird Liste neu sortiert.
+            </summary>
+            <param name="obj">Objekt´vom Typ SimObj</param>
+        </member>
+        <member name="M:SimNet.Scheduler.AddInterruptObj(SimNet.SimObj)">
+            <summary>
+            Fügt ein Objekt in die Interruptliste ein.
+            </summary>
+            <param name="obj">Objekt vom Typ SimObj</param>
+        </member>
+        <member name="M:SimNet.Scheduler.AddWaitForObj(SimNet.SimObj,System.Double)">
+            <summary>
+            Fügt ein Objekt in die Warteliste ein.
+            </summary>
+            <param name="obj">Objekt vom Typ SimObj</param>
+            <param name="priority">Give Priority</param>
+        </member>
+        <member name="M:SimNet.Scheduler.AddResourcePendingObj(SimNet.ResObj)">
+            <summary>
+            Fügt ein Objekt in die Warteliste der Ressourcen ein.
+            </summary>
+            <param name="obj">Objekt vom Typ ResObj</param>
+        </member>
+        <member name="M:SimNet.Scheduler.RemoveResourcePendingObj(SimNet.ResObj)">
+            <summary>
+            Löscht ein Objekt aus der Warteliste der Ressourcen.
+            </summary>
+            <param name="obj">Zu löschendes Objekt (vom Typ ResObj)</param>
+        </member>
+        <member name="M:SimNet.Scheduler.SortSchedObjects">
+            <summary>
+            Sortiert die Schedulerliste neu.
+            </summary>
+        </member>
+        <member name="M:SimNet.Scheduler.RemoveSchedObj">
+            <summary>
+            Löschen des aktuellen Objektes.
+            </summary>
+        </member>
+        <member name="M:SimNet.Scheduler.RemoveAllSchedObj">
+            <summary>
+            Löscht alle Objekte aus dem Scheduler
+            </summary>
+        </member>
+        <member name="M:SimNet.Scheduler.RemoveAllWaitForObj">
+            <summary>
+            Löscht alle wartenden Objekte aus dem Scheduler
+            </summary>
+        </member>
+        <member name="M:SimNet.Scheduler.Start">
+            <summary>
+            Starten der Simulation.
+            </summary>
+        </member>
+        <member name="M:SimNet.Scheduler.Stop">
+            <summary>
+            Stoppen der Simulation.
+            </summary>
+        </member>
+        <member name="P:SimNet.Scheduler.SimTime">
+            <summary>
+            Property der Simulationszeit.
+            </summary>
+        </member>
+        <member name="T:SimNet.ResObj">
+            <summary>
+            In dieser Klasse werden die Objekte gekapselt, die auf Ressourcen warten.
+            </summary>
+        </member>
+        <member name="M:SimNet.ResObj.#ctor">
+            <summary>
+            Konstruktor.
+            Setzen der Defaultwerte der Member.
+            </summary>
+        </member>
+        <member name="P:SimNet.ResObj.Obj">
+            <summary>
+            Property des Member obj.
+            Hier wird das Objekt gespeichert, welches auf Ressourcen wartet.
+            </summary>
+        </member>
+        <member name="P:SimNet.ResObj.NumberDesired">
+            <summary>
+            Property des Member numberDesired.
+            Anzahl der angeforderten Ressourcen.
+            </summary>
+        </member>
+        <member name="P:SimNet.ResObj.TimePeroid">
+            <summary>
+            Property des Member timePeroid.
+            Zeiteinheiten, die max. auf Ressourcen gewartet werden sollen.
+            </summary>
+        </member>
+        <member name="P:SimNet.ResObj.Priority">
+            <summary>
+            Property des Member priority.
+            Priorität der Anforderung.
+            </summary>
+        </member>
+        <member name="T:SimNet.RandomObj">
+            <summary>
+            Die Klasse RandomObj dient zur Erzeugung von verteilten Zufallszahlen.
+            Hierbei sind viele Verteilungsfunktionen integriert wurden.
+            </summary>
+        </member>
+        <member name="M:SimNet.RandomObj.#ctor">
+            <summary>
+            Konstruktor
+            Hier wird der eine Instanz der Klasse Random erzeugt.
+            Der Seed wird in Abhängigkeit der Systemzeit erzeugt.
+            </summary>
+        </member>
+        <member name="M:SimNet.RandomObj.SetSeed(System.Int32)">
+            <summary>
+            Einen neuen Startwert zum Generieren der Zufallszahlen setzen.
+            </summary>
+            <param name="newSeed">Startwert</param>
+        </member>
+        <member name="M:SimNet.RandomObj.UniformInt(System.Int32,System.Int32)">
+            <summary>
+            Liefert eine gleichverteilte Zufallszahl vom Typ Integer im angegebenen Intervall.
+            </summary>
+            <param name="min">Untere Grenze des Intervalls</param>
+            <param name="max">Obere Grenze des Intervalls</param>
+            <returns>gleichverteilte Zufallszahl</returns>
+        </member>
+        <member name="M:SimNet.RandomObj.UniformDouble(System.Double,System.Double)">
+            <summary>
+            Liefert eine gleichverteilte Zufallszahl von Type Double im angegebenen Intervall.
+            </summary>
+            <param name="min">Untere Grenze des Intervalls</param>
+            <param name="max">Obere Grenze des Intervalls</param>
+            <returns>gleichverteilte Zufallszahl</returns>
+        </member>
+        <member name="M:SimNet.RandomObj.Triangular(System.Double,System.Double,System.Double)">
+            <summary>
+            Liefert eine dreiecksverteilte Zufallszahl.
+            </summary>
+            <param name="min">Unterer Wert</param>
+            <param name="mode">Mittlerer Wert</param>
+            <param name="max">Oberer Wert</param>
+            <returns>dreiecksverteilte Zufallszahl</returns>
+        </member>
+        <member name="M:SimNet.RandomObj.Normal(System.Double,System.Double)">
+            <summary>
+            Liefert eine normalverteilte Zufallszahl.
+            </summary>
+            <param name="a">Erwartungswert</param>
+            <param name="b">Standardabweichung</param>
+            <returns>normalverteilte Zufallszahl</returns>
+        </member>
+        <member name="M:SimNet.RandomObj.Exponential(System.Double)">
+            <summary>
+            Liefert eine exponentialverteilte Zufallszahl.
+            </summary>
+            <param name="a">Erwartungswert</param>
+            <returns>exponentialverteilte Zufallszahl</returns>
+        </member>
+        <member name="M:SimNet.RandomObj.Weibull(System.Double,System.Double)">
+            <summary>
+            Liefert eine Zufallszahl nach Weibullverteilung
+            </summary>
+            <param name="a">Skalenparameter</param>
+            <param name="b">Formparameter</param>
+            <returns>weibullverteilte Zufallszahl</returns>
+        </member>
+        <member name="M:SimNet.RandomObj.Erlang(System.Double,System.Int32)">
+            <summary>
+            Liefert eine Zufallszahl nach Erlangverteilung
+            </summary>
+            <param name="a">Erwartungswert</param>
+            <param name="b">Anzahl Phasen</param>
+            <returns>nach Erlang verteile Zufallszahl</returns>
+        </member>
+        <member name="M:SimNet.RandomObj.LgNormal(System.Double,System.Double)">
+            <summary>
+            Liefert eine log-normalverteilte Zufallszahl
+            </summary>
+            <param name="a">Erwartungswert</param>
+            <param name="b">geom. Dispersion</param>
+            <returns>log-normalverteilte Zufallszahl</returns>
+        </member>
+        <member name="M:SimNet.RandomObj.RandomValue">
+            <summary>
+            Liefert eine Zufallszahl vom Typ Double im Bereich zwischen 0.0 und 1.0
+            </summary>
+            <returns>Zufallszahl</returns>
+        </member>
+        <member name="M:SimNet.RandomObj.GenerateSeedBySystemTime">
+            <summary>
+            Generiert einen Startwert in Abhängigkeit von der Systemzeit.
+            </summary>
+            <returns>Startwert</returns>
+        </member>
+        <member name="P:SimNet.RandomObj.OriginalSeed">
+            <summary>
+            Gibt den Seed zurück, der bei der Initialisierung gesetzt wurde.
+            </summary>
+        </member>
+        <member name="P:SimNet.RandomObj.CurrentSeed">
+            <summary>
+            Gibt aktuell verwendeten Seed zurück
+            </summary>
+        </member>
+        <member name="M:SimNet.TriggerObj.Trigger">
+            <summary>
+            Den Trigger asynchron ausführen, d.h. nicht warten
+            </summary>
+        </member>
+        <member name="M:SimNet.TriggerObj.Release">
+            <summary>
+            Trigger synchron ausführen. Benötigt Unterstützung durch den Enhancer.
+            </summary>
+        </member>
+        <member name="P:SimNet.TriggerObj.WaitingObjects">
+            <summary>
+            Objekte die auf den Trigger warten
+            </summary>
+        </member>
+        <member name="P:SimNet.TriggerObj.ReleasedObj">
+            <summary>
+            Objekt das den Trigger ausgelöst hat
+            </summary>
+        </member>
+        <member name="T:SimNet.TELLAttribute">
+            <summary>
+            Selbstdefiniertes Attribute zur Verwendung der TELL-Methoden.
+            Attribute dient zur Markierung der Methoden, bei denen es sich
+            um eine TELL-Methode handelt.
+            </summary>
+        </member>
+        <member name="M:SimNet.TELLAttribute.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="T:SimNet.TellMethod">
+            <summary>
+            Delegate zur Umsetzung der Tell-Methode
+            </summary>
+        </member>
+        <member name="T:SimNet.Simulation">
+            <summary>
+            Die Klasse Simulation stellt dem Nutzer alle notwendigen Funktionen zur 
+            Verfügung, um prozessorientierte Simulationen zu Implementieren.
+            </summary>
+        </member>
+        <member name="M:SimNet.Simulation.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:SimNet.Simulation.SimTime">
+            <summary>
+            Gibt aktuelle Simulationszeit zurück.
+            </summary>
+            <returns>Simulationszeit</returns>
+        </member>
+        <member name="M:SimNet.Simulation.Tell(SimNet.TellMethod,System.Double,System.Double,System.Object[])">
+            <summary>
+            Tell-Methode
+            Hier wird ein neues Objekt vom Typ SimObj angelegt, dem dann die angegebenen Paramater entsprechend
+            zugewiesen werden. Anschließend wird dieses Objekt zur Verarbeitung in die Schedulerliste aufgenommen.
+            Die Umsetzung der Tell-Methode erfolgt über ein Delegate, damit der Scheduler, eben stellvertretend
+            diese Methode zu gegebener Zeit ausführen kann. 
+            </summary>
+            <param name="tm">Delegate</param>
+            <param name="start">Startzeit, Angabe der Zeiteinheiten die vergehen bis Methode gestartet wird</param>
+            <param name="priority">Priorität</param>
+            <param name="list">Parameter für diese Methode</param>
+        </member>
+        <member name="M:SimNet.Simulation.Wait(System.Double,System.Boolean@)">
+            <summary>
+            Wait dient zum Warten einer bestimmten Zeit t. Die aufrufende Methode suspendiert also ihre Arbeit 
+            für einen gewissen Zeitraum.
+            </summary>
+            <param name="t">Zeit, Simulationseinheiten</param>
+            <param name="interrupt">Interrupt, wenn aufrufende Methode während Warten unterbrochen wird. 
+            Zur Auswertung muss nach dem Wait eine IF-Anweisung folgen.</param>
+        </member>
+        <member name="M:SimNet.Simulation.WaitFor(SimNet.TellMethod,System.Double,System.Double,System.Object[],System.Boolean@)">
+            <summary>
+            WaitFor bedeutet, das das aktuelle Objekt seine Arbeit suspendiert und solange wartet 
+            bis die aufgerufene Methode tm (in diesem Fall eine Tell-Methode) beendet ist.
+            </summary>
+            <param name="tm">Tell-Methode, die ausgeführt und auf die gewartet wird</param>
+            <param name="t">Zeit t. Hiermit soll es möglich sein, das die aufgerufene Methode erst
+            zu einem späteren Zeitpunkt gestartet wird.</param>
+            <param name="priority">Priorität der Methode</param>
+            <param name="list">Parameter der Tell-Methode</param>
+            <param name="interrupt">Interrupt, wenn aufrufende Methode während Warten unterbrochen wird. 
+            Zur Auswertung muss nach dem Wait eine IF-Anweisung folgen.</param>
+        </member>
+        <member name="M:SimNet.Simulation.WaitFor(SimNet.GiveMethod,System.Object,System.Int32,System.Boolean@,System.Double)">
+            <summary>
+            Waitfor für das Anfordern von Ressourcen. Es wird die Give-Methode der Klasse ResourceObj
+            aufgerufen.
+            </summary>
+            <param name="gm">Give-Methode, wird ausgeführt und auf beenden gewartet</param>
+            <param name="obj">Objekt, welches Ressourcen anfordert</param>
+            <param name="numberDesired">Anzahl der Ressourcen</param>
+            <param name="interrupt">Interrupt</param>
+            <param name="priority">Give Priority</param>
+        </member>
+        <member name="M:SimNet.Simulation.WaitFor(SimNet.TriggerObj,System.Object,System.Boolean@)">
+            <summary>
+            WaitFor Trigger. 
+            </summary>
+            <param name="trigger">Der Trigger auf den gewartet werden soll.</param>
+            <param name="obj">Objekt, welches Auf Trigger warten soll</param>
+            <param name="interrupt">Interrupt</param>
+        </member>
+        <member name="M:SimNet.Simulation.Interrupt(System.Object,System.String)">
+            <summary>
+            Interrupt wird verwendet um eine Methode eines bestimmten Objektes zu unterbrechen.
+            Es wird die erste gefundene Methode unterbrochen!
+            </summary>
+            <param name="obj">Objekt</param>
+            <param name="method">Methodenname</param>
+        </member>
+        <member name="M:SimNet.Simulation.InterruptAll(System.Object)">
+            <summary>
+            Hier werden alle aktiven Methoden eines bestimmten Objektes unterbrochen.
+            </summary>
+            <param name="obj">Objekt</param>
+        </member>
+        <member name="M:SimNet.Simulation.StartSimulation">
+            <summary>
+            Starten der Simulation
+            </summary>
+        </member>
+        <member name="M:SimNet.Simulation.StopSimulation">
+            <summary>
+            Stoppen der Simulation
+            </summary>
+        </member>
+        <member name="T:SimNet.GiveMethod">
+            <summary>
+            Delegate der Give-Methode
+            </summary>
+        </member>
+        <member name="T:SimNet.ResourceObj">
+            <summary>
+            Jede Instanz von ResourceObj beschreibt genau eine Ressource. 
+            Objekte koennen einen oder mehrere Plaetze der Ressource belegen
+            bzw. anfordern. Bei den meisten Anwendungen wird jedoch ein
+            Objekt auch genau einen Platz anfordern. Beispielsweise nimmt
+            jeder Kunde in einer Kaufhalle auch genau einen Einkaufskorb.
+            Andererseits belegt auch jeder PKW genau einen Stellplatz,
+            ein LKW belegt jedoch 8 Stellplaetze. 
+            Die Statistik wird vorerst jedoch nur fuer die Plaetze gefuehrt,
+            eine auf die belegenden Objekte bezogene Statistik kann ebenfalls
+            noch realisiert werden. Fuer den Fall, dass ein Objekt immer
+            nur einen Platz belegt, stimmt die Statistik fuer die Plaetze
+            mit der Statistik fuer die belegenden Objekte ueberein. 
+            </summary>
+        </member>
+        <member name="M:SimNet.ResourceObj.OnPropertyChanged(System.String)">
+            <summary>
+            Raises this object's PropertyChanged event.
+            </summary>
+            <param name="propertyName">The property that has a new value.</param>
+        </member>
+        <member name="M:SimNet.ResourceObj.VerifyPropertyName(System.String)">
+            <summary>
+            Warns the developer if this object does not have
+            a public property with the specified name. This 
+            method does not exist in a Release build.
+            </summary>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetPendingList">
+            <summary>
+            Gibt Liste der auf Ressourcen wartenden Objekte zurück.
+            </summary>
+            <returns>PendingList</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetResourceList">
+            <summary>
+            Gibt Liste der Objekte, die gerade Ressourcen verwenden zurück.
+            </summary>
+            <returns>ResourceList</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetZI">
+            <summary>
+            Gibt das Zeitintegral der Ressourcen zurück.
+            </summary>
+            <returns>Zeitintegral</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetZIQ">
+            <summary>
+            Gibt Zeitintegral der Warteschlange zurück.
+            </summary>
+            <returns>Zeitintegral</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetMi">
+            <summary>
+            Gibt mittleren Inhalt der Ressource zurück.
+            </summary>
+            <returns>mittlerer Inhalt</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetMaxi">
+            <summary>
+            Gibt maximalen Inhalt der Ressource zurück.
+            </summary>
+            <returns>maximaler Inhalt</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetMb">
+            <summary>
+            Gibt mittlere Belegungsdauer zurück.
+            </summary>
+            <returns>mittlere Belegungsdauer</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetAe">
+            <summary>
+            Gibt Anzahl der Eintritte in Ressource zurück.
+            </summary>
+            <returns>Anzahl der Eintritte</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetMa">
+            <summary>
+            Gibt mittlere Auslastung der Ressource zurück.
+            </summary>
+            <returns>mittlere Auslastung</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetMv">
+            <summary>
+            Gibt mittlere Verweilzeit der Ressource zurück.
+            </summary>
+            <returns>mittlere Verweilzeit</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetAeq">
+            <summary>
+            Gibt Anzahl der Eintritte in Warteschlange zurück.
+            </summary>
+            <returns>Anzahl Eintritte</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetAeq0">
+            <summary>
+            Gibt Anzahl der Eintritte in Warteschlange zurück, bei denen Wartezeit gleich null ist.
+            </summary>
+            <returns>Anzahl Eintritte</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetMlq">
+            <summary>
+            Gibt die mittlere Länge der Warteschlange zurück.
+            </summary>
+            <returns>mittlere Länge</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetMaxq">
+            <summary>
+            Gibt die maximale Länge der Warteschlange zurück.
+            </summary>
+            <returns>maximale Länge</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetMvq">
+            <summary>
+            Gibt mittlere Verweilzeit der Warteschlange zurück.
+            </summary>
+            <returns>mittlere Verweilzeit</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetMvq0">
+            <summary>
+            Gibt mittlere Verweilzeit der Warteschlange zurück.
+            </summary>
+            <returns>mittlere Verweilzeit</returns>
+        </member>
+        <member name="M:SimNet.ResourceObj.#ctor">
+            <summary>
+            Konstruktor.
+            Initialisierung der Member.
+            </summary>
+        </member>
+        <member name="M:SimNet.ResourceObj.CreateResource(System.Int32)">
+            <summary>
+            Initialisiert das Resource-Objekt mit der angegeben Anzahl von Resourcen.
+            Es wird also die Kapazität der Resource festgelegt.
+            </summary>
+            <param name="numberOfResources">Anzahl der Resourcen</param>
+        </member>
+        <member name="M:SimNet.ResourceObj.IncrementResources(System.Int32)">
+            <summary>
+            Vergrösseren der Kapazität des Resource-Objektes um den angegebenen Wert.
+            </summary>
+            <param name="increaseBy">Um diesen Wert wird Kapazität verkleinert.</param>
+        </member>
+        <member name="M:SimNet.ResourceObj.Give(System.Object,System.Int32,System.Double)">
+            <summary>
+            Stellt eine Anzahl von benötigten Resourcen dem anfragendem Objekt zur Verfügung.
+            Die aufrufende Methode wird solange geblockt, bis die Resourcen verfügbar sind.
+            Die Anfragen werden in der Warteliste (PendingList) nach dem Prinzip Frist-In First-Out
+            verarbeitet.
+            </summary>
+            <param name="obj">Objekt das Resourcen benötigt</param>
+            <param name="numberDesired">Anzahl der Resourcen</param>
+            <param name="priority">Give Priority</param>
+        </member>
+        <member name="M:SimNet.ResourceObj.TimedGive(System.Object,System.Int32,System.Double)">
+            <summary>
+            Hat die selbe Aufgabe wie <see cref="M:SimNet.ResourceObj.Give(System.Object,System.Int32,System.Double)"/>, mit dem Unterschied das die aufrufende Methode
+            unterbrochen wird, wenn in der angegebenen Zeit <c>timePeriod</c> die Resourcen nicht zur Verfügung
+            gestellt werden können.
+            </summary>
+            <param name="obj">Objekt das Resourcen benötigt</param>
+            <param name="numberDesired">Anzahl der Resourcen</param>
+            <param name="timePeroid">Zeiteinheiten die vergehen dürfen bis Resourcen zur Verfügung gestellt sein müssen</param>
+        </member>
+        <member name="M:SimNet.ResourceObj.PriorityGive(System.Object,System.Int32,System.Double)">
+            <summary>
+            Hat die selbe Aufgabe wie <see cref="M:SimNet.ResourceObj.Give(System.Object,System.Int32,System.Double)"/>, mit dem Unterschied das die Anfrage nach der Priorität behandelt wird.
+            D.h. je höher die Priorität, desto weiter vorn in der Warteliste wird die Anfrage eingeordnet.
+            </summary>
+            <param name="obj">Objekt das Resourcen benötigt</param>
+            <param name="numberDesired">Anzahl der Resourcen</param>
+            <param name="priority">Priorität</param>
+        </member>
+        <member name="M:SimNet.ResourceObj.GetResource(System.Object,System.Int32,System.Double,System.Double)">
+            <summary>
+            Ist eine Kombination aus <see cref="M:SimNet.ResourceObj.TimedGive(System.Object,System.Int32,System.Double)"/> und <see cref="M:SimNet.ResourceObj.PriorityGive(System.Object,System.Int32,System.Double)"/>. Die anfragende Methode wird unterbrochen
+            wenn die Resourcen nicht innerhalb der angegebenen Zeiteinheiten zur Verfügung stehen. Die Anfragen werden hier aber
+            auch nach Priorität in die Warteliste eingeordnet. 
+            </summary>
+            <param name="obj">Objekt das Resourcen benötigt</param>
+            <param name="numberDesired">Anzahl der Resourcen</param>
+            <param name="timePeroid">Zeiteinheiten die vergehen dürfen</param>
+            <param name="priority">Priorität</param>
+        </member>
+        <member name="M:SimNet.ResourceObj.TakeBack(System.Object,System.Int32)">
+            <summary>
+            Gibt die angegebene Anzahl von Resourcen wieder frei.
+            </summary>
+            <param name="obj">Objekt das Resourcen frei gibt</param>
+            <param name="numberReturned">Anzahl der Resourcen</param>
+        </member>
+        <member name="E:SimNet.ResourceObj.PropertyChanged">
+            <summary>
+            Raised when a property on this object has a new value.
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.ThrowOnInvalidPropertyName">
+            <summary>
+            Returns whether an exception is thrown, or if a Debug.Fail() is used
+            when an invalid property name is passed to the VerifyPropertyName method.
+            The default value is false, but subclasses used by unit tests might 
+            override this property's getter to return true.
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.ResourceList">
+            <summary>
+            Liste der verwendeten Resourcen
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.PendingList">
+            <summary>
+            Liste der wartenden Resourcen.
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.ZI">
+            <summary>
+            Zeitintegral Ressource
+            wesentliche Groesse zur Ermittlung weiterer statistischer Werte
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Mi">
+            <summary>
+            Mittlerer Inhalt Ressource (ZI/SimTime())
+            ( = 0, falls SimTime() kleiner gleich 0 ist)
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Maxi">
+            <summary>
+            Maximaler Inhalt Ressource
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Mb">
+            <summary>
+            Mittlere Belegungsdauer Ressource (ZI/ae)
+            (= 0, falls ae kleiner gleich 0 ist)
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Ae">
+            <summary>
+            Anzahl Eintritte gesamt in Ressource (akkumuliert)
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Ma">
+            <summary>
+            Mittlere Auslastung (ZI/(SimTime()* maxResources)),
+            (= 0, falls (SimTime()* maxResources) kleiner gleich 0 ist)
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Mv">
+            <summary>
+            Mittlere Verweilzeit Resources (ZI/ae)
+            (0, falls ae kleiner gleich 0)
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.ZIQ">
+            <summary>
+            Zeitintegral Queue
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Aeq">
+            <summary>
+            Anzahl Eintritte Queue (akkumuliert) mit Wartezeit größer gleich 0
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Aeq0">
+            <summary>
+            Anzahl Eintritte Queue (akkumuliert) mit Wartezeit gleich 0
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Mlq">
+            <summary>
+            Mittlerer Laenge Queue (ZIQ/SimTime())
+            (= 0, falls SimTime() kleiner gleich 0 ist)
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Maxq">
+            <summary>
+            Maximale Laenge Queue
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Mvq">
+            <summary>
+            Mittlere Verweilzeit Queue (ZIQ/aeq)
+            (0, falls aeq kleiner gleich 0 ist)
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Mvq0">
+            <summary>
+            Mittlere Verweilzeit Queue (ZIQ/(aeq-aeq0)) fuer alle Eintritte mit Wartezeit größer 0
+            (= 0, falls aeq-aeq0 kleiner gleich 0 ist)
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Iold">
+            <summary>
+            Letzte Belegung an Ressourcenplätzen
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Told">
+            <summary>
+            Letzter Zeitpunkt der Änderung von Resourcenplätzen
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.MaxNew">
+            <summary>
+            Neue Belegung an Plätzen in der Queue
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Tolq">
+            <summary>
+            Letzter Zeitpunkt der Änderung der Queue
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.Resources">
+            <summary>
+            Property des Member resources.
+            Anzahl der aktuell verfügbaren Ressourcen.
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.MaxResources">
+            <summary>
+            Property des Member maxResources.
+            Maximale Anzahl der Ressourcen.
+            </summary>
+        </member>
+        <member name="P:SimNet.ResourceObj.PendingResources">
+            <summary>
+            Property des Member pendingResources.
+            Anzahl der wartenden Ressourcen.
+            </summary>
+        </member>
+    </members>
+</doc>

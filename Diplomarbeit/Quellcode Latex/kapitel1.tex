@@ -1,0 +1,21 @@
+
+
+\chapter{Einleitung}\label{kap_einleitung}
+
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+
+Heutzutage ist es häufig eine Notwendigkeit, Geschäftsprozesse mittels Computersoftware zu simulieren, da Sachverhalte und Abläufe innerhalb großer Systeme in der Industrie meist nicht ohne weiteres überschaubar sind. Unternehmen nutzen
+daher oft bei ihrer Entscheidungsfindung Computersimulationen, um Auswirkungen von Änderungen innerhalb komplexer Systeme besser nachvollziehen zu können. Dabei können, ohne hohe Kosten zu verursachen, verschiedene Szenarien durchexerziert werden. Eine übliche Vorgehensweise ist es, ausgehend von bekannten Größen aus der realen Umgebung ein Model für eine Computersimulation zu entwickeln. Zielstellung ist es, ein solches Model mit möglichst wenig Aufwand so nah wie möglich der Realität anzunähern. Hat man ein solches Model, ist man in der Lage, alternative Szenarien zu simulieren, womit letztendlich auch Schlussfolgerungen für die Realität vorgenommen werden können.
+
+In diesen Bereich der Simulationen gibt es eine Vielzahl von unterschiedlichen Ansätzen. Der Fokus dieser Diplomarbeit liegt allerdings auf ereignisorientierter Simulation (engl. \Gls{DESL}). Dies ist ein Gebiet, welches bereits auf einige Jahrzehnte Forschung zurückblicken kann. Seit den 1960er Jahren stehen spezialisierte Programmiersprachen für die Erstellung von Computersimulation zur Verfügung. 
+Einige bekannte Vertreter darunter sind u.a. GPSS (ab 1961)\footnote{Vgl. \cite{GAS2005} S. 131} und Modsim. Durch die Kombination von bewährten Programmierkonzepten (wie z.B. der objektorientierten Programmierung) mit der DES sind diese Programmiersprachen dank ihrer Mächtigkeit und Simplizität hochgradig geeignet für die Modellierung komplexer Systeme, wie sie in der Realität vorkommen.
+
+Mit dem Einzug grafischer Bedienkonzepte in Betriebssysteme ab ca. Mitte der 1980er Jahre hat sich auch in der Welt der Computersimulationen einiges verändert. Auch auf dem Gebiet der \Gls{des} haben sich insbesondere in den letzten zwei Jahrzehnten grafische Systeme zunehmend durchsetzen können. Ein entscheidender Vorteil solcher Systeme ist deren einfache Zugänglichkeit, womit auch Nicht-Informatiker ein leistungsstarkes Werkzeug an die Hand bekommen. Da mit grafischen Mitteln allein komplexe Sachverhalte nicht immer korrekt abgebildet werden können, handelt es sich bei diesen Softwaresystemen tatsächlich aber häufig um Hybridsysteme, welche mit Skriptsprachen ausgestattet es erlauben, komplexe Sachverhalte mittels Logikbausteinen auszudrücken. Mit Hilfe dieser Softwaresysteme lassen sich überdies besonders einfach Sachverhalte grafisch in Form von Animationen virtualisieren. 
+
+Ein großer Nachteil vieler am Markt vorhandenen Lösungen für grafische \Gls{des}-Systeme ist deren proprietäre Geschlossenheit zu anderen Systemen. Obwohl es sehr oft Möglichkeiten gibt, Daten von externen Quellen zu importieren bzw. zu exportieren, ist dies meist nicht ausreichend, um wie in der Informatik üblich eine Kompatibilität zu möglichst vielen verschiedenen Komponenten zu erreichen. Solche Einschränkungen sind aber in aller Regel, wenn es um die Einbettung in komplexe IT-Systeme geht, nicht hinnehmbar.
+
+Um eine größere Flexibilität in dieser Angelegenheit zu erreichen, und um weitestgehend unabhängig von teuren proprietären System zu werden, ist es Zielstellung dieser Diplomarbeit einen ersten minimalen Prototyp eines grafischen \Gls{des}-Systems als eingebettetes System für die Entwicklungsumgebung Visual Studio zu entwerfen. Dabei wird eine möglichst enge Verzahnung mit der \Gls{wpf} angestrebt, welche die derzeit modernste Technologie von Microsoft darstellt, um grafische Oberflächen für das Betriebssystem Microsoft Windows zu entwickeln.
+
+Ausgehend von der Diplomarbeit {\em Untersuchung zur Einbettung von Sprachelementen der prozessorientierten Simulation in C\# unter .Net} aus dem Jahre 2005 des ehemaligen Studenten Torsten Wondrak, ist an der \Gls{htw}-Dresden ein Erweiterung der Programmiersprache C\# entstanden, welche seither kontinuierlich weiterentwickelt wird. Grundlegende Eigenschaften, die für ein \Gls{des}-System fundamental wichtig sind, wurden in dieser Arbeit bereits realisiert. Daher erscheint es sinnvoll, diese Vorarbeit als Grundlage für dieses Projekt zu verwenden.

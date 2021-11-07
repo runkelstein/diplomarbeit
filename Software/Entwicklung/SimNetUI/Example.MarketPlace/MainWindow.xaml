@@ -1,0 +1,217 @@
+﻿<Window x:Class="Example.MarketPlace.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="624" Width="1113" xmlns:my="SimNetUI" Loaded="Window_Loaded" 
+        xmlns:conv="clr-namespace:Example.MarketPlace.Converter"
+        >
+    <Window.Resources>
+        <conv:TimeValueConverter x:Key="TimeValueConverter" />
+        <conv:PeopleInMarketplaceMultiValueConverter x:Key="PeopleInMarketplaceMultiValueConverter" />
+        <conv:CountMultiValueConverter x:Key="CountMultiValueConverter" />
+        <!--
+        Not working as of yet. Reason unknown
+        <Style x:Key="Cash_Register" TargetType="my:Wait">
+            <Setter Property="VisualAppearanceTemplate">
+                <Setter.Value>
+                    <Image Source="cash_register.png" Height="100" Width="100" />
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+        <Image x:Key="Img_Person1" Source="pic\person1.png" Height="50" Width="50" />
+        <Image x:Key="Img_Person2" Source="pic\person2.png" Height="50" Width="50" />
+        <Image x:Key="Img_Person3" Source="pic\person3.png" Height="50" Width="50" />
+        <Image x:Key="Img_Person4" Source="pic\person4.png" Height="50" Width="50" />
+        <Image x:Key="Img_Person5" Source="pic\person5.png" Height="50" Width="50" />
+        <Image x:Key="Img_ShoppingCart" Source="pic\shopping_cart.png" Height="35" Width="35" />
+    </Window.Resources>
+    <my:SimulationContainer  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="simulation1" Background="#FFFFC100" Visibility="Visible">
+        
+
+        
+        <my:SimulationContainer.Resources>
+            <my:Resource x:Key="shopping cart" Capacity="15" />
+        </my:SimulationContainer.Resources>
+        <Border BorderBrush="Black" BorderThickness="1" Canvas.Left="601" Canvas.Top="153" Height="374" HorizontalAlignment="Left" Name="border1" VerticalAlignment="Top" Width="126" />
+        <Button Content="{Binding RelativeSource={RelativeSource self},Path=Command.Text}" Command="MediaCommands.Play" CommandTarget="{Binding ElementName=simulation1}" Canvas.Left="12" Canvas.Top="12" Height="23" HorizontalAlignment="Left" Name="button1" VerticalAlignment="Top" Width="83" />
+        <Button Content="{Binding RelativeSource={RelativeSource self},Path=Command.Text}" Command="MediaCommands.Stop" CommandTarget="{Binding ElementName=simulation1}" Canvas.Left="101" Canvas.Top="12"  Height="23" HorizontalAlignment="Left" Name="button2" VerticalAlignment="Top" Width="75" />
+        <Slider Canvas.Left="182" Canvas.Top="12" Height="23" Name="slider1" Width="260" Value="{Binding Path=AnimationClockSpeed, ElementName=simulation1}" TickFrequency="1" Maximum="25" />
+        <TextBlock Canvas.Left="462" Canvas.Top="12" Height="23" Name="textBlock5" Text="{Binding ElementName=simulation1, Path=AnimationClockSpeed}" Width="61" TextAlignment="Center" />
+        <TextBlock Canvas.Left="922" Canvas.Top="12" Height="57" HorizontalAlignment="Left" Name="textBlock10" Text="{Binding ElementName=simulation1, Path=SimulationTime,Converter={StaticResource TimeValueConverter}}" TextAlignment="Center" VerticalAlignment="Top" Width="169" FontSize="32" />
+        <my:Generator Canvas.Left="-10" Canvas.Top="51" HorizontalAlignment="Left" Name="generator1" VerticalAlignment="Top" EntityLeft="generator1_EntityLeft" Visibility="Visible" ConnectorsVisible="False">
+            <my:Generator.VisualAppearanceTemplate>
+                <Image Source="pic\enter.png" Width="75" Height="75" />
+            </my:Generator.VisualAppearanceTemplate>
+            <my:Generator.Entity>
+                <my:Entity />
+            </my:Generator.Entity>
+            <my:Generator.Schedule>
+                <my:Schedule Start="0" Stop="43200">
+                    <my:Exponential Alpha="120" my:Schedule.Duration="Infinity" Seed="0" />
+                </my:Schedule>
+            </my:Generator.Schedule>
+            <my:Out Connector="Out">
+                <my:Target Activity="assignResource1" ConnectionPoints="L 102.5,98.5 L 102.5,204 L" Connector="In" ConnectionVisibility="False" />
+            </my:Out>
+        </my:Generator>
+        <my:AssignResource Canvas.Left="159" Canvas.Top="164" HorizontalAlignment="Left" Name="assignResource1" VerticalAlignment="Top" EntityLeft="assignResource1_EntityLeft" ConnectorsVisible="False">
+            <my:AssignResource.VisualAppearanceTemplate>
+                <Image Source="pic\shopping_carts.png" Width="60" Height="60"/>
+            </my:AssignResource.VisualAppearanceTemplate>
+            <my:AssignResource.EntityResourceDependencies>
+                <my:ResourceDependency Resource="{StaticResource shopping cart}" />
+            </my:AssignResource.EntityResourceDependencies>
+            <my:Out Connector="Out">
+                <my:Target Activity="wait1" Connector="In" ConnectionPoints="C 254.67,204 254.67,328" ConnectionVisibility="False" />
+            </my:Out>
+        </my:AssignResource>
+        <my:Wait Canvas.Left="292" Canvas.Top="278" HorizontalAlignment="Left" Name="wait1" VerticalAlignment="Top" Capacity="99999" ConnectorsVisible="False" EntityRouted="wait1_EntityRouted">
+            <my:Wait.VisualAppearanceTemplate>
+                <Image Source="pic\pumps.png" Height="100" Width="100"/>
+            </my:Wait.VisualAppearanceTemplate>
+            <my:Wait.Distribution>
+                <my:Triangular Max="1500" Min="120" Mode="720" Seed="0" />
+            </my:Wait.Distribution>
+            <my:Out Connector="Out">
+                <my:Target Activity="wait6" ConnectionPoints="C 485.33,339 485.33,214" Connector="In" ConnectionVisibility="False" />
+                <my:Target Activity="wait2" ConnectionPoints="" Connector="In" ConnectionVisibility="False" />
+                <my:Target Activity="wait3" ConnectionPoints="C 485.33,339 485.33,467" Connector="In" ConnectionVisibility="False" />
+            </my:Out>
+        </my:Wait>
+
+        <my:Wait  Canvas.Left="612" Canvas.Top="289" HorizontalAlignment="Left" Name="wait2" VerticalAlignment="Top" ConnectorsVisible="False">
+            <my:Wait.VisualAppearanceTemplate>
+                <Image Source="pic\cash_register.png" Height="80" Width="80" />
+            </my:Wait.VisualAppearanceTemplate>
+            <my:Wait.Distribution>
+                <my:UniformDouble Max="180" Min="30" Seed="0" />
+            </my:Wait.Distribution>
+            <my:Out Connector="Out">
+                <my:Target Activity="releaseResource1" ConnectionPoints="L 778.5,339 L 778.5,131 L" Connector="In" ConnectionVisibility="False" />
+            </my:Out>
+        </my:Wait>
+        <my:Wait Canvas.Left="612" Canvas.Top="417" HorizontalAlignment="Left" Name="wait3" VerticalAlignment="Top" ConnectorsVisible="False">
+            <my:Wait.VisualAppearanceTemplate>
+                <Image Source="pic\cash_register.png" Height="80" Width="80" />
+            </my:Wait.VisualAppearanceTemplate>
+            <my:Wait.Distribution>
+                <my:UniformDouble Max="180" Min="30" />
+            </my:Wait.Distribution>
+            <my:Out Connector="Out">
+                <my:Target Activity="releaseResource1" Connector="In" ConnectionPoints="L 778.5,467 L 778.5,131 L" ConnectionVisibility="False" />
+            </my:Out>
+        </my:Wait>
+        <my:Wait Canvas.Left="612" Canvas.Top="164" HorizontalAlignment="Left" Name="wait6" VerticalAlignment="Top" ConnectorsVisible="False">
+            <my:Wait.VisualAppearanceTemplate>
+                <Image Source="pic\cash_register.png" Height="80" Width="80" />
+            </my:Wait.VisualAppearanceTemplate>
+            <my:Wait.Distribution>
+                <my:UniformDouble Max="180" Min="60" Seed="0" />
+            </my:Wait.Distribution>
+            <my:Out Connector="Out">
+                <my:Target Activity="releaseResource1" ConnectionPoints="L 778.5,214 L 778.5,131 L" Connector="In" ConnectionVisibility="False" />
+            </my:Out>
+        </my:Wait>
+        <my:ReleaseResource Canvas.Left="845" Canvas.Top="91" HorizontalAlignment="Left" Name="releaseResource1" VerticalAlignment="Top" Visibility="Visible" EntityLeft="releaseResource1_EntityLeft" ConnectorsVisible="False">
+            <my:ReleaseResource.VisualAppearanceTemplate>
+                <Image Source="pic\shopping_carts.png" Width="60" Height="60"/>
+            </my:ReleaseResource.VisualAppearanceTemplate>
+            <my:ReleaseResource.EntityResourceDependencies>
+                <my:ResourceDependency Resource="{StaticResource shopping cart}" />
+            </my:ReleaseResource.EntityResourceDependencies>
+            <my:Out Connector="Out">
+                <my:Target Activity="exit1" Connector="In" ConnectionVisibility="False" ConnectionPoints="L 957.5,131 L 957.5,459.5 L" />
+            </my:Out>
+        </my:ReleaseResource>
+        <my:Exit Canvas.Left="990" Canvas.Top="412" HorizontalAlignment="Left" Name="exit1" VerticalAlignment="Top" Visibility="Visible" ConnectorsVisible="False">
+            <my:Exit.VisualAppearanceTemplate>
+                <Image Source="pic\exit.png" Height="75" Width="75" />
+            </my:Exit.VisualAppearanceTemplate>
+        </my:Exit>
+        <TextBlock Canvas.Left="29" Canvas.Top="556" Height="29" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" Width="564" >
+        Images are taken from the Open Clip Art Library
+        <Hyperlink>http://www.openclipart.org/</Hyperlink>
+        </TextBlock>
+        <my:QueueCompanion Canvas.Left="403" Canvas.Top="315" Height="74" HorizontalAlignment="Left" Name="queueCompanion1" VerticalAlignment="Top" Width="203" ActivityQueue="{Binding ElementName=wait2}" />
+        <my:QueueCompanion ActivityQueue="{Binding ElementName=wait3}" Canvas.Left="403" Canvas.Top="443" Height="74" HorizontalAlignment="Left" Name="queueCompanion2" VerticalAlignment="Top" Width="203" />
+        <my:QueueCompanion ActivityQueue="{Binding ElementName=wait6}" Canvas.Left="403" Canvas.Top="190" Height="74" HorizontalAlignment="Left" Name="queueCompanion3" VerticalAlignment="Top" Width="203" />
+        <Label Canvas.Left="534" Canvas.Top="51" Content="Marketplace" FontSize="40" Height="76" Name="label2" Width="250" Foreground="#FFF50000" />
+        <my:QueueCompanion Canvas.Left="-23" Canvas.Top="180" Height="149" HorizontalAlignment="Left" Name="queueCompanion4" VerticalAlignment="Top" Width="176" ActivityQueue="{Binding ElementName=assignResource1}" />
+        <TextBlock Canvas.Left="586" Canvas.Top="123" Height="23" HorizontalAlignment="Left" Name="textBlock1" Text="Cash Registers" VerticalAlignment="Top" Width="141" TextAlignment="Center" FontSize="18" />
+        <TextBlock Canvas.Left="302" Canvas.Top="241" FontSize="18" Height="23" HorizontalAlignment="Left" Name="textBlock2" Text="{Binding ElementName=wait1, Path=Statistics.InWork, StringFormat=Shopping (\{0\})}" TextAlignment="Center" VerticalAlignment="Top" Width="120" />
+        <TextBlock Canvas.Left="146" Canvas.Top="138" FontSize="18" Height="23" HorizontalAlignment="Left" Name="textBlock3" Text="acquire cart" TextAlignment="Center" VerticalAlignment="Top" Width="109" />
+        <TextBlock Canvas.Left="790" Canvas.Top="61" FontSize="18" Height="23" HorizontalAlignment="Left" Name="textBlock4" Text="return cart" TextAlignment="Center" VerticalAlignment="Top" Width="191" />
+        <TextBlock Canvas.Left="0" Canvas.Top="148" FontSize="18" Height="23" HorizontalAlignment="Left" Name="textBlock6" Text="{Binding ElementName=generator1, Path=Statistics.DepartedEntities, StringFormat=Enter (\{0\})}" TextAlignment="Center" VerticalAlignment="Top" Width="85" />
+        <TextBlock Canvas.Left="1000" Canvas.Top="375" FontSize="18" Height="23" HorizontalAlignment="Left" Name="textBlock7" Text="{Binding ElementName=exit1, Path=Statistics.ArrivedEntities, StringFormat=Exit (\{0\})}" TextAlignment="Center" VerticalAlignment="Top" Width="85" />
+        <Grid Canvas.Left="12" Canvas.Top="334" HorizontalAlignment="Left" Name="grid1" VerticalAlignment="Top" Width="283">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="204*" />
+                <ColumnDefinition Width="79*" />
+            </Grid.ColumnDefinitions>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Column="0" Grid.Row="0">People entered: </TextBlock>
+            <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding ElementName=generator1, Path=Statistics.DepartedEntities}" TextAlignment="Left" />
+
+            <TextBlock Grid.Column="0" Grid.Row="1">People left:</TextBlock>
+            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ElementName=exit1, Path=Statistics.ArrivedEntities}" TextAlignment="Left" />
+
+
+            <TextBlock Grid.Column="0" Grid.Row="2">People in marketplace:</TextBlock>
+            <TextBlock Grid.Column="1" Grid.Row="2" TextAlignment="Left">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource PeopleInMarketplaceMultiValueConverter}">
+                        <Binding ElementName="generator1" Path="Statistics.DepartedEntities" />
+                        <Binding ElementName="exit1" Path="Statistics.ArrivedEntities" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+
+
+            <TextBlock Grid.Column="0" Grid.Row="3">People shopping:</TextBlock>
+            <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding ElementName=wait1, Path=Statistics.InWork}" TextAlignment="Left" />
+
+
+            <TextBlock Grid.Column="0" Grid.Row="4">People paying up:</TextBlock>
+            <TextBlock Grid.Column="1" Grid.Row="4" TextAlignment="Left">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource CountMultiValueConverter}">
+                        <Binding ElementName="wait2" Path="Statistics.InWork" />
+                        <Binding ElementName="wait3" Path="Statistics.InWork" />
+                        <Binding ElementName="wait6" Path="Statistics.InWork" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            
+            <TextBlock Grid.Column="0" Grid.Row="5">People waiting to pay up:</TextBlock>
+            <TextBlock Grid.Column="1" Grid.Row="5" TextAlignment="Left">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource CountMultiValueConverter}">
+                        <Binding ElementName="wait2" Path="Statistics.InQueue" />
+                        <Binding ElementName="wait3" Path="Statistics.InQueue" />
+                        <Binding ElementName="wait6" Path="Statistics.InQueue" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+
+            <TextBlock Grid.Column="0" Grid.Row="6">Shopping carts available:</TextBlock>
+            <TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding Source={StaticResource shopping cart}, Path=Statistics.AvailableResources}" TextAlignment="Left"/>
+
+
+            <TextBlock Grid.Column="0" Grid.Row="7">People waiting for shopping cart:</TextBlock>
+            <TextBlock Grid.Column="1" Grid.Row="7" Text="{Binding ElementName=assignResource1, Path=Statistics.InQueue}" TextAlignment="Left" />
+
+              
+        </Grid>
+    </my:SimulationContainer>
+</Window>

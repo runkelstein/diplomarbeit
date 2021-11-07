@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F110B6AC-793F-4869-B11B-AA2DF6CB9F86}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SimNetUI.VisualStudio.Design</RootNamespace>
+    <AssemblyName>SimNetUI.VisualStudio.Design</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\SimNetUI.View\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\SimNetUI.View\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SimNetUI.View.VisualStudio.Design.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Windows.Design.Extensibility, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Windows.Design.Interaction, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Adapters\SimulationContainerControlAdapter.cs" />
+    <Compile Include="Adorner\Panel\ConnectorMarkerAdorner.cs" />
+    <Compile Include="Adorner\Panel\LineMarkerAdorner.cs" />
+    <Compile Include="Adorner\Panel\OptionsAdorner.xaml.cs">
+      <DependentUpon>OptionsAdorner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Adorner\Provider\SimulationContainerAdornerProvider.cs" />
+    <Compile Include="Adorner\Tasks\ConnectTask.cs" />
+    <Compile Include="Adorner\Tasks\LineTask.cs" />
+    <Compile Include="Adorner\ToolWindows\ResourceContainer.cs" />
+    <Compile Include="Adorner\ToolWindows\ResourceEditorWindow.xaml.cs">
+      <DependentUpon>ResourceEditorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AttributEditors\CategoryEditors.cs" />
+    <Compile Include="AttributEditors\EditorResources.cs" />
+    <Compile Include="AttributEditors\GeneralCategoryEditor.cs" />
+    <Compile Include="AttributEditors\ValueConverter\Distribution\DistributionDurationConverter.cs" />
+    <Compile Include="AttributEditors\ValueConverter\Distribution\DistributionPropertyFilter.cs" />
+    <Compile Include="AttributEditors\ValueConverter\Distribution\DistributionTypeConverter.cs" />
+    <Compile Include="AttributEditors\ValueConverter\Distribution\ComboBoxDistributionTypeConverter.cs" />
+    <Compile Include="DesignModeValueProviders\ActivityDesignModeValueProvider.cs" />
+    <Compile Include="Initializers\Activities\ActivityBaseInitializer.cs" />
+    <Compile Include="Initializers\Activities\GeneratorInitializer.cs" />
+    <Compile Include="Initializers\Activities\ActivityDelayBaseInitializer.cs" />
+    <Compile Include="ItemFactories\DistributionNewItemFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="RegisterMetadata.cs" />
+    <Compile Include="Tasks\ActivityBaseTaskProvider.cs" />
+    <Compile Include="Util\Constants.cs" />
+    <Compile Include="Util\LineType.cs" />
+    <Compile Include="Util\PropertyNames.cs" />
+    <Compile Include="Util\UtilMethods.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="SimNetUI.View.VisualStudio.Design.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimNetUI.View\SimNetUI.csproj">
+      <Project>{64EE47D2-B4FC-4186-BEF6-B36E81199103}</Project>
+      <Name>SimNetUI.View</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Adorner\Panel\Icons\reload.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Adorner\Panel\OptionsAdorner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Adorner\ToolWindows\ResourceEditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AttributEditors\EditorResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Adorner\Panel\Icons\properties.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

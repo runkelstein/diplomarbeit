@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhancer", "Enhancer.csproj", "{E3BA64BF-433C-4F7D-A967-95EE7767722D}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{E3BA64BF-433C-4F7D-A967-95EE7767722D}.Debug.ActiveCfg = Debug|.NET
+		{E3BA64BF-433C-4F7D-A967-95EE7767722D}.Debug.Build.0 = Debug|.NET
+		{E3BA64BF-433C-4F7D-A967-95EE7767722D}.Release.ActiveCfg = Release|.NET
+		{E3BA64BF-433C-4F7D-A967-95EE7767722D}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

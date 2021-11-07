@@ -1,0 +1,334 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Local="clr-namespace:SimNetUI.VisualStudio.Design.AttributeEditors"
+                    x:Class="SimNetUI.VisualStudio.Design.AttributeEditors.EditorResources"
+                    x:ClassModifier="internal"
+                    xmlns:PropertyEditing="clr-namespace:Microsoft.Windows.Design.PropertyEditing;assembly=Microsoft.Windows.Design.Interaction"
+                    xmlns:Converter="clr-namespace:SimNetUI.VisualStudio.Design.AttributEditors.ValueConverter"
+
+                    >
+<!--xmlns:sapv="clr-namespace:System.Activities.Presentation.Converters;assembly=System.Activities.Presentation"-->
+    <!-- Region ValueConverters-->
+          
+    <Converter:DistributionTypeConverter x:Key="DistributionTypeConverter" />
+    <Converter:DistributionDurationConverter x:Key="DistributionDurationConverter" />
+    <Converter:DistributionPropertyFilter x:Key="DistributionPropertyFilter" />
+
+
+    <!-- EndRegion -->
+
+
+
+    <!-- Region CoporateIdentity //-->
+  
+
+
+    <Style x:Key="HeaderStyle" TargetType="{x:Type TextBlock}">
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1">
+                    <GradientStop Offset="0" Color="Gold" />
+                    <GradientStop Offset="0.5" Color="Goldenrod"/>
+                    <GradientStop Offset="1" Color="Gold" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <Style x:Key="PanelGroupStyle"  TargetType="{x:Type StackPanel}">
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,2">
+                    <GradientStop Offset="0" Color="White" />
+                    <GradientStop Offset="0.7" Color="LightGray" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    
+    <!-- EndRegion -->
+
+    <!-- Region AssignResource and ReleaseResource DataTemplate//-->
+    <DataTemplate x:Key="ActivityResourceCategoryEditorTemplate">
+        <StackPanel Style="{StaticResource PanelGroupStyle}">
+            <TextBlock Text="Resources" Style="{StaticResource HeaderStyle}"/>
+            <!-- Placeholder -->
+            <Border Height="2" />
+
+            <PropertyEditing:PropertyContainer PropertyEntry="{Binding [EntityResourceDependencies]}">
+                <PropertyEditing:PropertyContainer.InlineRowTemplate>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <PropertyEditing:EditModeSwitchButton Width="Auto"  HorizontalAlignment="Stretch"  Content="Edit Entity Resource Dependencies" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </PropertyEditing:PropertyContainer.InlineRowTemplate>
+            </PropertyEditing:PropertyContainer>
+        </StackPanel>
+    </DataTemplate>
+    <!-- End Region-->
+
+
+    <!-- Region Queue ActivityBase//-->
+    <DataTemplate x:Key="ActivityBaseCategoryEditorTemplate">
+        <StackPanel Style="{StaticResource PanelGroupStyle}">
+            <TextBlock Text="Visual Appearance" Style="{StaticResource HeaderStyle}"/>
+            <!-- Placeholder -->
+            <Border Height="2" />
+            <PropertyEditing:PropertyContainer PropertyEntry="{Binding [ConnectorsVisible]}"/>
+        </StackPanel>
+    </DataTemplate>
+    <!-- End Region-->
+
+    <!-- Region Queue DataTemplate//-->
+    <DataTemplate x:Key="QueueCategoryEditorTemplate">
+        <StackPanel Style="{StaticResource PanelGroupStyle}">
+            <TextBlock Text="Queue" Style="{StaticResource HeaderStyle}"/>
+            <!-- Placeholder -->
+            <Border Height="2" />
+            <PropertyEditing:PropertyContainer PropertyEntry="{Binding [QueueType]}"/>
+        </StackPanel>
+    </DataTemplate>
+    <!-- End Region-->
+
+
+    <!-- Region ActivityDelay DataTemplate//-->
+    <DataTemplate x:Key="ActivityDelayCategoryEditorTemplate">
+
+        <StackPanel>
+        
+        <!-- Region Distribution //-->
+        <StackPanel Style="{StaticResource PanelGroupStyle}">
+            <TextBlock Text="Distribution" Style="{StaticResource HeaderStyle}"/>
+
+
+            <!-- Placeholder -->
+            <Border Height="2" />
+
+            <ComboBox  SelectedValuePath="Content" Loaded="Distribution_Selection_Loaded">
+                <ComboBoxItem>Erlang</ComboBoxItem>
+                <ComboBoxItem>Exponential</ComboBoxItem>
+                <ComboBoxItem>Fixed</ComboBoxItem>
+                <ComboBoxItem>LogNormal</ComboBoxItem>
+                <ComboBoxItem>Normal</ComboBoxItem>
+                <ComboBoxItem>Triangular</ComboBoxItem>
+                <ComboBoxItem>UniformDouble</ComboBoxItem>
+                <ComboBoxItem>UniformInt</ComboBoxItem>
+                <ComboBoxItem>Weibull</ComboBoxItem>
+            </ComboBox>
+
+            <!-- Placeholder -->
+            <Border Height="5" />
+
+            <ItemsControl ItemsSource="{Binding [Distribution].SubProperties,Mode=OneWay,Converter={StaticResource DistributionPropertyFilter}}">
+
+                <ItemsControl.Template>
+                    <ControlTemplate>
+                        <StackPanel Background="Transparent">
+                            <ItemsPresenter/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <PropertyEditing:PropertyContainer PropertyEntry="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <!-- EndRegion //-->
+
+        <!-- Region Resources //-->
+        <StackPanel Style="{StaticResource PanelGroupStyle}">
+            <TextBlock Text="Resources" Style="{StaticResource HeaderStyle}"/>
+            <!-- Placeholder -->
+            <Border Height="2" />
+
+            <PropertyEditing:PropertyContainer PropertyEntry="{Binding [ResourceDependencies]}">
+                <PropertyEditing:PropertyContainer.InlineRowTemplate>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <PropertyEditing:EditModeSwitchButton Width="Auto"  HorizontalAlignment="Stretch"  Content="Edit Resource Dependencies" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </PropertyEditing:PropertyContainer.InlineRowTemplate>
+            </PropertyEditing:PropertyContainer>
+
+
+        </StackPanel>
+        <!-- EndRegion //-->
+
+        </StackPanel>
+    </DataTemplate>
+    <!-- End Region-->
+
+    <!-- Region Datatemplates //-->
+
+    <!-- Region Generator DataTemplate //-->
+    <DataTemplate x:Key="GeneratorCategorieEditorTemplate">
+        <StackPanel>
+
+            <!-- Region Generator Schedule //-->
+            <StackPanel Style="{StaticResource PanelGroupStyle}">
+                <TextBlock Text="Schedule" Style="{StaticResource HeaderStyle}"/>
+                <!-- Placeholder -->
+                <Border Height="2" />
+                <PropertyEditing:PropertyContainer PropertyEntry="{Binding [Schedule].PropertyValue.SubProperties[Start]}" />
+                <PropertyEditing:PropertyContainer PropertyEntry="{Binding [Schedule].PropertyValue.SubProperties[Stop]}" />
+            
+                <Border Height="10" />
+            
+                <DataGrid HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" AutoGenerateColumns="False" ItemsSource="{Binding [Schedule].PropertyValue.SubProperties[Content].Collection}"  CanUserSortColumns="False" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="true"  Binding="{Binding Value, Converter={StaticResource DistributionTypeConverter} }" Header="Distribution" Width="3*" />
+                        <DataGridTextColumn IsReadOnly="true" Binding="{Binding Value, Converter={StaticResource DistributionDurationConverter} }"  Header="Duration"  Width="2*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Border Height="5" />
+
+                <PropertyEditing:PropertyContainer PropertyEntry="{Binding [Schedule].PropertyValue.SubProperties[Content]}">
+                    <PropertyEditing:PropertyContainer.InlineRowTemplate>
+                        <ControlTemplate>
+                            <StackPanel>         
+                                <PropertyEditing:EditModeSwitchButton Width="Auto"  HorizontalAlignment="Stretch"  Content="Modify Schedule" />
+                            </StackPanel>           
+                        </ControlTemplate>
+                    </PropertyEditing:PropertyContainer.InlineRowTemplate>
+                </PropertyEditing:PropertyContainer>
+
+                <Border Height="10" />
+            </StackPanel>
+
+            <!-- EndRegion -->
+            
+
+
+           
+            <!-- Region Generator Entity //-->
+
+            <StackPanel Style="{StaticResource PanelGroupStyle}">
+                
+                <TextBlock Text="Entity" Style="{StaticResource HeaderStyle}"/>
+                <!-- Placeholder -->
+                <Border Height="2" />
+                <PropertyEditing:PropertyContainer PropertyEntry="{Binding [Entity].PropertyValue.SubProperties[Priority]}"/>
+                <PropertyEditing:PropertyContainer PropertyEntry="{Binding [Entity].PropertyValue.SubProperties[Type]}"/>
+                <PropertyEditing:PropertyContainer PropertyEntry="{Binding [EntityMaxCount]}"/>
+                
+            </StackPanel>
+
+            <!-- EndRegion //-->
+
+
+            <!-- Region ActivityBase //-->
+            <ContentPresenter ContentTemplate="{StaticResource ActivityBaseCategoryEditorTemplate}" />
+            <!-- EndRegion //-->
+
+        </StackPanel>
+    </DataTemplate>
+    <!-- EndRegion //-->
+
+    <!-- Region Exit DataTemplate //-->
+
+    <DataTemplate x:Key="ExitCategoryEditorTemplate">
+        <StackPanel>
+
+            <!-- Region Common //-->
+            <StackPanel Style="{StaticResource PanelGroupStyle}">
+                <TextBlock Text="Common" Style="{StaticResource HeaderStyle}"/>
+                <!-- Placeholder -->
+                <Border Height="2" />
+                <PropertyEditing:PropertyContainer PropertyEntry="{Binding [EndSimulationAtEntityCount]}"/>
+            </StackPanel>
+            <!-- EndRegion //-->
+
+            <!-- Region ActivityBase //-->
+            <ContentPresenter ContentTemplate="{StaticResource ActivityBaseCategoryEditorTemplate}" />
+            <!-- EndRegion //-->
+
+        </StackPanel>
+            
+    </DataTemplate>
+    
+    <!-- EndRegion //-->
+    
+    <!-- Region Wait DataTemplate//-->
+    <DataTemplate x:Key="WaitCategoryEditorTemplate">
+        
+
+        <StackPanel>
+
+            <!-- Region Common //-->
+            <StackPanel Style="{StaticResource PanelGroupStyle}">
+                <TextBlock Text="Common" Style="{StaticResource HeaderStyle}"/>
+                <!-- Placeholder -->
+                <Border Height="2" />
+                <PropertyEditing:PropertyContainer PropertyEntry="{Binding [Capacity]}"/>
+            </StackPanel>
+            <!-- EndRegion //-->
+
+            <!-- Region Queue //-->
+            <ContentPresenter ContentTemplate="{StaticResource QueueCategoryEditorTemplate}" />
+            <!-- EndRegion //-->
+
+            <!-- Region ActivityDelay //-->
+            <ContentPresenter ContentTemplate="{StaticResource ActivityDelayCategoryEditorTemplate}" />
+            <!-- EndRegion //-->
+
+            <!-- Region ActivityBase //-->
+            <ContentPresenter ContentTemplate="{StaticResource ActivityBaseCategoryEditorTemplate}" />
+            <!-- EndRegion //-->
+
+        </StackPanel>  
+        
+    </DataTemplate>
+    <!-- EndRegion//-->
+
+
+    <!-- Region AssignResource DataTemplate//-->
+    <DataTemplate x:Key="AssignResourceCategoryEditorTemplate">
+        
+        <StackPanel>
+        
+        <!-- Region Queue //-->
+        <ContentPresenter ContentTemplate="{StaticResource QueueCategoryEditorTemplate}" />
+        <!-- EndRegion //-->
+
+        <!-- Region Resource //-->
+        <ContentPresenter ContentTemplate="{StaticResource ActivityResourceCategoryEditorTemplate}" />
+        <!-- EndRegion //-->
+
+        <!-- Region ActivityBase //-->
+            <ContentPresenter ContentTemplate="{StaticResource ActivityBaseCategoryEditorTemplate}" />
+        <!-- EndRegion //-->
+
+        </StackPanel>
+    </DataTemplate>
+    <!-- End Region-->
+
+    <!-- Region ReleaseResource DataTemplate//-->
+    <DataTemplate x:Key="ReleaseResourceCategoryEditorTemplate">
+        <StackPanel>
+
+            <!-- Region Resource //-->
+            <ContentPresenter ContentTemplate="{StaticResource ActivityResourceCategoryEditorTemplate}" />
+            <!-- EndRegion //-->
+
+            <!-- Region ActivityBase //-->
+            <ContentPresenter ContentTemplate="{StaticResource ActivityBaseCategoryEditorTemplate}" />
+            <!-- EndRegion //-->
+
+        </StackPanel>
+    </DataTemplate>
+    <!-- End Region-->
+
+    <!-- EndRegion //-->
+
+</ResourceDictionary>

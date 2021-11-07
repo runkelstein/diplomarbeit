@@ -1,0 +1,659 @@
+\chapter{Technische Realisierung der SimNetUI-Bibliothek}\label{kap_technik}
+
+Die Anforderungen, die an eine moderne Software gestellt werden, können sehr vielfältig formuliert werden.  
+Zum einen gibt es eine Reihe von Qualitätsmerkmalen, die gute Software kennzeichnen.
+
+\begin{itemize}
+	\item Zuverlässigkeit
+	\item Sicherheit
+	\item Fehlerfreiheit
+	\item Performance
+	\item Stabilität
+	\item Korrektheit
+	\item Nutzerfreundlichkeit
+	\item Erweiterbarkeit
+\end{itemize}
+
+Diese Liste stellt nur eine Auswahl von Qualitätsmerkmalen dar und kann zweifelsohne endlos erweitert werden. Nicht jede Software wird imstande sein, jeden dieser Punkte ausreichend abzudecken. Häufig geht es vielmehr darum, den bestmöglichen Kompromiss zu finden, der für die Aufgabe, die die Software zu erfüllen hat, am sinnvollsten erscheint.
+
+Softwareentwicklung stellt somit eine sehr anspruchsvolle Aufgabe dar, denn es gilt vieles miteinander abzuwägen. Um so wichtiger ist daher ein überlegter Softwareentwurf, denn ohne solides Fundament lässt es sich sehr schwer darauf aufbauen. Da im Laufe der Zeit verschiedene Programmierer an einem Projekt arbeiten können, ist zudem eine Dokumentation über die Prinzipien der Softwarearchitektur unerlässlich. Und genau diesem Punkt soll sich dieses Kapitel widmen.
+
+Der sinnvolle Einsatz eines bewährten Entwurfsmusters erleichtert die Anwendungsentwicklung erheblich. Zum einen führt eine robuste Grundlage zu weniger Programmfehlern und stellt damit auch einen erheblicher Zeitgewinn ein, denn erfahrungsgemäß ist die Phase des so genannten {\em Debuggings} die zeitaufwendigste. Zum anderen erleichtern gute Entwurfsmuster die Weiterentwicklung einer Software durch unabhängige Programmierer, was nicht zuletzt auch mit einer vorgegeben sinnvollen Organisation des Quellcodes zu tun hat.
+
+Entwurfsmuster lassen sich allerdings nicht in jedem Fall beliebig anwenden, denn auch der technische Kontext einer Anwendung muss mit in Betracht gezogen werden. Als Beispiel für ein Entwurfsmuster, welches sich für die Entwicklung von Anwendungen mit der WPF eignet, kann das MVVM-Pattern genannt werden. Es hat sich allerdings gezeigt, dass die Gegebenheiten, wie sie für die \Gls{SimNetUI}-Bibliothek vorliegen, es nicht ohne weiteres ermöglichen, auf Basis dieses Entwurfsmuster zu arbeiten. Denn die \Gls{SimNetUI}-Bibliothek stellt keine klassische Endnutzer-Anwendung dar, da sie als Entwicklungswerkzeug für die Entwicklung von Simulationsapplikationen konzipiert worden ist und in diesem Sinne auch lediglich als Sammlung von Benutzersteuerelementen für die WPF betrachtet werden kann. Wenngleich diese Bezeichnung der Komplexität der Funktionalitäten, die durch die Bibliothek bereitgestellt werden, nicht gerecht wird. Auch wenn es aus diesem Grunde als unmöglich erscheint, ein Entwurfsmuster vollständig zu übernehmen, so können ausgewählte Konzepte, insbesondere aus dem MVVM Entwurfsmuster, auf die besondere Ausgangslage angepasst werden.
+
+\section{Komponentenmodell der SimNetUI-Bibliothek}
+
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{Architektur.png}
+	\caption{Komponentenarchitektur der \Gls{SimNetUI}-Bibliothek}
+  \label{fig:pic_architektur_komponenten}
+\end{figure}
+
+
+Als Basis für die Betrachtung der einzelnen Komponenten der Softwarearchitektur einer Simulationsanwendung soll die Abbildung \ref{fig:pic_architektur_komponenten} dienen. Jede einzelne dieser Komponenten ist als eigenes Visual Studio Projekt mit der Programmiersprache C\# realisiert worden. Die Pfeile in der Grafik stellen die Beziehung zwischen den Komponenten dar. 
+
+Die \Gls{SimNet}-Bibliothek, welche aus einer Diplomarbeit aus dem Jahre 2005 mit dem Titel {\em Untersuchung zur Einbettung von Sprachelementen der prozessorientierten Simulation in C\# unter .Net} an der HTW-Dresden hervorgegangen ist, stellt als unterste Softwareschicht das Fundament der \Gls{SimNetUI}-Bibliothek dar. Die \Gls{SimNet}-Bibliothek stellt Sprachelemente zur Verfügung, die die Entwicklung eines Simulationsmodells mit C\# erleichtern. Durch Verwendung dieser Bibliothek müssen elementare Eigenschaften von Simulationssystemen für die \Gls{SimNetUI}-Bibliothek nicht selbst implementiert werden. Die \Gls{SimNet}-Bibliothek implementiert einen Scheduler, welcher sich selbständig um die Planung von Ereignissen kümmert. Zur Synchronisation von Ereignissen stehen Elemente wie Ressourcen, Trigger oder Interrupts zur Verfügung. Durch die Separierung beider Bibliotheken kann die Weiterentwicklung an unabhängig voneinander arbeitende Programmierer delegiert werden.
+
+Den eigentlichen Kern der \Gls{SimNetUI}-Bibliothek stellen die beiden Komponenten {\em SimNetUI.ModelLogic} sowie {\em SimNetUI} dar. Entwickler, die auf Basis der \Gls{SimNetUI}-Bibliothek Anwendungen entwickeln, werden ausschließlich mit der Ansichtskomponente ({\em SimNetUI}) in Berührung kommen. Über diese Komponente werden Benutzersteuerelemente für die Entwicklung mit der WPF bereitgestellt. Die Modellschicht stellt eine interne Repräsentation des Simulationsmodells dar. Der eigentliche Programmcode, der für die Ausführung einer Simulation benötigt wird, ist somit in der Modellschicht zu finden. Eine Anwendung, die die \Gls{SimNet}-Bibliothek verwendet, muss auch stets durch den sogenannten \Gls{Enhancer} erweitert werden. Der \Gls{Enhancer} ist ein ergänzender Bestandteil zur \Gls{SimNet}-Bibliothek und wird in diesem Fall verwendet, um den \Gls{il}-Code der Modellschicht zu erweitern.
+
+Ein interessanter Aspekt für die Entwicklung von Benutzersteuerelementen für die WPF ist die einfache Erweiterbarkeit des Visual Studio Designers. Um Zugriff auf diese Erweiterungsmöglichkeiten zu erhalten, war es notwendig, zur eigentlichen Bibliothek ein weiteres Projekt zu realisieren.\footnote {Die Nutzung der Erweiterbarkeitsmechanismen der WPF ist Thema des Kapitels \ref{kap4_erweiterungen}}
+
+\subsection{Begründung für Trennung in eine Modell- und Ansichtsschicht}\label{kap4:ursachen}
+
+Die Unterteilung in eine {\em Modell-} und eine {\em Ansichtskomponente} bedarf weiterer Aufklärung. 
+
+Ein offensichtlicher Vorteil dieser Trennung ist zum einen eine Unterscheidung von verschiedenen Aufgabenbereichen. Während die Ansichtskomponente als Schnittstelle für Simulationsentwickler dient, kann sich die Modellkomponente um die internen Implementationsdetails kümmern. Letztlich ist es Zielstellung, einen Nutzer der \Gls{SimNetUI}-Bibliothek nicht mit unnötigen Interna zu belasten. Daher ist sehr viel Beachtung der Gestaltung der Zugriffsregeln erwiesen worden. Durch die Auslagerung von Code in eine eigenständige {\em \Gls{Assembly}} wird dieser Prozess erheblich vereinfacht.
+
+Durch die Verwendung der \Gls{SimNet}-Bibliothek ergibt sich leider auch ein Nachteil. Denn aufgrund der Erweiterung des \Gls{il}-Codes durch den \Gls{Enhancer}, ist es im Anschluss nicht mehr möglich, den C\# Programmcode der Modellschichtkomponente zu debuggen. Gäbe es diese Separierung nicht, würde sich dieser Nachteil ebenso auf einen großen Teil des Programmcodes auswirken, der für die Bereitstellung der WPF-Komponenten der \Gls{SimNetUI}-Bibliothek zuständig ist. Weiterhin ist es zur Entwicklungszeit sehr nützlich, wenn Kompilierungszeiten möglichst kurz sind. Der Code der \Gls{Modellschicht} ist wesentlich kompakter als der Code für die \Gls{Ansichtsschicht} und kann daher vom {\em \Gls{Enhancer}} bedeutend schneller verarbeitet werden.
+
+Der wichtigste Grund für die Gliederung des Codes ist die Notwendigkeit einer {\em multithreaded} Anwendung. Ereignisse im Kontext einer DES-Simulation sind stets zeitlich voneinander getrennt. Dass zwei Ereignisse zum selben Zeitpunkt ausgeführt werden, stellt daher eine extreme Ausnahme dar. Eine Parallelisierung des Simulationscodes wäre zudem viel besser, in der \Gls{SimNet}-Bibliothek unterzubringen. Die Aufteilung in unterschiedliche Threads hat vielmehr rein technische Gründe, die sich aus dem Zusammenspiel mit der WPF-Technologie ergeben. Zum einen wird eine Anwendung, die in der Lage ist, auf Eingaben auch während der Ausführungszeit des Simulationscodes zu reagieren, als sehr viel Nutzerfreundlicher empfunden.
+
+Die eigentliche Hürde stellt allerdings die Art und Weise dar, wie Animationen in der WPF realisiert sind. Für Anwendungen, die auf Basis der WPF laufen, kann zwischen einem UI-Tread und einen Render-Thread unterschieden werden. Nutzercode wird in aller Regel im UI-Thread ausgeführt. Darüber hinaus können weitere Threads vom Anwendungsentwickler realisiert werden. Animationen werden über den Render-Thread der WPF ausgeführt, können aber im UI-Thread initialisiert werden. Zwischen dem UI-\Gls{Thread} und dem Render-\Gls{Thread} besteht eine Synchronisation, sodass immer dann, wenn Nutzercode ausgeführt wird, der nicht Bestandteil der \Gls{wpf} ist, der Render-\Gls{Thread} blockiert ist. Eine folgerichtige Konsequenz, die sich hieraus ergibt, ist, dass es für Anwendungsentwickler nicht möglich ist, auf das Ende der Ausführung einer Animation im UI-\Gls{Thread} zu warten, um im Anschluss weiteren Code auszuführen. Einen Ausweg aus dieser Situation schafft ein Ereignis, dass nach Beenden der Animation im UI-\Gls{Thread} ausgelöst wird. Das alleine genügt allerdings nicht, um das Problem vollständig zu lösen. Den je komplexer der Aufruf-Stack ist, um so schwieriger wird es den UI-\Gls{Thread} an gegebener Stelle wieder zu verlassen, um später an geeigneter Stelle wieder einzuspringen. Darum erscheint ein zusätzlicher \Gls{Thread}, der für die Zeit der Ausführung einer Animation blockiert wird, als sehr nützlich. Somit wird Programmcode im UI-\Gls{Thread} nur noch ausgeführt, wenn Änderungen auftreten, die auf die Darstellung einwirken, wie beispielsweise die Initialisierung einer Animation oder wenn Code von Anwendungsentwicklern auf das Geschehen der Simulation einwirken soll. Der \Gls{Thread} der Modellschicht wartet nun, bis er vom UI-\Gls{Thread} signalisiert bekommt, dass er weiter arbeiten darf. Dieser Sachverhalt ist etwas komplexer und soll daher in Form einer Grafik veranschaulicht werden.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{thread.png}
+	\caption{Kommunikation zwischen Threads}
+  \label{fig:pic_architektur_komponenten}
+\end{figure}
+
+Die meisten Klassen der Ansichtsschichtkomponente erben von der \Gls{wpf}-Klasse {\em DependencyObject}. Eine Eigenschaft von instanziierten {\em DependencyObjects} ist es, dass diese an den \Gls{Thread} gebunden sind, in welchem sie erstellt worden sind. Somit können Objekte aus der Ansichtsschicht nicht in einem separaten \Gls{Thread} verwendet werden. Daher ist es ungeheuer praktisch, dass die Modellschicht ihre eigene von der grafischen Darstellung losgelöste Repräsentation des Simulationsmodells besitzt. 
+
+\section{Realisierung der Ansichts- und Modellebene}\label{kap4_realisierung}
+
+Nachdem betrachtet worden ist, weshalb eine Aufteilung des Programmcodes auf mehrere Komponenten notwendig ist, werden nun Implementationsdetails der Ansichts- und Modellschicht beleuchtet. Aufgrund des engen Zusammenhangs beider Ebenen erscheint eine gleichzeitige Betrachtung sinnvoll.
+
+
+\subsection{Beziehung zwischen Ansichts- und Modellschicht}
+
+Ein Grundprinzip, das bei der Ausarbeitung der Konzepte stets im Vordergrund stand, ist die möglichst lose Kopplung der Modellschicht an die Ansichtsschicht. Eine Auswirkung dieser Entscheidung ist darin zu erkennen, dass die Modellebene keine Verweise auf die Ansichtsebene besitzt. Somit besteht nur eine Abhängigkeit von der Ansichtsschicht zur Modellschicht, keinesfalls aber in umgekehrter Richtung. In der Softwareentwicklung spricht man deshalb auch von einem {\em Schichtenmodell}. Diese klare Trennung erleichtert es, die Abläufe innerhalb der \Gls{SimNetUI}-Bibliothek zu verstehen. Auf diese Weise ist es zumindest theoretisch möglich, einen Komponententest (engl. {\em unit test}) speziell für die Modellschicht zu implementieren.
+
+Da Ansichts- und Modellschicht jeweils ihre eigene Repräsentation des Simulationsmodells besitzen, existieren für die meisten Klassen aus der Ansichtsebene in der Modellebene entsprechende korrespondierende Klassen. Ausnahmen bilden Elemente, die nur für die Darstellung wichtig sind, wie dies bei den Begleitobjekten der Fall ist. Eine typische Implementation einer Klasse aus der Ansichtsschicht sieht somit eine Referenz auf eine Klasse der Modellschicht vor. Modellschichtklassen sind immer am Suffix {\em ML} klar erkennbar. Bei der Referenz auf eine Modellschichtklasse handelt es sich selbstverständlich um ein Implementationsdetail, welches unter keinen Umständen durch Code von Applikationsebene erreichbar sein darf. \\
+
+
+\input{csharp.tex}
+\begin{lstlisting}[caption={Implementation des ModelLogic-Properties für Aktivitäten (Quellcodeauszug aus der Klasse \nolinkurl{ SimNetUI.Activities.Base.ActivityBase})},label={list:kap4_modellogic_property}]
+internal static readonly DependencyProperty ModelLogicProperty =
+	DependencyProperty.Register("ModelLogic",
+	typeof (ActivityBaseML), typeof (ActivityBase),
+	new FrameworkPropertyMetadata(OnModelLogicPropertyChanged));
+
+  [Browsable(false)]
+  internal ActivityBaseML ModelLogic
+  {
+  	get { return (ActivityBaseML) GetValue(ModelLogicProperty); }
+    set { SetValue(ModelLogicProperty, value); }
+  }
+\end{lstlisting}
+
+Eine Instanz einer zugehörigen Modellklasse wird idealerweise im Konstruktor der Ansichtsklasse erstellt.
+
+\subsubsection{Datenbindung zwischen Modell- und Ansichtsschicht}
+
+Klassen in der Modellschicht besitzen alle eine gemeinsame Basisklasse \footnote{Die gemeinsame Basisklasse {\em ModelLogicBase} befindet sich im Namespace \nolinkurl{SimNetUI.ModelLogic.Base}}, die das INotifyPropertyChanged Interface implementiert. Dieses Interface ist eine Voraussetzung, um Datenbindung für Klassen zu ermöglichen, die nicht von DependenyObject erben und somit auch keine DependencyProperties implementieren können. Damit ist eine wichtige Grundlage geschaffen, um einen reibungslosen Datenaustausch zwischen der Modell- und der Ansichtsschicht zu ermöglichen. 
+
+Wie aus dem Quelltext \ref{list:kap4_modellogic_property} ersichtlich ist, besitzt das ModelLogic Property immer eine Callback-Funktion, die aufgerufen wird, sobald sich der Wert des Properties verändert hat. Diese Callback-Methode wird unter anderem dafür verwendet, die Datenbindung zu initialisieren, mit welcher Eigenschaften zwischen der Modellschicht und der Ansichtsschicht miteinander abgeglichen werden. Der folgende Auszug aus der \Gls{SimNetUI}-Bibliothek soll zeigen, wie dies funktionieren kann.\\
+
+\begin{lstlisting}[caption={Datenbindung von Properties aus der Ansichtsschicht zu Properties aus der Modellschicht (Quellcodeauszug aus der Klasse \nolinkurl{SimNetUI.Activities.Base.ActivityBase})},label={list:kap4_modellogic_databinding}]
+private static void OnModelLogicPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+{
+  var activityBase = obj as ActivityBase;
+  var activityBaseML = e.NewValue as ActivityBaseML;
+
+  if (activityBaseML != null)
+  {
+    // set up binding
+    activityBase.SetUpBinding(NameProperty);
+  }
+}
+        
+\end{lstlisting}
+
+Es ist Konvention, dass der Name eines Properties in der Modellschicht dem Namen des Properties der Ansichtsschicht entspricht. Auf diese Weise können die wichtigen Informationen, die für die Datenbindung Voraussetzung sind, vollständig aus den Metadaten des {\em Dependency-Properties} gewonnen werden.
+
+Eine klare Festlegung darüber, welcher Code auf Eigenschaften einwirken darf, hilft dabei, die Richtung der Datenbindung der Properties zu bestimmen. So gilt allgemein die Regel, dass Properties, die der Anwendungsentwickler durch Verwendung der Benutzersteuerelemente aus der Ansichtsschicht setzen kann, eine einseitige Bindung von der {\em Ansichts-} zur {\em Modellebene} besitzen. Sind Properties für Anwendungsentwickler nur lesbar, besteht hingegen eine einseitige Datenbindung von der Modellschicht zur Ansichtsschicht.
+
+\subsubsection{Ereignisorientierte Kommunikation}
+
+Für die Kommunikation zwischen der Modell- und der Ansichtsebene reicht eine Datenbindung zwischen Properties alleine nicht aus. Es mag erforderlich sein, dass die Modellschicht die Ansichtsschicht über Zustandsänderungen im Modell informiert oder Informationen aus der Ansichtsschicht anfordert. Ein Problem hierbei ist, dass die Modellschicht bekanntlich keine Verweise auf Objekte aus der Ansichtsschicht besitzt. Für diese Problematik empfiehlt sich eine Ereignisorientierte Kommunikation. Die Modellschicht besitzt Events, die bei Bedarf ausgelöst werden, um mit der Ansichtsschicht zu kommunizieren. Diese Ereignisse werden von der Ansichtskomponente abonniert.
+
+Eine Sache, die hierbei berücksichtigt werden muss, ist dass eine Kommunikation über Threadbarrieren hinweg erfolgen muss. Wie bereits betrachtet, gilt für die meisten Objekte aus der Ansichtsschicht eine sogenannte Threadaffinität. Diese Gebundenheit von Objekten an den UI-\Gls{Thread} verhindert es, dass andere Threads Zugriff auf Eigenschaften dieser Objekte erhalten. Eine Methode aus der Ansichtsschicht, die ein Ereignis abonniert hat, welches sich in der Modellschicht befindet, wird daher zunächst im \Gls{Thread} der Modellschicht ausgeführt. 
+
+Eine Kommunikation zwischen verschiedenen Threads wird in der \Gls{wpf} über einen Dispatcher \footnote{\cite{Wild2010}} ermöglicht. Über diesen Dispatcher können Nachrichten in Form eines Delagates an den UI-\Gls{Thread} versandt werden. Hierzu verwaltet der Dispatcher eine nach Priorität sortierte Liste von Nachrichten. Die meisten Klassen aus der \Gls{wpf} erben von der Klasse {\em DispatcherObject} und erhalten damit Zugriff auf die Funktionalitäten, die durch den Dispatcher über eine Referenz auf ein Dispatcherobjekt bereitgestellt werden. Auf diese Weise erben auch alle relevanten Klassen aus der Ansichtsschicht der \Gls{SimNetUI}-Bibliothek ohne Ausnahme von der DispatcherObject Klasse. Die Methoden {\em Invoke} und {\em BeginInvoke} stellen eine Möglichkeit dar, Nachrichten an den UI-\Gls{Thread} zu versenden. Während die Methode {\em Invoke} bei Aufruf den aufrufenden \Gls{Thread} blockiert, bis der Code, der mit der übermittelten Nachricht assoziiert wird, ausgeführt worden ist, erlaubt die Methode {\em BeginInvoke} eine parallele Ausführung von Programmcode in beiden Threads.
+
+Da es sich hierbei um einen Vorgang handelt, der häufiger Anwendung findet, existiert für die Ansichtsebene eine Klasse {\em RegisterEvent}. Diese stellt Methoden zur Verfügung, die eine Abonnierung von Ereignissen vereinfachen. Über die überladene Methode {\em register} wird ein Wrapper für eine Methode erstellt, die ein Ereignis abonnieren soll. Dieser Wrapper kümmert sich darum, dass der Code im richtigen \Gls{Thread} ausgeführt wird.\\
+
+\begin{lstlisting}[caption={Beispiel für die überladene Methode {\em register}. Quellcodeauszug aus der Klasse \nolinkurl{ SimNetUI.Util.RegisterEvent}.},label={list:kap4_register_event}]
+public static Func<T1, R> register<T1, R>(Func<T1, R> ev, Dispatcher dispatcher)
+{
+  var wrapper = (Func<T1, R>) delegate(T1 t1) { return (R) dispatcher.Invoke(ev, t1); };
+
+  return wrapper;
+}
+\end{lstlisting}
+
+
+Die Abonnierung von Ereignissen kann erst erfolgen, nachdem eine Klasse aus der Ansichtsschicht eine entsprechende Modellklasse besitzt. Daher bietet sich hierfür erneut die Verwendung der Callback-Methode  {\em OnModelLogicPropertyChanged} an. Illustriert wird dies im 
+Quelltext \ref{list:kap4_activityroute_registerevent}.\\
+
+\begin{lstlisting}[caption={Beispiel für die Abonnierung von Ereignissen aus der Modellschicht. Quellcodeauszug aus der Klasse {\em ActivityRouteBase}.},label={list:kap4_activityroute_registerevent}]
+private static void OnModelLogicPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+{
+  var activity = obj as ActivityRouteBase;
+  var activityML = e.NewValue as ActivityRouteBaseML;
+
+  if (activityML != null)
+  {
+  
+    // register events
+    activityML.ProvideEntity +=
+      RegisterEvent.register<OutConnectorML,EntityML>(activity.InteractionML_ProvideEntityML,activity.Dispatcher);
+
+  }
+\end{lstlisting}
+
+\subsubsection{Threadsicherheit}
+
+Bei den bisher betrachteten Kommunikationsmechanismen stellt sich die Frage, ob eine threadsichere Kommunikation stattfindet.
+Threadsicherheit bedeutet, dass keine {\em Race-Condition} oder kein {\em \Gls{Deadlock}} zwischen den beiden Threads auftreten dürfen.
+
+Datenbindung, wie sie in der \Gls{SimNetUI}-Bibliothek verwendet wird, ist im allgemeinen Threadsicher. Eine Ausnahme bilden Collections, die auch in der aktuellen .Net Version 4.0 nicht Threadsicher sind.\footnote{ Bea Stollitz, die für Microsoft als Entwicklerin für das \Gls{wpf}- und Silverlight-Framework tätig war,  erläutert diesen Sachverhalt in einem Artikel auf ihrem Blog bezogen auf die 1. Version der \Gls{wpf} \cite{Stoll2006}. }. 
+
+Für die \Gls{SimNetUI}-Bibliothek ist zu beachten, dass für Elemente einer Collection aus der Ansichtsschicht korrespondierende Elemente innerhalb einer Collection aus der Modellschicht existieren. Derzeit wird dieser Abgleich in der Ansichtsschicht im UI-\Gls{Thread} vollzogen. Die wichtigsten Collections in der \Gls{SimNetUI}-Bibliothek stellen zum einen die Liste der Aktivitäten dar, zum anderen deren Verbindungen zu anderen Aktivitäten. Weiterhin besitzen Generatoren einen sogenannten {\em Schedule}, der ebenfalls als Collection realisiert worden ist. Da aber die interne Modellrepräsentation für die Ansichtsschicht sowie die Modellschicht noch vor dem Start einer Simulation initialisiert wird, können keinerlei Probleme bezüglich der Threadsicherheit auftreten. Applikationsentwickler können während eines Simulationslaufs auf Zustände des Simulationsmodells einwirken, sobald ein Ereignis einer Aktivität ausgelöst worden ist. Wenn Nutzercode im UI-\Gls{Thread} ausgeführt wird, wird der \Gls{Thread} auf welchem die Modellschicht arbeitet blockiert. Ein dynamischer Umbau des Modells während eines Simulationslaufes wird allerdings nicht explizit unterstützt und kann Probleme verursachen. Normale Properties von Aktivitäten und Entitäten können aber jederzeit auch problemlos an dieser Stelle manipuliert werden.
+
+\subsection{Aktivitäten}
+
+
+
+\subsubsection{Vererbungshierarchie}\label{kap_vererbungshierarchie}
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{cd2.png}
+	\caption{Vererbungshierarchie für Aktivitäten aus der Ansischtsebene der \Gls{SimNetUI}-Bibliothek }
+  \label{fig:pic_cd2}
+\end{figure}
+
+Da Aktivitäten eine Reihe von gemeinsamen Eigenschaften besitzen, lässt sich das Paradigma der Vererbung aus der objektorientierten Programmierung sinnvoll anwenden. Aus Abbildung \ref{fig:pic_cd2} ist eine Aufteilung von Basisklassen und Aktivitäten zu erkennen.
+Basisklassen stellen ein internes Implementationsdetail dar und sind nicht für die Verwendung im \Gls{xaml}-Code von Simulationsanwendungen vorgesehen. Für die Modellschicht existiert ein äquivalente Vererbungshierarchie.
+
+\paragraph{ActivityBase}
+
+Die Klasse {\em ActivityBase} stellt die Grundlage für alle Aktivitäten aus der \Gls{SimNetUI}-Bibliothek dar. Diese erbt von der \Gls{wpf}-Framework-Klasse {\em UserControl}, wodurch eine Verwendung von Aktivitäten als eigenes Steuerelement in der \Gls{wpf} ermöglicht wird.
+Die Klasse {\em ActivityBase} legt das Fundament für die Verwaltung von Verbindungen zwischen einzelnen Aktivitäten. Es werden die Datenstrukturen aufbereitet, die für das Zeichnen der Verbindungen zwischen den Aktivitäten intern verwendet werden.
+Außerdem wird ableitenden Klassen bereits ein Entwurfsmuster vorgegeben, indem eine Reihe von virtuellen Methoden bereitgestellt werden, die von ableitenden Klassen überschrieben werden können. Im Regelfall werden Aktivitäten sich nicht direkt von dieser Klasse ableiten. Die Aktivität {\em Exit} stellt hierbei eine Ausnahme dar, da nur eine eingeschränkte Kommunikation mit anderen Aktivitäten stattfindet. Denn die Aktivität {\em Exit} besitzt keine ausgehenden Verbindungen.
+
+\paragraph{ActivityRoute}
+
+Die {\em ActivityRoute}-Klasse erweitert die Konzepte der {\em ActivityBase}-Klasse. Aktivitäten, die sich von dieser Basisklasse herleiten, besitzen die Möglichkeit, Entitäten an andere Aktivitäten weiterzuleiten. Durch die Implementation des Interfaces {\em IEntityRouting} können zudem Nutzer der \Gls{SimNetUI}-Bibliothek auf das Routing von Aktivitäten, die von der Klasse {\em ActivityRoute} erben, über das Event {\em EntityRouted} Einfluss nehmen. Weiterhin wird das Interface {\em IEntityLeaving} implementiert, welches das Event {\em EntityLeft} bereitstellt.
+
+\paragraph{ActivityQueueBase}
+
+Aktivitäten die eine Warteschlange besitzen, erben von der Basisklasse {\em ActivityQueueBase}. Diese Klasse besitzt eine Liste aller Entitäten, die sich in der Warteschlange befinden. Über das Datenfeld {\em QueueType} kann  Einfluss auf die Sortierung innerhalb dieser Liste genommen werden. Ableitende Klassen müssen an geeigneter Stelle die Methode {\em SortQueue()} aufrufen, um eine Neusortierung der Liste nach den gewählten Kriterien zu erlauben.
+
+\paragraph{ActivityDelayBase}
+
+Der Aufgabenbereich von Aktivitäten, die von der Basisklasse {\em ActivityDelayBase} erben, ist in der Form definiert, dass ein Verbrauch von Simulationszeit ermöglicht wird. Die Aktivität {\em Wait} stellt derzeit die einzige Aktivität dieser Kategorie dar. Für eine Erweiterung der \Gls{SimNetUI}-Bibliothek bietet es sich an, auf dieser Basis weitere spezialisierte Aktivitäten zu implementieren.
+
+\subsubsection{Statistiken}
+
+Mit Ausnahme der Basisklassen besitzen alle Aktivitätsklassen ein Property {\em Statistics}. Da für jede Aktivität andere Statistiken kalkuliert werden, existiert für jede Aktivität in der Ansichts- sowie der Modellschicht eine eigene Statistikklasse. Die Vererbungshierarchie der Statistikklassen ist an die Vererbungshierarchie der Aktivitäten angelehnt.
+
+Statistiken werden ausschließlich in der Modellschicht berechnet. Mittels {\em \Gls{DataBinding}} werden die Werte in der Ansichtsschicht aktualisiert.
+
+Die abstrakte Basisklasse {\em StatisticInfoBaseML} aus der Modellschicht stellt zwei virtuelle Methoden zur Verfügung, die von ableitenden Klassen überschrieben werden sollten.\\ 
+
+\begin{lstlisting}[caption={Implementation der {\em StatisticInfoBaseML}-Klasse},label={list:kap4_StatisticInfoBaseML}]
+abstract public class StatisticInfoBaseML : ModelLogicBase
+{
+  internal virtual void Reset() {}
+  internal virtual void UpdateTimeBasedStatistics() {}
+}
+\end{lstlisting}
+
+Die Methode {\em Reset} ist für das Rücksetzen aller Werte einer Statistikklasse verantwortlich. Die Methode {\em UpdateTimeBasedStatistics} dient zur Aktualisierung von Statistiken, deren Werte bei Fortschreiten der Simulationszeit angepasst werden müssen.
+
+\subsubsection{Kommunikation}
+
+
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{kommunikationszyklus.png}
+	\caption{Kommunikationszyklus von Aktivitäten}
+  \label{fig:pic_cd2}
+\end{figure}
+
+Der komplexe Ablauf der Kommunikation von Aktivitäten ist in der Abbildung \ref{fig:pic_cd2} dargestellt. Der hier vorgestellte Ablauf kann, je nachdem wo sich eine Aktivität in der Vererbungshierarchie befindet, variieren. Bei der {\em Exit}-Aktivität, die von der Klasse {\em ActivityBase} erbt, existiert in der Ansichts- wie auch Modellschicht jeweils nur die Methode {\em OnReceiveEntity}. Auch wenn die {\em Generator}-Aktivität sich von der Klasse {\em ActivityBase} herleitet, besitzen diese Methoden ({\em OnReceiveEntity}) aus der Ansichts- und Modellschicht für diese Aktivität keine Relevanz. Da Generatoren keine eingehenden Verbindungen besitzen, wird die {\em OnReceiveEntity} Methode niemals aufgerufen. Aufgrund einer nicht vorhandenen Unterstützung einer Art von Mehrfachvererbung in C\# ist es sehr schwierig, eine konsistente Klassenhierarchie zu entwerfen, die auf solche Kompromisse nicht angewiesen ist.
+
+\paragraph{OnReceiveEntity}
+
+Durch die Methode {\em OnReceiveEntity} werden Aktivitäten über die Ankunft neuer Entitäten informiert. 
+
+In der Ansichtsschicht ist es Aufgabe dieser Methode, über eintreffende Entitäten Buch zu führen. Aktivitäten, die eine Warteschlange besitzen, werden beispielsweise eintreffende Entitäten in der dafür vorgesehenen Datenstruktur\footnote{Damit ist das \Gls{DependencyProperty} {\em Queue} der Klasse {\em ActivityQueueBase} aus der Ansichtsschicht gemeint} aufbewahren, um später durch die Methode {\em InteractionML\_ProvideEntity} die zugehörige Modellklasse einer Entität für die Modellschicht bereitzustellen. Außerdem wird das Event {\em EntityEntered} ausgelöst, wodurch Programmcode von Applikationsentwicklern, die sich der \Gls{SimNetUI}-Bibliothek bedienen, ausgeführt wird.
+
+
+Die {\em OnReceiveEntity}-Methode aus der Modellschicht leitet die Ausführung des Simulationscodes einer Aktivität ein. Außerdem können Statistiken einer Aktivität an dieser Stelle aktualisiert werden.
+
+\paragraph{Tell-Methoden}
+
+Es existiert kein konkretes Entwurfsmuster, welches vorschreibt wo und mit welcher Bezeichnung eine Tell-Methode einer Aktivität implementiert sein muss.
+Sofern eine Aktivität aber direkt auf das Simulationsgeschehen einwirken soll, ist eine Implementation einer Tell-Methode unausweichlich.
+Solch eine Tell-Methode muss für den Scheduler der \Gls{SimNet}-Bibliothek innerhalb der Methode {\em OnReceiveEntity} aus der Modellschicht bekannt gemacht werden.\\
+
+\begin{lstlisting}[caption={Beispiel für die Registrierung einer Tell-Methode in der Modellschicht},label={list:kap4_register_tell}]
+internal override void OnReceiveEntity(InConnectorML targetConnectorML, OutConnectorML startConnectorML)
+{
+  var logic = new NestedClassSimulationLogic(this);
+  Simulation.Tell(logic.wait, 0, 0, null);
+}
+\end{lstlisting}
+
+Die Klasse {\em ActivityRouteBase} stellt ableitenden Klassen die Methode {\em GetProvideEntity} zur Verfügung, durch deren Aufruf ein Ereignis ausgelöst wird, welches von der {\em InteractionML\_ProvideEntity}-Methode aus der Ansichtsschicht abonniert worden ist. Für die Implementation einer Tell-Methode ist es somit vorgesehen, auf diesem Wege an eine Referenz einer Entität zu gelangen. Hierdurch wird es der Tell-Methode ermöglicht, auf Attribute (Properties) von Entitäten einzuwirken. Im Anschluss wird die Methode {\em Send Entity} ausgeführt.
+
+\paragraph{SendEntity}
+
+Die Methode {\em SendEntity} aus der Modellschicht hat die Aufgabe, die Nutzeroberfläche über Veränderungen im Modell zu informieren.
+Zunächst wird die Nutzeroberfläche über das Voranschreiten der Simulationszeit informiert. Daraufhin wird ein Ereignis ausgelöst, welches von der {\em InteractionML\_SendEntity}-Methode aus der Ansichtsschicht abonniert worden ist. Im nächsten Schritt wird der Folgeaktivität durch Aufruf der Methode {\em OnReceiveEntity} das Eintreffen einer Entität signalisiert.
+
+\paragraph{InteractionML\_SendEntity}
+
+Die Methode {\em InteractionML\_SendEntity} löst die Ereignisse {\em EntityRouted} und {\em EntityLeft} aus, wodurch Applikationsentwickler die Möglichkeit erhalten, auf das Simulationsgeschehen direkt einzuwirken. Im Anschluss wird die Methode {\em AnimateEntity} einer Instanz der Klasse {\em SimulationContainer} ausgelöst.
+
+\paragraph{AnimateEntity}
+
+Diese Methode initiiert eine Animation, die die Bewegung einer Entität von einer Aktivität zu einer Zielaktivität visualisiert.
+In der \Gls{wpf} werden Animationen über {\em Storyboards} beschrieben. Eine Besonderheit ist es, dass Animationen in der \Gls{wpf} über einen speziellen Render-Thread gesteuert werden, welcher sich allerdings der Kontrolle von Programmierern, die sich der \Gls{wpf} bedienen völlig entzieht. Ein jedes {\em Storyboard} besitzt ein Ereignis {\em completed}, welches nach dem eine Animation abgespielt worden ist, ausgelöst wird.
+
+\paragraph{AnimationCompleted}
+
+Das Ereignis {\em AnimationCompleted} wird genau an zwei Stellen ausgelöst. Einmal nachdem das {\em completed}-Event eines Storyboards, welches die Bewegung einer Entität animiert hat, ausgelöst worden ist. Da im Falle eines vorzeitigen Abbruchs eines Simulationslaufs das Event {\em completed} nicht mehr ausgelöst wird, wird das {\em AnimationCompleted}-Event ebenso nach initiieren des Abbruchs im UI-\Gls{Thread} ausgelöst.
+
+
+\subsubsection{Konstruktion mit XAML}
+
+Aktivitäten, wie sie für die \Gls{SimNetUI}-Bibliothek konzipiert worden sind, sind grafische Komponenten, die sich auf einem Formular, den Simulationscontainer, anordnen lassen. Die Darstellung dieser Aktivitäten wird, wie in der \Gls{wpf} üblich, mittels \Gls{xaml} beschrieben. Aktivitäten werden, wie im Kapitel \ref{kap_vererbungshierarchie} bereits betrachtet, als sogenannte User-Controls implementiert.
+Eine Aktivität erbt stets von einer der aus Abbildung \ref{fig:pic_cd2} gekennzeichneten Basisklassen. Der Quellcode einer Aktivität besteht aus einer \Gls{xaml}-Datei für die Darstellung und einer C\# Datei für den Programmcode der Aktivität. 
+
+In diesem Abschnitt soll anhand der Aktivität {\em Wait} beispielhaft dargestellt werden, wie Aktivitäten in der \Gls{SimNetUI}-Bibliothek mittels \Gls{xaml} implementiert werden.
+
+\paragraph{Namensräume}
+
+Namensräume sind ein Konzept des \Gls{xml}-Standards. \Gls{xml}-Dokumenten sind häufig Namensräume zugeordnet, die meist auf ein entsprechendes \Gls{xml}-Schema verweisen, wodurch klar geregelt ist, welche Elemente und Attribute in einem \Gls{xml}-Dokument zulässig sind. \Gls{xaml} erweitert dieses Konzept insofern, dass \Gls{xaml} Namensräume sich beispielsweise auch auf .Net Namensräume beziehen können, wodurch der komplette Satz von öffentlichen Klassen, die einem .Net Namespace zugeordnet sind, für die Verwendung im \Gls{xaml}-Code verfügbar gemacht wird.
+
+Beim Anlegen einer \Gls{xaml}-Datei in Visual Studio, werden einige elementare Namensräume bereits dem Dokument hinzugefügt. Dabei handelt es sich unter anderem um \Gls{xaml}-Namensräume, die sich auf Namensräume der \Gls{wpf}-Klassenbibliothek beziehen, bzw. um \Gls{xaml}-Namensräume, die für den Designer von Visual Studio dienlich sind.
+
+Somit muss für Klassen, die in der \Gls{SimNetUI}-Bibliothek implementiert werden und im \Gls{xaml}-Code einer Aktivität verwendet werden sollen, ein entsprechender Namensraum im \Gls{xaml}-Dokument hinzugefügt werden.\\
+
+\input{xaml.tex}
+
+
+\begin{lstlisting}[caption={Namensräume der Aktivität {\em Wait}. Auszug aus der Datei {\em Wait.xaml}},label={listing:xaml_wait_root}]
+<base:ActivityDelayBase 
+  x:Class="SimNetUI.Activities.Controls.Wait"
+  xmlns="http://schemas.microsoft.com/winfx/2006/XAML/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/XAML"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+  xmlns:base="clr-namespace:SimNetUI.Activities.Base"
+  xmlns:con="clr-namespace:SimNetUI.Activities.ControlParts.Connection" 
+  mc:Ignorable="d"
+  DataContext="{Binding RelativeSource={RelativeSource Self}}" 
+  ToolTipService.ShowDuration="120000" />
+\end{lstlisting}
+
+Mittels eines Verweises über ein Attribut, dem das Präfix {\em xmlns} vorangestellt ist, wird die Verwendung von Elementen eines Namensraums innerhalb eines \Gls{xaml}-Dokuments zulässig. Durch die Einbindung des Namensraums {\em base} kann die Basisklasse {\em ActivityDelayBase}, von der sich die Aktivität {\em Wait} herleitet, verwendet werden. Der Namensraum {\em con} ist ebenfalls von zentraler Bedeutung, da hierdurch die Verwendung von Verbindungsstellen, über welche Aktivitäten miteinander verbunden sind, erst ermöglicht wird.
+
+\paragraph{Darstellung}
+
+Um die Präsentation von Simulationsmodellen aufzuwerten, besitzen Aktivitäten das Property {\em VisualAppearanceTemplate}, über das Nutzer der \Gls{SimNetUI}-Bibliothek das Aussehen einer Aktivität verändern können. Die Standarddarstellung der {\em Wait}-Aktivität kann dem Quelltext \ref{list:xaml_wait_VisualAppearanceTemplate} entnommen werden.\\
+
+\begin{lstlisting}[caption={Standarddarstellung der {\em Wait}-Aktivität, ohne Verbindungsstücke. Auszug aus der Datei {\em Wait.xaml}},label={list:xaml_wait_VisualAppearanceTemplate}]
+<base:ActivityDelayBase.VisualAppearanceTemplate>
+  <Border Name="border" Height="36" Width="36" BorderThickness="2">
+    <Border.Style>
+      <Style TargetType="{x:Type Border}">
+        <Setter Property="BorderBrush" Value="Black" />
+        <Style.Triggers>
+          <DataTrigger Binding="{Binding Path=Statistics.IsProcessing,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}" Value="true">
+            <Setter Property="BorderBrush" Value="Red" />
+          </DataTrigger>
+        </Style.Triggers>
+      </Style>
+    </Border.Style>
+    <Border.Background>
+      <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="DarkGreen" />
+        <GradientStop Offset="0.3" Color="DarkGreen" />
+        <GradientStop Offset="1" Color="White" />
+      </LinearGradientBrush>
+    </Border.Background>
+    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="W" Foreground="White" FontSize="22" FontStretch="ExtraExpanded" Width="21" Height="32" />
+  </Border>
+</base:ActivityDelayBase.VisualAppearanceTemplate>
+\end{lstlisting}
+
+Der Teil der Darstellung, der von Nutzern der \Gls{SimNetUI}-Bibliothek nicht verändert werden darf, gehört selbstverständlich nicht zu diesem Template. Dies gilt insbesondere für die Verbindungsstellen, die als Start- und Endpunkte von Verbindungen zwischen Aktivitäten dienen. Diese Verbindungsstellen müssen ebenfalls im \Gls{xaml}-Code einer Aktivität hinterlegt sein. Im Quelltext \ref{list:xaml_wait_Content} ist die Struktur der Wait-Aktivität dargestellt. Das Darstellungstemplate aus Quelltext \ref{list:xaml_wait_VisualAppearanceTemplate} wird in diesem Fall innerhalb einer 3x3 Gitterstruktur in der mittleren Zelle positioniert. Rechts befindet sich die Verbindungsstelle für ausgehende Verbindungen, wohingegen links sich die Verbindungsstelle für eingehende Verbindungen befindet.\\
+
+\begin{lstlisting}[caption={Aufbau der {\em Wait}-Aktivität. Auszug aus der Datei {\em Wait.\Gls{xaml}}},label={list:xaml_wait_Content}]
+   <base:ActivityDelayBase.Content>
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="10" />
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="10" />
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="10" />
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="10" />
+      </Grid.ColumnDefinitions>
+      <ContentPresenter Grid.Row="1" Grid.Column="1" Content="{Binding VisualAppearanceTemplate,UpdateSourceTrigger=PropertyChanged}" />
+      <con:InConnector x:Name="In" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" />
+      <con:OutConnector x:Name="Out" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" />
+    </Grid>
+  </base:ActivityDelayBase.Content>
+\end{lstlisting}
+
+\paragraph{Tooltip}
+
+Damit Tooltips für Aktivitäten einem einheitlichen {\em Look and Feel} unterliegen, ist ein \Gls{wpf}-Style erstellt worden, der zu diesem Zweck von allen Aktivitäten verwendet wird. Um diesen \Gls{wpf}-Style verwenden zu können, muss das passende {\em Resource-Dictionary}, in das \Gls{xaml}-Dokument der Wait-Aktivität eingebunden werden.\\ 
+
+
+\begin{lstlisting}[caption={Einbindung eines Resource-Dictionaries für die {\em Wait}-Aktivität. Auszug aus der Datei {\em Wait.\Gls{xaml}}},label={list:xaml_resourcedictionary_wait}]
+  <base:ActivityDelayBase.Resources>
+    <ResourceDictionary Source="Themes\Generic.\Gls{xaml}" />
+  </base:ActivityDelayBase.Resources>
+\end{lstlisting}
+
+Statistiken einer Aktivität werden durch \Gls{DataBinding} über einen Tooltip verfügbar gemacht. Der Data-Context bezieht sich, wie im Quelltext \ref{listing:xaml_wait_root} gezeigt, auf die Aktivität selbst. Somit muss für eine Datenbindung an einen statistischen Wert, jeweils nur noch der Pfad zum passenden Property angegeben werden.\\
+
+\begin{lstlisting}[caption={\Gls{xaml}-Quellcode für den Tooltip der Wait-Aktivität. Verkürzter Auszug aus der Datei {\em Wait.xaml}},label={list:xaml_resourcedictionary_wait}]
+<base:ActivityDelayBase.ToolTip>
+  <ToolTip Style="{StaticResource ToolTipStyle}">
+    <Grid>
+    
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="120" />
+        <ColumnDefinition Width="60" />
+      </Grid.ColumnDefinitions>
+
+      <Grid.RowDefinitions>
+        <RowDefinition />
+        <RowDefinition />
+      </Grid.RowDefinitions>
+
+      <TextBlock Grid.Column="0" Grid.Row="0" Text="Currently processing:" />
+      <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Mode=OneWay,Path=Statistics.InWork}" />
+
+      <TextBlock Grid.Column="0" Grid.Row="1" Text="Currently in queue:" />
+      <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Mode=OneWay,Path=Statistics.InQueue}" />
+
+    </Grid>
+  </ToolTip>
+</base:ActivityDelayBase.ToolTip>
+\end{lstlisting}
+
+\subsection{Assembly Manifest}
+
+Programme und Bibliotheken, die für die .Net Plattform entwickelt werden, besitzen immer ein eigenes Manifest, welches mit Metadaten zur Beschreibung der Assembly ausgestattet werden kann\footnote{Vgl. \cite{Kueh2010} Kapitel 1.3} Jede der Komponenten aus Abbildung \ref{fig:pic_architektur_komponenten} besitzt daher ihr eigenes Manifest. In diesem Zusammenhang ist die Verwendung spezieller Attribute, die als Metadaten im Manifest der Ansichtsschicht verwendet werden, zu erwähnen\footnote{Diese Attribute, die zur Beschreibung des Manifests verwendet werden, befinden sich in der Datei {\em AssemblyInfo.cs} im Verzeichnis {\em Properties}}.
+
+\subsubsection{XmlnsDefinition}
+
+Das Attribut {\em XmlnsDefinition} wird verwendet, um die Menge der Namensräume aus dem Programmcode der Ansichtsschicht, die die Klassen beinhalten, die für die Verwendung innerhalb des \Gls{xaml}-Quellcodes von Simulationsapplikationen vorgesehen sind, auf einen eigenen \Gls{xaml}-Namensraum abzubilden. Durch diese Maßnahme kann in der \Gls{SimNetUI}-Bibliothek der Programmcode sinnvoller organisiert werden, was zu einer besseren Abgrenzung von Klassen bezüglich deren Aufgaben und Funktionalitäten führt, ohne den \Gls{xaml}-Code von Simulationsapplikationen durch die Einbindung unzähliger komplizierter Namensräume zu überfrachten.\\
+
+\input{csharp.tex}
+
+\begin{lstlisting}[caption={Abbildung der Namensräume aus der \Gls{SimNetUI} Bibliothek auf einen einheitlichen Namensraum zur Verwendung in Xaml},label={list:csharp_xmlns}]
+[assembly: XmlnsDefinition("SimNetUI", "SimNetUI.Controls")]
+[assembly: XmlnsDefinition("SimNetUI", "SimNetUI.Activities.Controls")]
+[assembly: XmlnsDefinition("SimNetUI",
+	                         "SimNetUI.Activities.PropertyObjects.Connections")]
+[assembly: XmlnsDefinition("SimNetUI",
+	                         "SimNetUI.Activities.PropertyObjects.Distributions")]
+[assembly: XmlnsDefinition("SimNetUI",
+	                         "SimNetUI.Activities.PropertyObjects.Schedule")]
+[assembly: XmlnsDefinition("SimNetUI",
+	                         "SimNetUI.Activities.PropertyObjects.Resources")]
+[assembly: XmlnsDefinition("SimNetUI", "SimNetUI.Companions.Controls")]
+[assembly: XmlnsDefinition("SimNetUI", "SimNetUI.Entity")]
+[assembly: XmlnsDefinition("SimNetUI", "SimNetUI.Resources")]
+\end{lstlisting}
+
+\subsubsection{InternalsVisibleTo}
+
+Möchte man einem Assembly Zugriff auf die als intern ({\em internal}) gekennzeichneten Member einer anderen Assembly gewähren, so kann man durch Verwendung des Attributs {\em InternalsVisibleTo} dies bewerkstelligen.
+
+Die Assembly, die für die Bereitstellung der Erweiterungen für den \Gls{wpf}-Designer zuständig ist, erhält durch die Verwendung dieses Attributs Zugriff auf interne Member der Ansichtsschicht.\\
+
+\begin{lstlisting}[caption={Interne Member einer anderne Assembly verfügbar machen. Quellcodeauszug aus der Datei {\em AssemblyInfo.cs} aus der Ansichtsschicht.},label={list:csharp_internalsvisibleto}]
+[assembly: InternalsVisibleTo("SimNetUI.VisualStudio.Design")]
+\end{lstlisting}
+
+\section{Realisierung der Erweiterungen des WPF-Designers}\label{kap4_erweiterungen}
+
+Für die Erweiterung des \Gls{wpf}-Designers existiert ein Framework, welches mit einer eigenen API daher kommt. Mittels dieser API ist es möglich eigene Werkzeuge, Fenster, Adorner und eigene Eigenschaften-Editoren zu erstellen\footnote{Vgl. \cite{MSDN2011}}. Die größte Schwierigkeit, die sich bei der Programmierung eigener Erweiterungen einstellt, ist die nur unzureichende Dokumentation dieser Technologie, da diese für den Großteil der \Gls{wpf}-Entwicklergemeinde eher ein Nischendasein darstellt. Literatur, die sich mit der Thematik eingehend befasst, ist daher Mangelware. Die umfangreichste Quelle für die Entwicklung von Erweiterungen stellt das Internet dar. Zu erwähnen ist hierbei insbesondere die Dokumentation aus der MSDN-Bibliothek, welche online abrufbar ist. Dennoch ist auch die MSDN-Bibliothek keine all umfassende Informationsquelle, die alles für die Entwicklung von Erweiterungen für den \Gls{wpf}-Designer notwendige Wissen in einer übersichtlichen Form darstellt. Eine gute Einarbeitung in diese Thematik ist durch das Studium von Beispielprojekten möglich, welche oft auch in der MSDN-Bibliothek referenziert werden\footnote{Einige Beispielprojekte, die die Verwendung des \Gls{wpf}-Extensibility-Frameworks demonstrieren, sind zusätzlich auf der CD, welche dieser Diplomarbeit beliegt, enthalten}. 
+
+\subsection{Projekt für WPF-Designer Erweiterungen}
+
+Um eine bestehende \Gls{wpf}-Benutzersteuerelement-Bibliothek mit Erweiterungen für den Visua Studio \Gls{wpf}-Designer anzureichern, ist ein eigenes Projekt für die Programmierung dieser Erweiterungen zu erstellen. 
+
+Damit dies funktionieren kann, ist eine Konvention bezüglich der Benennung dieses Projektes einzuhalten. Gemäß dieser Richtlinie ist der Projektname {\em SimNetUI. VisualStudio.Design} gewählt worden. Die Ergänzung {\em VisualStudio.Design} zum Projektnamen zeigt an, dass die Erweiterungen sich nur auf den \Gls{wpf}-Designer von Visual Studio beziehen. Damit ist auch die Verwendung dieser Erweiterungen für den \Gls{xaml}-Designer des Softwareproduktes {\em Mircrosoft Expression Studio} ausgeschlossen.
+
+Als Ausgabepfad für die kompilierte Assembly ist das selbe Verzeichnis anzugeben, in dem auch die DLL für das Projekt {\em \Gls{SimNetUI}} abgelegt wird. Die Assembly {\em SimNetUI.VisualStudio.Design} wird nur zur Entwicklungszeit von Simulationsapplikationen benötigt, die die \Gls{SimNetUI} Bibliothek referenzieren, und muss daher für Endanwender dieser Simulationsapplikationen nicht mit ausgeliefert werden.
+
+\subsection{Unterscheidung zwischen Entwicklungszeit und Laufzeit}
+
+Auch im Programmcode der Ansichtsschicht kann auf das Entwicklungserlebnis zur Entwicklungszeit Einfluss genommen werden.
+Daher ist eine Begriffsabgrenzung bezüglich der Entwurfszeit ({\em engl. design time}) und der Laufzeit ({\em engl. run time}) zwingend notwendig. Dabei gilt es sich zu vergegenwärtigen, dass der \Gls{wpf}-Designer zur Entwurfszeit auch Programmcode aus der \Gls{SimNetUI}-Bibliothek ausführen muss, um eine grafische Ansicht und Entwicklung von \Gls{xaml}-Code überhaupt erlauben zu können. Folglich wird allerdings auch Code ausgeführt, der für die korrekte Darstellung im Designer nicht notwendig ist. 
+
+Um ein Beispiel zu nennen, sei die Datenbindung von Properties aus der Ansichtsschicht zur Modellschicht erwähnt. Initialisiert man diese Datenbindung auch zur Entwurfszeit, wird in der 2010er Version des \Gls{wpf}-Designers {\em Cider} an einigen Stellen der Programmcode für die Datenbindung zur Modellschicht mit in den \Gls{xaml}-Code übernommen!
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{editoruc}
+	\caption{Übernahme des Codes zur Datenbindung nach \Gls{xaml}}
+  \label{fig:pic_editorurc}
+\end{figure}
+
+Eine einfache Maßnahme für die Lösung dieses Problems ist das Hinzufügen einer Abfrage, ob sich ein Dependency-Objekt im Entwurfsmodus befindet.\\
+
+\begin{lstlisting}[caption={Abfrage bezüglich des Modus für ein Dependency-Objekt. Quellcodeauszug aus der Datei {\em Normal.cs} aus der Ansichtsschicht},label={list:csharp_designtime}]
+public Normal() : base()
+{
+  if (!DesignerProperties.GetIsInDesignMode(this))
+    this.ModelLogic = new NormalML();
+}
+\end{lstlisting}
+
+
+\subsection{Attribute für die Bereitstellung von Metadaten zur Entwurfszeit}
+
+Viele Informationen, die zur Entwurfszeit mit \Glspl{DependencyObject} verbunden sind, können über Attribute beschrieben werden. 
+Einige Attribute, die in diesem Zusammenhang im Projekt {\em \Gls{SimNetUI}} verwendet werden, werden in den folgenden Abschnitten aufgeführt.
+
+\subsubsection{DisplayName}
+
+Durch die Verwendung des Attributs {\em DisplayName} kann ein .Net Property mit einer eigenen Bezeichnung für den \Gls{wpf}-Designer versehen werden. Wird dieses Attribut nicht verwendet, wird stattdessen der ursprüngliche Name des Properties im Property-Grid angezeigt.  
+
+\subsubsection{CategoryAttribute}
+
+Das {\em CategoryAttribute} ist ein wichtiges Attribut, dessen Aufgabe es ist, Properties einer bestimmten Kategorie zuzuweisen. Hierdurch werden in der \Gls{SimNetUI}-Bibliothek Properties von {\em Dependency-Objects} der Kategorie {\em Simulation} hinzugefügt.\\
+
+\begin{lstlisting}[caption={Beispiel für die Verwendung der Attribute {\em DisplayName} und {\em CateogoryAttribute}. Quellcodeauszug aus der Datei {\em Wait.\Gls{xaml}.cs} aus der Ansichtsschicht},label={list:csharp_attribute}]
+[CategoryAttribute("Simulation")]
+[DisplayName("Processing Capacity")]
+public uint Capacity
+{
+  get { return (uint) GetValue(CapacityProperty); }
+  set { SetValue(CapacityProperty, value); }
+}
+\end{lstlisting}
+
+\subsubsection{DesignTimeVisible}
+
+Um ein Ausblenden von Komponenten im Designer zur Entwurfszeit zu erzwingen, bietet sich die Verwendung des Attributs {\em DesignTimeVisible} an. Ebenso kann auf diesem Wege explizit angegeben werden, wenn eine Komponente, d.h. eine Klasse oder ein Property, zur Entwurfszeit eingeblendet werden soll.\\
+
+\begin{lstlisting}[caption={Beispiel für die Verwendung der Attribute {\em DesignTimeVisible}}]
+[DesignTimeVisible(false)]
+public class ActivityDelayBase : ActivityQueueBase { }
+\end{lstlisting}
+
+\subsection{Attributtabelle zur Bereitstellung von Metadaten für die Entwurfszeit}
+
+Für Werkzeuge, die als Erweiterung in den \Gls{wpf}-Designer {\em Cider} integriert werden sollen, müssen zunächst Metadaten zur Beschreibung dieser Erweiterungen in einer Attributtabelle abgelegt werden. Im Projekt {\em SimNetUI.VisualStudio.Design} existiert hierfür eine Klasse {\em RegisterMetadata}. Diese Klasse implementiert das {\em IProvideAttributeTable} Interface und stellt über das Property {\em AttributeTable} eine solche Attributtabelle zur Verfügung. Somit eignet sich die Datei {\em RegisterMeta.cs} als Einstiegspunkt für das Studium der \Gls{wpf}-Designer-Erweiterungen der \Gls{SimNetUI}-Bibliothek.
+
+Visual Studio instanziiert die Objekte, die für den \Gls{wpf}-Designer benötigt werden selbstständig. Daher wird über die Attributtabelle lediglich der Typ der entsprechenden Klassen bereitgestellt. Häufig wird hierfür das Attribut {\em FeatureAttribut} verwendet.\\
+
+\begin{lstlisting}[caption={Minimales Beispiel für die Bereitstellung von Metadaten in einer Attributtabelle unter Verwendung des Attributs {\em FeatureAttribut}}]
+internal class RegisterMetadata : IProvideAttributeTable
+{
+  public AttributeTable AttributeTable
+  {
+    get
+    {
+      builder = new AttributeTableBuilder();
+      builder.AddCustomAttributes(typeof(Generator), new FeatureAttribute(typeof(GeneratorInitializer));
+      return builder.CreateTable();
+    }
+  }
+}
+\end{lstlisting}
+
+\subsection{Bearbeitungsmodell für den Zugriff auf Benutzeroberflächenobjekte}\label{kap4_bearbeitungsmodell}
+
+Vielerorts im Programmcode des {\em SimNetUI.VisualStudio.Design}-Projektes erfolgt der Zugriff auf Objekte aus der Ansichtsschicht über eine Abstraktion in Form eines Bearbeitungsmodells. Folglich werden Eigenschaften von Objekten im Designer selten über Referenzen auf instanziierte Objekte aus der Ansichtsschicht direkt verändert. Hier hilft es sich in Erinnerung zu rufen, dass der \Gls{wpf}-Designer selbständig Instanzen der Benutzersteuerelemente, die über die Ansichtsschicht bereitgestellt werden, instanziiert. Somit muss zwischen den vom  \Gls{wpf}-Designer instanziierten Objekten und dem \Gls{xaml}-Quellcode, der hierfür ausgewertet wird, unterschieden werden. In der Regel ist es gewollt, dass sowohl die Eigenschaften der Instanzen im \Gls{wpf}-Designer aktualisiert werden, als auch der zugehörige \Gls{xaml}-Quellcode. Durch ein abstraktes Bearbeitungsmodell wird all dies ermöglicht. 
+
+In diesem Zusammenhang ist eine Betrachtung des {\em Microsoft.Windows.Design.Model}-Namespace von nutzen \footnote{ Vgl. \cite{MSDN2011B}}. Jede Instanz der {\em ModelItem}-Klasse stellt ein Element im Bearbeitungsmodus dar. Hierbei kann es sich um jede Art von .Net Objekten handeln. Am häufigsten wird über die {\em ModelItem}-Klasse auf Klassen aus der \Gls{SimNetUI}-Bibliothek zugegriffen, die von der Klasse {\em DependencyObject} erben. Neue Objekte können über eine sogenannte {\em ModelFactory} erstellt werden. Die Verwendung dieses Mechanismus soll an einem Beispiel demonstriert werden.\\
+
+\begin{lstlisting}[caption={Beispiel zur Demonstration der Verwendung des Bearbeitungsmodells zum Zugriff auf Objekte, die für den Designer instanziiert werden.},label={list:csharp_wpfextensibility_modelitem}]
+ModelItem distribution = ModelFactory.CreateItem(item.Context, typeof(UniformDouble));
+distribution.Properties[PropertyNames.UniformDouble.SeedProperty].SetValue(1);
+distribution.Properties[PropertyNames.UniformDouble.MinProperty].SetValue(0.0);
+distribution.Properties[PropertyNames.UniformDouble.MaxProperty].SetValue(5.0);
+\end{lstlisting}
+
+Der Zugriff auf Properties eines Objektes über ein {\em ModelItem} erfolgt, wie im Quellcode \ref{list:csharp_wpfextensibility_modelitem} ersichtlich, über einen Bezeichner. Bei diesem Bezeichner kann es sich um eine Zeichenkette handeln oder aber eine Instanz der Klasse {\em PropertyIdentifier}. Dieses Zugriffsmodel kann allerdings auch eine häufige Fehlerquelle sein. Denn Tippfehler werden erst zur Laufzeit entdeckt, da an dieser Stelle keine Syntaxfehler vorliegen und somit keine Chance besteht, dass der Compiler diese Fehler selbstständig findet. Eine Möglichkeit diese Fehlerquelle wenigstens zu minimieren, ist die Bereitstellung von vordefinierten Bezeichnern, sodass für jede Eigenschaft eines Objektes nur eine Instanz eines Bezeichners an zentraler Stelle im Code des Erweiterungsprojektes instanziiert werden muss. Dies hat im speziellen auch den Vorteil, dass bei Namensänderungen in der Ansichtsschicht der Aufwand geringer ist, diese Umstellungen auch im Quellcode des Erweiterungsprojektes durchzuführen. Im Gültigkeitsbereich der Klasse {\em PropertyNames} werden daher Instanzen auf Basis der Klasse {\em PropertyIdentifier} zur Verfügung gestellt.\\
+
+\begin{lstlisting}[caption={Bereitstellung von Bezeichnern für den Zugriff auf Objekte über das Bearbeitungsmodell des WPF-Designer-Extensibility-Frameworks. Quellcodeauszug aus der Datei {\em PropertyNames.cs}},label={list:csharp_wpfextensibility_propertynames}]
+internal class PropertyNames {
+  public class UniformDouble : ProbabilityDistributionBase {
+    new public static readonly TypeIdentifier TypeId = 
+      new TypeIdentifier(
+        "SimNetUI.Activities.PropertyObjects.Distributions.UniformDouble");
+    public static readonly PropertyIdentifier MinProperty = 
+      new PropertyIdentifier(TypeId, "Min");
+    public static readonly PropertyIdentifier MaxProperty = 
+      new PropertyIdentifier(TypeId, "Max");
+  }
+  public class ProbabilityDistributionBase : DistributionBase {
+    new public static readonly TypeIdentifier TypeId = 
+      new TypeIdentifier(
+        "SimNetUI.Activities.PropertyObjects.Distributions.ProbabilityDistributionBase");
+    public static readonly PropertyIdentifier SeedProperty = 
+      new PropertyIdentifier(TypeId, "Seed");
+  }
+  public class DistributionBase {
+    public static readonly TypeIdentifier TypeId = 
+      new TypeIdentifier(
+        "SimNetUI.Activities.PropertyObjects.Distributions.DistributionBase");
+  } 
+}
+\end{lstlisting}
+
+\subsection{Erweiterungskomponenten}
+
+\subsubsection{Adorner}
+
+Zur Entwurfszeit können Benutzersteuerelemente im Visual Studio \Gls{wpf}-Designer zusätzliche Bedienelemente erhalten. Diese werden in Form einer Überlagerung im Designer dargestellt. Die Bedienleiste, die im Kapitel \ref{kap3_erweiterungen} vorgestellt worden ist, ist ein Beispiel für deren Verwendung. In der \Gls{SimNetUI}-Bibliothek sind des Weiteren Adorner auch als grafische Hilfsmittel für die Erstellung von Verbindungen zwischen Aktivitäten implementiert worden. So existiert beispielsweise für jede Verbindungstelle einer Aktivität eine farbig markierte Fläche in Form eines eigenen Adorners. Weiterhin werden ebenso vom Entwickler ausgewählte Linien im Linienmodus mittels Adorner farblich hervorgehoben.
+
+Eine zentrale Bedeutung für die Bereitstellung von Adornern kommt der Klasse {\em SimulationContainerAdornerProvider} zu. Diese Klasse erweitert die Klasse {\em AdornerProvider} und überschreibt die beiden wichtigen Methoden {\em Activate} sowie {\em Deactiviate}, wobei eine von diesen vom \Gls{wpf}-Designer immer dann aufgerufen wird, wenn ein Benutzersteuerelement vom Typ {\em SimulationContainer} aus der \Gls{SimNetUI}-Bibliothek selektiert ({\em Activate}) oder die Auswahl aufgehoben ({\em Deactivate}) worden ist.\\
+
+\begin{lstlisting}[caption={Prototypen der Methoden {\em Activate} und {\em Deactivate}. Quellcodeauszug aus der Datei {\em SimulationContainerAdornerProvider.cs}},label={list:csharp_wpfextensibility_adorner_provider}]
+[UsesItemPolicy(typeof(SelectionPolicy))]
+internal class SimulationContainerAdornerProvider : AdornerProvider {
+  protected override void Activate(ModelItem item) {
+    // ...
+    var ToolbarPanel = new AdornerPanel();
+    ToolbarPanel.Children.Add(optionsAdorner);
+    // Die Toolbar der Liste der Adorner für das Benutzersteuerelement
+    // SimulationContainer hinzufügen.
+    Adorners.Add(ToolbarPanel); 
+    // ...
+    base.Activate(item);
+  }
+  protected override void Deactivate() {
+    // ...
+    base.Deactivate();
+  }
+}
+\end{lstlisting}
+
+Wie im vorangestellten Quelltext \ref{list:csharp_wpfextensibility_adorner_provider} zu erkennen ist, wird der Methode {\em Activate} noch zusätzlich eine Instanz vom Typ {\em ModelItem} übergeben, womit in diesem Fall eine Abstraktion für den Zugriff auf den Simulationscontainer bereitgestellt wird. Dies erlaubt unter anderem auch eine komplette Analyse des Modells, wodurch die Grundlage für weitere Adorner geschaffen ist, um Verbindungsstellen sowie Verbindungen durch farbige Markierungen hervorzuheben.
+
+Die Oberfläche eines Adorners kann sich aus beliebigen \Gls{wpf}-Controls zusammensetzen, welche aber innerhalb eines {\em AdornerPanels} angeordnet sein müssen. Die Oberfläche der Bedienleiste ist beispielsweise vollständig in einer separaten \Gls{xaml}-Datei als {\em UserControl} implementiert, welches innerhalb eines {\em AdornerPanels} platziert worden ist. Die Positionierung eines {\em AdornerPanels} wird am Benutzersteuerelement, welches es dekoriert, ausgerichtet. Dies kann eine beliebige Position innerhalb des Bereiches welcher vom jeweiligen Benutzersteuerelement aufgespannt wird oder außerhalb entlang den Rändern des UserControls sein.
+
+\subsubsection{Editoren}
+
+Die allermeisten Eigenschaften der Benutzersteuerelemente werden im Property-Grid des Visual Studio \Gls{wpf}-Designers bearbeitet. Dieses Eigenschaftsfenster kann durch eigene Bedienelemente angereichert werden. Für einzelne Properties von Benutzersteuerelementen kann dies mittels der Klasse {\em PropertyValueEditor} bewerkstelligt werden. Da sich aber alle Properties, die für die Benutzersteuerelemente der \Gls{SimNetUI}-Bibliothek angepasst werden sollen, in eine eigene Kategorie zusammenfassen lassen, ist es aber sinnvoller, für jedes Control einen eigenen {\em CategoryEditor} zu entwickeln. Die Klasse {\em CategoryEditor} besitzt zwei Properties. Durch das Property {\em TargetCategory} wird die Kategorie festgelegt, welche mit dem {\em CategoryEditor} assoziiert werden soll. Über das Property {\em EditorTemplate} wird dem \Gls{wpf}-Designer {\em Cider} ein {\em DataTemplate} zur Verfügung gestellt. Innerhalb eines solchen {\em DataTemplates} werden Steuerelemente angeordnet, welche durch Data-Binding an Properties der Benutzersteuerelemente aus der \Gls{SimNetUI}-Bibliothek gebunden sind. Alle {\em DataTemplates} sind im Erweiterungsprojekt zur \Gls{SimNetUI}-Bibliothek in einem {\em ResourceDictionary} mit \Gls{xaml} implementiert worden\footnote{Der \Gls{xaml}-Code für alle Kategorieeditoren ist in der Datei {\em EditorResources.\Gls{xaml}} zu finden.}.  Die Klasse {\em GeneralCategoryEditor} im Erweiterungsprojekt erbt von der Framework-Klasse {\em CategoryEditor} und wird verwendet, um ableitenden Klassen eine Bereitstellung eigener Templates auf einfache Art und Weise für die Kategorie {\em Simulation} zu erlauben.\\
+
+\begin{lstlisting}[caption={Bereitstellung eigener Templates über Proxyklassen. Quellcodeauszug aus der Datei {\em CategoryEditors.cs}},label={list:csharp_wpfextensibility_category_editors}]
+internal class GeneratorCategoryEditor : GeneralCategoryEditor {
+  public GeneratorCategoryEditor() : base("GeneratorCategorieEditorTemplate") { }
+}
+
+internal class ExitBaseCategoryEditor : GeneralCategoryEditor {
+  public ExitBaseCategoryEditor() : base("ExitCategoryEditorTemplate") { }
+}
+
+// ... weitere Proxyklassen
+\end{lstlisting}
+
+Für Kategorieeditoren muss innerhalb der Attributtabelle dem jeweiligen Benutzersteuerelement aus der \Gls{SimNetUI}-Bibliothek ein Attribut hinzugefügt werden, um auf die Klasse zu verweisen, welche das passenden {\em DataTemplate} bereitstellt.\\
+
+\begin{lstlisting}[caption={Hinzufügen eines {\em EditorAttributes} zu einem Benutzersteuerelement aus der \Gls{SimNetUI}-Bibliothek. Quellcodeauszug aus der Datei {\em RegisterMetadata.cs}},label={list:csharp_wpfextensibility_attributtable_editorattribute}]
+AddCustomActivityBaseAttributes(typeof(Generator),
+  new FeatureAttribute(typeof(GeneratorInitializer)),
+  new EditorAttribute(typeof(GeneratorCategoryEditor),
+  typeof(GeneratorCategoryEditor))
+);
+\end{lstlisting}
+
+Im Gegensatz zu anderen Erweiterungskomponenten, die über das abstraktes Bearbeitungsmodell, welches im Kapitel \ref{kap4_bearbeitungsmodell} vorgestellt worden ist, Zugriff auf Properties von Benutzersteuerelementen aus der \Gls{SimNetUI}-Bibliothek erhalten, verwenden Kategorieeditoren ein eigenes Zugriffsmodell. Zum besseren Verständnis bietet es sich daher an, einen Blick in die Dokumentation aus der MSDN-Bibliothek zu werfen und den Framework-Namespace {\em Microsoft.Windows.Design.PropertyEditing} eingehend zu studieren.
+
+\subsubsection{Initializer}
+
+Eigenschaften von {\em DependencyObjects} können zur Entwurfszeit mit Standardwerten initialisiert werden. Bei {\em DependencyProperties} werden in der Regel die Standardwerte verwendet, die bei der Registrierung als Metadaten mit angegeben worden sind. Wenn aber eine flexiblere Lösung benötigt wird, bietet sich die Verwendung von Intializern an.
+Ein Initializer ist als eine eigene Klasse zu implementieren, die von der Framework-Klasse {\em DefaultInitializer} erbt. Die Methode {\em InitializeDefaults} muss überschrieben werden. Wiederum wird das aus Kapitel \ref{kap4_bearbeitungsmodell} bekannte Bearbeitungsmodell verwendet.\\
+
+\begin{lstlisting}[caption={Beispiel für die Verwendung eines Initializers.
+Quellcodeauszug aus der Datei {\em ActivityDelayBaseInitializer.cs}},label={list:csharp_wpfextensibility_initializer}] 
+public override void InitializeDefaults(ModelItem item)
+{
+  if (item != null)
+  {
+    base.InitializeDefaults(item);
+    ModelItem distribution = ModelFactory.CreateItem(item.Context, typeof(UniformDouble));                  
+    distribution.Properties[PropertyNames.UniformDouble.MaxProperty].SetValue(5.0);
+		item.Properties[PropertyNames.ActivityDelayBase.DistributionProperty].SetValue(distribution);
+
+  }
+}
+\end{lstlisting}
+
+Über einen Eintrag in der Attributtabelle, wie aus dem Quelltext \ref{list:csharp_wpfextensibility_attributtable_editorattribute} entnommen werden kann, wird die Verwendung des korrekten Initializers bestimmt.\\
+
+\subsubsection{Tasks}
+
+Wenn im Simulationsmodell eine Aktivität gelöscht wird, so müssen alle eingehenden Verbindungen der zu löschenden Aktivität ebenso entfernt werden. Die Schwierigkeit, die sich hierbei ergibt, ist, dass nur ausgehende Verbindungen der Hierarchie einer Aktivität untergeordnet sind. Das bedeutet, dass der \Gls{xaml}-Quellcode für eingehende Verbindungen nicht gelöscht wird, da dieser anderen Aktivitäten zugeordnet ist.
+
+Tasks sind eine Möglichkeit, um auf Benutzerinteraktion im \Gls{wpf}-Editor einzuwirken. So lassen sich unter anderem \Gls{wpf}-Standardkommandos über Kommandobindungen an selbst geschriebenen Programmcode koppeln. Im beschriebenen Problemfall ist dies für das Löschkommando von Benutzersteuerelementen eine gute Lösung. Die Klasse {\em ActivityBaseTaskProvider} nimmt sich im Erweiterungsprojekt der \Gls{SimNetUI}-Bibliothek dem hier beschriebenen Problem an, wodurch beim löschen einer Aktivität auch ausgehende Verbindungen anderer Aktivitäten gelöscht werden, sofern diese mit der zu löschenden Aktivität verbunden sind.
+
+\subsubsection{DesignModeValueProviders}
+
+Es mag Eigenschaften von Benutzersteuerelementen geben, die zur Entwurfszeit anders interpretiert werden sollen als zur Laufzeit. Beispielsweise ist es sinnvoll, Aktivitäten die zur Laufzeit ausgeblendet werden sollen, zur Entwurfszeit im Editor dennoch anzuzeigen.
+Auf diese Weise wird eine übersichtliche Bearbeitung des Simulationsmodells zur Entwurfszeit gewähleistet. Für diesen Anwendungsfall eigenen sich {\em DesignModeValueProvider}. Die Klasse {\em ActivityDesignModeValueProvider.cs} im Designer-Erweiterungsprojekt der \Gls{SimNetUI}-Bibliothek sorgt dafür, dass Aktivitäten zur Entwurfszeit eingeblendet werden, auch wenn derren Property {\em Visibility} den Wert {\em Hidden} besitzt.
+

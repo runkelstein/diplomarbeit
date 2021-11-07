@@ -1,0 +1,80 @@
+﻿<Window x:Class="SimNetUI.VisualStudio.Design.Adorner.ToolWindows.ResourceEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Resource Editor" Height="300" Width="340">
+    <Window.CommandBindings>
+        <CommandBinding Command="Delete"
+                        Executed="DeleteCmdExecuted"
+                        CanExecute="DeleteCmdCanExecute" />
+        <CommandBinding Command="New"
+                        Executed="NewCmdExecuted"
+                        CanExecute="NewCmdCanExecute" />
+    </Window.CommandBindings>
+
+
+    <Grid VerticalAlignment="Stretch">
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="28"/>
+        </Grid.RowDefinitions>
+
+        <Menu  Grid.Row="0" Grid.Column="0">
+            <MenuItem Header="Resources">
+                <MenuItem.Items>
+                    <MenuItem Command="Delete" Header="Delete Resource"/>
+                    <MenuItem Command="New" Header="Add Resource" />
+                </MenuItem.Items>
+            </MenuItem>
+
+        </Menu>
+
+        <DataGrid Margin="4,0,4,0"  Grid.Row="1" Grid.Column="0" ItemsSource="{Binding}" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Name="ResourceDataGrid">
+            <DataGrid.CommandBindings>
+                <CommandBinding Command="Delete"
+                        Executed="DeleteCmdExecuted"
+                        CanExecute="DeleteCmdCanExecute" />
+                <CommandBinding Command="New"
+                        Executed="NewCmdExecuted"
+                        CanExecute="NewCmdCanExecute" />
+            </DataGrid.CommandBindings>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="2*" Binding="{Binding Name}" Header="Name" />
+                <DataGridTextColumn Width="1*" Binding="{Binding Capacity}" Header="Capacity" />
+            </DataGrid.Columns>
+            
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="Delete" Header="Delete Resource"/>
+                    <MenuItem Command="New" Header="Add Resource" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            
+
+        </DataGrid>
+
+        <Grid Margin="4,0,4,4"  Grid.Row="2" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            
+            <TextBox Name="tbnTextbox" Grid.Row="0" Grid.Column="0" />
+            <Button Command="New"  Grid.Row="0" Grid.Column="1" Content="Add Resource"  />
+            
+        </Grid>
+
+    </Grid>
+
+
+        
+
+</Window>

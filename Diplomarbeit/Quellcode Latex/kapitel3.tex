@@ -1,0 +1,690 @@
+\chapter{Elementare Konzepte des Modellentwurfs}\label{kap_konzeption}
+
+In einem modernen Softwareentwicklungsprozess folgt die Konzeption meist direkt
+auf die Analyse. Denn ohne ein fundiertes Konzept sind die meisten komplizierten
+IT-Projekte zum Scheitern verurteilt. Hierbei geht es darum, die Erkenntnisse aus der
+Analyse auszuwerten und im Kontext der geplanten Entwicklung sinnvoll auf das zu
+erstellende System umzusetzen.
+
+Bei der von dieser Arbeit ausgehenden Software handelt es sich um einen Prototyp, der selbstverständlich nur einen Bruchteil der Funktionalitäten abbilden kann, die für einen professionellen Einsatz von Bedeutung sind. Dies ist auch leicht nachzuvollziehen, wenn man bedenkt, dass an den derzeit etablierten Lösungen am Markt ganze Gruppen von Informatikern über Jahre hinweg gearbeitet haben. Was zugleich aber auch ein beachtlicher Vorteil ist, denn auf diese Weise lassen sich Erkenntnisse für die Eigenentwicklung übernehmen oder gar verbessern.
+
+Es wäre naiv davon auszugehen, dass sich Ansichten über konkrete Konzepte über die Zeit hinweg nicht verändern können. Dies ist zum einen der Tatsache geschuldet, dass sich Erkenntnisse im laufe der Zeit ganz natürlich weiterentwickeln und somit alte Ideen in ein anderes Licht rücken lassen. Zudem ist nicht zu vergessen, dass ein Softwaresystem sich meist in eine komplexere IT-Struktur, welche als Unterbau dient, eingliedern muss und somit teilweise auch technische Gegebenheiten dazu führen können, dass Konzepte überarbeitet werden müssen. Insofern sind die Konzepte, die in diesem Kapitel besprochen werden, Ergebnisse dieses ganz natürlichen Prozesses. Es sei also angemerkt, dass im Rahmen der sich stetig veränderten Anforderungen an ein Softwaresystem, regelmäßige Restrukturierungsarbeiten eine Notwendigkeit darstellen. Da es sich in diesem Fall um einen Prototypen handelt und nicht um eine Software, die vom ersten Tag an für die kommerzielle Softwareentwicklung eingesetzt wird, ergibt sich der Luxus, dass Refaktorierungsarbeiten ohne Rücksicht auf Client-Code ausgeführt werden können.
+
+An dieser Stelle erscheint es als äußerst sinnvoll, eine Unterscheidung zwischen einer Konzeption, die die Elemente die zur Beschreibung eines Simulationsmodells notwendig sind zum Gegenstand hat und einer rein technischen Konzeption zu treffen. Ersteres soll Gegenstand dieses Kapitels werden. Somit werden in diesem Kapitel lediglich diese Basiskonzepte, die zur Verwendung der aus dieser Arbeit hervorgehenden Bibliothek notwendig sind, vermittelt. Die technische Konzeption, die dann zur technischen Realisierung geführt hat, wird im nachfolgenden Kapitel erörtert.
+
+Im Kapitel \ref{kap_analyse_modell_basiskonzepte} ist bereits der grundlegende Aufbau eines Simulationsmodells beschrieben worden. Dieser hat sich über die Jahre hinweg bewährt und wird in beinah allen Simulationsprogrammen auf die eine oder andere Art umgesetzt. Folgerichtig und somit am sinnvollsten ist es von diesem Aufbau nicht weiter abzuweichen. Dessen ungeachtet ist es nicht verkehrt über Erweiterungskonzepte nachzudenken. Die vorgestellten Grundkonzepte stellen daher auch für die Eigenentwicklung, die aus dieser Diplomarbeit hervorgeht, das theoretische Fundament dar.
+
+\section{Modellcontainer}
+
+Mit der WPF hat Microsoft ein sehr mächtiges Werkzeug geschaffen, mit welchem eine produktive Entwicklung von grafischen Nutzeroberflächen für das Betriebssystem Windows erleichtert wird.
+
+Die aus dieser Arbeit hervorgehende  {\em \Gls{SimNetUI}}-Bibliothek ergänzt die WPF um Komponenten, die eine grafische Entwicklung eines Simulationsmodells ermöglichen. Um eine Separierung von den sonstigen Komponenten einer Nutzeroberfläche zu erreichen, sieht das Konzept für den Modellaufbau ein eigenes Container-Control vor, welches ein komplettes Simulationsmodell beinhaltet. Ein entscheidender Vorteil, der mit diesem Ansatz einhergeht, ist, dass auf diese Weise relativ einfach zentrale Einstellungen für ein Simulationsmodell über den Container vorgenommen werden können. Beispielsweise lassen sich auf diese Weise Aktionen, wie das Starten und Beenden einer Simulation, bequem über Kommandos bereitstellen. Das Container-Control wird von dem aus der WPF bekannten Canvas-Control abgeleitet und erbt damit all dessen Eigenschaften zur Positionierung von WPF Steuerelementen. Diese Flexibilität kann zum Beispiel genutzt werden, um das Simulationsmodell zu dokumentieren bzw. grafisch mit WPF Bordmitteln aufzuwerten.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=10cm]{interface_prototyp.png}
+	\caption{Oberflächenprototyp für eine Anwendung, die auf der \Gls{SimNetUI}-Bibliothek basiert.}
+  \label{fig:pic_interface_prototype}
+\end{figure}
+
+
+Als minimale Ausgangslage für die Entwicklung einer eigenen Simulation auf Basis der {\em \Gls{SimNetUI}} Bibliothek kann folgender \Gls{xaml}-Quellcode dienen.
+\footnote{
+Für nachfolgende \Gls{xaml}-Quellcode-Auszüge stellt dieses Rahmenprogramm die Grundlage dar.
+Wobei folgendes zu beachten ist:
+\begin{itemize}
+	\item Steuerelemente sind immer in der Hierarchie dem Simulationskontainer als Kind-Elemente untergeordnet
+	\item Zu Demonstrationszwecken werden häufig nur Attribute dargestellt, welche für die Betrachtung von einer konkreten Eigenschaft unmitelbar von Bedeutung sind. Eine ausführbare Anwendung ohne Veränderung des Quellcodes ergibt sich somit nicht.
+\end{itemize}} \\
+
+\input{xaml.tex}
+
+
+\begin{lstlisting}[caption={Minimales Beispiel für ein Rahmenprogramm ohne Simulationsmodell}]
+<Window x:Class="Example.Test.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/\Gls{xaml}/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/\Gls{xaml}"
+        Title="MainWindow" Height="350" Width="687"
+        xmlns:my="\Gls{SimNetUI}"
+        >
+    <my:SimulationContainer  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="simulation1">
+        <Button Content="{Binding RelativeSource={RelativeSource self},Path=Command.Text}" Command="MediaCommands.Play" CommandTarget="{Binding ElementName=simulation1}" Canvas.Left="12" Canvas.Top="12" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Width="83" />
+        <Button Content="{Binding RelativeSource={RelativeSource self},Path=Command.Text}" Command="MediaCommands.Stop" CommandTarget="{Binding ElementName=simulation1}" Canvas.Left="101" Canvas.Top="12"  Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" />
+        <TextBlock Canvas.Left="563" Canvas.Top="12" Height="23" Text="Simulationszeit:" Width="90" />
+        <Slider Canvas.Left="182" Canvas.Top="12" Height="23" Width="260" Value="{Binding Path=AnimationClockSpeed, ElementName=simulation1}" TickFrequency="1" Maximum="25" />
+        <TextBlock Canvas.Left="462" Canvas.Top="12" Height="23" Text="{Binding ElementName=simulation1, Path=AnimationClockSpeed}" Width="61" TextAlignment="Center" />
+        <TextBlock Canvas.Left="563" Canvas.Top="31" Height="18" HorizontalAlignment="Left" Name="textBlock10" Text="{Binding ElementName=simulation1, Path=SimulationTime,StringFormat={}{0:0.0000}}" TextAlignment="Center" VerticalAlignment="Top" Width="78" />
+	</my:SimulationContainer>
+\end{lstlisting}
+
+
+
+\section{Aktivitäten}
+
+Aktivitäten stellen wichtige Kernkomponenten für den Aufbau eines Simulationsmodells dar. Sie besitzen Eigenschaften, deren Zustand sich auf den Verlauf einer Simulation entscheidend auswirken kann. Insofern ist es wichtig, neue Aktivitäten möglichst auf eine Weise zu konstruieren, dass diese den bestehenden Satz an Aktivitäten möglichst gut ergänzen.
+
+Eine wichtige Erkenntnis aus der Analyse ist es, dass es Sinn macht, viele Aktivitäten mit spezialisierten Aufgaben zu implementieren. Dies hat den Vorteil, dass es sowohl für den Betrachter als auch den Entwickler wesentlich einfacher nachzuvollziehen ist, was im Modell passiert, als wenn Aktivitäten zu viele Nebeneffekte haben, wenngleich die Gesamtheit der verfügbaren Aktivitäten immer noch so allgemein sein muss, dass diese sich auf eine Vielzahl von Anwendungsfällen abbilden lassen. 
+
+Durch die Betrachtung der Softwarepakete Simul8, Simprocess und Micro Saint Sharp hat es sich allerdings auch gezeigt, dass es sinnvoll ist, gewisse Aufgaben als Funktionalitäten für die Mehrzahl der Aktivitäten direkt zu implementieren, statt zusätzliche Aktivitäten zu schaffen. Dies hat technische wie auch praktische Gründe.
+
+\subsection{Allgemeine Eigenschaften von Aktivitäten}
+
+\subsubsection{Warteschlangen}\label{kap3:warteschlangen}
+
+Im Hinblick auf die technische Realisierung hat es sich gezeigt, dass es wesentlich einfacher ist, Warteschlangen in ausgewählte Aktivitäten zu integrieren, anstatt einen extra Baustein in Form einer Aktivität bereitzustellen. Dies hat unter anderem auch damit zu tun, dass die Kommunikation der Aktivitäten dadurch untereinander wesentlich vereinfacht wird, insofern da ein allgemein weniger fehleranfälliger Ansatz verfolgt werden kann. Weiterhin wird damit das Problem umgangen, dass Warteschlangen häufig nur im Kontext mit bestimmten Aktivitäten überhaupt sinnvoll eingesetzt werden können. Ein Missbrauch eines solchen Bausteins ist somit bereits ausgeschlossen. 
+
+Die für die \Gls{SimNetUI}-Bibliothek realisierten Sortierungsvarianten für Warteschlangen können der Tabelle \ref{tab:SimNetUI_Bibliothek_Queue} entnommen werden.
+\\
+\begin{longtable}{p{5cm}|p{95mm}}\hline
+\footnotesize\textbf{Variante} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Sortierungsarten von Warteschlangen}
+\label{tab:SimNetUI_Bibliothek_Queue}%
+
+\endfoot
+
+\Gls{fifo} & {\em First In First Out} stellt die gängigste Sortierung dar. Entitäten verlassen die Warteschlange in der Reihenfolge, wie sie diese betreten haben.
+\tabularnewline\hline
+\Gls{lifo} & Die Einstellung {\em Last In First Out} sorgt dafür, dass Entitäten in der umgekehrten Reihenfolge ihres eintreffens die Warteschlange verlassen.
+\tabularnewline\hline
+PRIORITY\_FIFO & Bei Wahl dieser Variante werden Entitäten zunächst {\em absteigend} nach ihrer Priorität sortiert. Entitäten mit der gleichen Priorität werden nach dem \Gls{fifo} Prinzip innerhalb ihrer Gruppe sortiert.
+\tabularnewline\hline
+PRIORITY\_LIFO &  Entitäten werden zuerst {\em absteigend} nach ihrer Priorität sortiert. Befinden sich mehrere Entitäten mit der gleichen Priorität in der Warteschlange, werden diese nach dem \Gls{lifo} Prinzip innerhalb ihrer Gruppe angeordnet.
+\tabularnewline\hline
+PRIORITY\_DESC\_FIFO & Bei Wahl dieser Variante werden Entitäten zunächst {\em aufsteigend} nach ihrer Priorität sortiert. Entitäten mit der gleichen Priorität werden nach dem \Gls{fifo} Prinzip innerhalb ihrer Gruppe sortiert.
+\tabularnewline\hline
+PRIORITY\_DESC\_LIFO & Entitäten werden zuerst nach {\em aufsteigender} Priorität sortiert. Entitäten mit gleicher Priorität werden nach dem \Gls{lifo}-Prinzip sortiert.
+\tabularnewline\hline
+
+\end{longtable}
+
+\subsubsection{Routing}
+
+Eine weitere markante Eigenschaft, die beinah jede Aktivität auszeichnet, mit Ausnahme der {\em Exit}-Aktivität, ist die Möglichkeit, Entitäten an Aktivitäten gezielt weiterzuleiten. In Form eines Events kann ein Entwickler eines Simulationsmodells genau festlegen, welche von mehreren angeschlossenen Aktivitäten unter welchen Umständen das Ziel für eine ausgehende Entität darstellt. Ein Vorteil, der sich aus dem Verzicht einer zusätzlichen Aktivität für das Routing ergibt, ist , dass das Modell durch diese Maßnahme tatsächlich aufgeräumter erscheint, da wesentlich an Platz gespart wird. Weiterhin bleibt der Dokumentationseffekt gewahrt, denn es ist leicht zu erkennen, dass bei mehreren ausgehenden Verbindungen ein Routing erfolgen muss.
+
+\subsection{Verbindungen}
+
+Wie schon im Kapitel \ref{kap_analyse_modell_basiskonzepte} erwähnt, repräsentieren Kanten jeweils eine Route zwischen verbundenen Aktivitäten. 
+
+Ein hierfür notwendiges Basiskonzept stellen die Verbindungsstücke dar, welche ähnlich wie die {\em Pads} aus Simprocess funktionieren. Theoretisch könnte eine Aktivität mehrere solcher Verbindungsstücke besitzen. Jedoch besitzen die realisierten Aktivitäten in der {\em \Gls{SimNetUI}}-Bibliothek derzeit maximal einen Eingang und einen Ausgang. Die Anzahl der ausgehenden oder eingehenden Verbindungen eines Verbindungsstücks können Beschränkungen unterliegen. Bei den derzeit implementierten Aktivitäten wird von dieser Möglichkeit allerdings noch kein Gebrauch gemacht. 
+
+Die Koordinaten für die Stützpunkte der Verbindungslinien werden direkt mittels \Gls{xaml}-Code beschrieben. Dies ist die flexibelste Lösung, da es damit dem Programmierer völlig freigestellt wird, wie dieser die Verbindungslinien anordnet. Lediglich Anfangs- und Endpunkt sind unveränderlich. 
+
+Da es sehr mühsam ist, den \Gls{xaml}-Code für solche Veränderungen selbst zu schreiben, hat es sich angeboten intensiven Gebrauch von den Erweiterungsmöglichkeiten des Visual Studio Designers zu machen\footnote{Eine Abhandlung bezüglich der Verwendung der Erweiterungen für den Visual Studio Designer findet sich im Kapitel \ref{kap3_erweiterungen}.}. Dank dieser Erweiterungen lassen sich Verbindungen relativ einfach mittels grafischer Werkzeuge erstellen. Diese Verbindungen können zudem in Aussehen und Form über ein Kontextmenü verändert werden. Für erweiterte Szenarien kann die hierfür wichtige Zeichenkette im \Gls{xaml}-Code aber weiterhin direkt angepasst werden. 
+
+\Gls{xaml} schreibt als Derivat des \Gls{xml}-Standards eine hierarchische Dokumentstruktur vor. Damit eine Zuordnung von Verbindungen zu Aktivitäten möglich ist, werden diese sinnvollerweise der Aktivität zugeordnet, von welcher die Verbindung ausgeht. Im nachfolgenden Quelltext ist dies klar zu erkennen.\\
+
+\begin{lstlisting}[caption={Ausschnitt eines \Gls{xaml}-Quelltextes zur Demonstration des Verbindungscodes},label={list:xaml_beispiel_verbindungen}]
+<my:Generator Canvas.Left="49" Canvas.Top="171" Name="generator1">
+  <my:Generator.Entity>
+    <my:Entity />
+  </my:Generator.Entity>
+  <my:Generator.Schedule>
+    <my:Schedule>
+      <my:UniformDouble Max="5" Min="0" my:Schedule.Duration="Infinity" Seed="1" />
+    </my:Schedule>
+  </my:Generator.Schedule>
+  <my:Out Connector="Out">
+    <my:Target Activity="exit1" Connector="In" ConnectionPoints="C 179.33,199 179.33,104" />
+    <my:Target Activity="exit2" Connector="In" ConnectionPoints="L 216.5,199 L 216.5,247 L" />
+  </my:Out>
+</my:Generator>
+<my:Exit Canvas.Left="328" Canvas.Top="76" Name="exit1" />
+<my:Exit Canvas.Left="328" Canvas.Top="219" Name="exit2" />
+\end{lstlisting}
+
+In diesem Beispiel werden drei Aktivitäten erzeugt. 
+
+\begin{itemize}
+	\item Ein Generator, der für die Erzeugung neuer Entitäten zuständig ist
+	\item Zwei Exit-Aktivitäten, über welche Entitäten das Simulationsmodell verlassen.
+\end{itemize}
+
+Der Generator besitzt eine Liste von ausgehenden Verbindungen. Solch eine Liste ist als {\em Content}-Element jeder Aktivität zugeordnet. Im Falle der Exit-Aktivität können allerdings keine ausgehenden Verbindungen beschrieben werden, da diese Aktivität kein Ausgangsverbindungsstück besitzt.
+
+Zunächst muss definiert werden, über welches Verbindungsstück eine Aktivität mit einer Folgeaktivität verbunden ist. Wenn eine Aktivität mehrere Ausgangsverbindungsstücke besitzt, könnte der \Gls{xaml}-Code wie folgt aussehen.\footnote{Hinweis: Dies ist nur eine theoretische Betrachtung. Derzeit besitzt keine Aktivität mehr als ein ausgehendes Verbindungsstück.}\\
+
+\begin{lstlisting}[caption={Beispiel für eine Aktivität mit mehreren Ausgängen},label={list:xaml_ausgangskonnektoren}]]
+<my:ActivityTypeName>
+  <!-- Weitere Eigenschaften der Aktivität -->
+  <my:Out Connector="One">
+    <!-- Verbindungscode -->
+  </my:Out>
+  <my:Out Connector="Two">
+    <!-- Verbindungscode -->
+  </my:Out>            
+</my:ActivityTypeName>
+\end{lstlisting}
+
+Wie also aus dem Quelltext \ref{list:xaml_beispiel_verbindungen} entnommen werden kann, verlassen Entitäten über einen Ausgang, welcher die Bezeichnung {\em Out} trägt, den Generator. Über diese Verbindungsstelle ist die {\em Generator}-Aktivität an die beiden {\em Exit}-Aktivitäten angeschlossen. Für jedes {\em Target}-Element müssen der Name der Zielaktivität sowie der Name des Eingangs definiert werden.
+
+Diese Architektur mag zunächst unnötig kompliziert erscheinen, ist aber unvermeidbar, wenn Aktivitäten über mehrere ausgehende Verbindungsstücke verfügen sollen.
+
+Dank der Erweiterung des Visual Studio Designers muss sich der Entwickler über diese Details aber keine Gedanken machen. Denn dieser Code wird automatisch generiert. Für den Fall, dass aber dennoch einmal Änderungen direkt im \Gls{xaml}-Code vorgenommen werden müssen, ist ein tieferes Verständnis des Codes jedoch von Nutzen.
+
+Zuletzt soll noch die Zeichenkette beschrieben werden, welche für die Darstellung der Verbindung entscheidend ist. Das {\em Target}-Element besitzt eine Eigenschaft {\em ConnectionPoints}. Für die Interpretation dieser Zeichenkette wird die Methode {\em Parse} der Klasse {\em Geometry} verwendet, welche Bestandteil der WPF-API ist. An dieser Stelle sei das Buch {\em WPF 4 Unleashed} von {\em Adam Nathan} aus dem Jahre 2010 empfohlen. In diesem Buch ist im Kapitel 15 {\em 2D Graphics} ab Seite 487 eine detaillierte Beschreibung zum Aufbau dieser Zeichenkette beschrieben. Es wurde bereits erwähnt, dass die Anfangspunkte und Endpunkte vorgegeben werden und nicht den Änderungen des Programmierers, der sich der \Gls{SimNetUI}-Bibliothek bedient, unterliegen. Es gibt somit 2 Modifikationen an der Zeichenkette, der sich der Entwickler stets bewusst sein muss. Der folgende Code soll die Veränderungen an der im \Gls{xaml}-Code hinterlegten Zeichenkette demonstrieren.\\
+
+\input{csharp.tex}
+
+\begin{lstlisting}[caption={},label={list:csharp_connectionpoints_example}]
+return 
+  "M " + PointToString(Start) + " " + ConnectionPoints + " " + PointToString(End);
+\end{lstlisting}
+
+Aus dem Beispiel aus Quelltext  \ref{list:xaml_beispiel_verbindungen} ergibt sich somit die Zeichenkette
+{\em M x1,y1 C 179.33,199 179.33,104 x2,y2}, wobei die beiden Koordinatenpaare {\em x1,y1} und {\em x2,y2} Platzhalter für die errechneten tatsächlichen Werte der Koordinaten der Verbindungsstücke mit deren Bezug innerhalb des Simulationscontainers sind. 
+
+\subsection{Verteilungsfunktionen}
+
+Im Kapitel \ref{kap2:verteilungsfunktionen} wurde unter anderem betrachtet, welche Bedeutung statistischen Verteilungsfunktionen im Rahmen eines Simulationsmodells zukommen. Die zugrunde liegende {\em \Gls{SimNet}}-Bibliothek implementiert bereits einige dieser Wahrscheinlichkeitsverteilungen\footnote{Die in der \Gls{SimNet}-Bibliothek realisierten Wahrscheinlichkeitsverteilungen können auch der Tabelle \ref{tab:Distribution} aus Kapitel \ref{kap2:verteilungsfunktionen} entnommen werden}. Diese Verteilungsfunktionen bilden ebenso für die \Gls{SimNetUI}-Bibliothek die Grundlage für die Berechnung von Simulationszeit. Derzeit verwenden lediglich die Wait-Aktivität\footnote{Eine Abhandlung der Wait-Aktivität ist im Kapitel \ref{kap3:wait} zu finden} sowie die Generator-Aktivität\footnote{Eine umfassende Beschreibung für Generatoren können dem Kapitel \ref{kap3:generator} entnommen werden} diese Möglichkeit.
+
+Alle Wahrscheinlichkeitsverteilungen besitzen einen {\em Seed}. Setzt man diesen auf einen Wert ungleich 0, werden für jede Simulation immer die gleichen Werte generiert. Ein Wert von 0 hingegen initialisiert den Seed auf einen pseudo- zufälligen Wert.
+
+
+Weiterhin gibt es 2 Verteilungsfunktionen in der \Gls{SimNetUI}-Bibliothek, die nicht zu den Wahrscheinlichkeitsverteilungen gezählt werden können. Hinzugekommen sind die {\em Fixed}-Distribution, die es erlaubt einen statischen Wert zu setzen sowie die {\em NoEvent}-Distribution, die nur für Generatoren innerhalb eines {\em Schedules} sinnvoll eingesetzt werden kann, da sie es erlaubt, für einen definierten Zeitraum einen Generator zu deaktivieren.
+
+Der nachfolgende Quelltext soll aufzeigen, wie die einzelnen Verteilungsfunktionen in \Gls{xaml} erzeugt werden können. Zu Demonstrationszwecken werden alle Verteilungsfunktion als WPF-Ressourcen definiert. Im Regelfall wird man diese den Attributen der Aktivitäten allerdings direkt zuordnen.\\
+
+\input{xaml.tex}
+
+\begin{lstlisting}[caption={Verwendung von Verteilungsfunktionen in \Gls{xaml}},label={list:distribution_xaml}]
+<my:SimulationContainer>
+  <my:SimulationContainer.Resources>
+    <!-- Beispiele für Wahrscheinlickheitsverteilungen -->
+    <my:Erlang x:Key="erlang"  Alpha="0.0" Beta="1.0" Seed="0.0" />
+    <my:Exponential x:Key="exponential" Alpha="1.0" Seed="0.0" />
+    <my:LogNormal x:Key="logNormal" Alpha="0.0" Beta="1.0" Seed="1.0" />
+    <my:Normal x:Key="normal" Alpha="0" Beta="1" Seed="1" />
+    <my:UniformDouble x:Key="uniformDbl" Min="1.0" Max="2.0"  Seed="0.0" />
+    <my:UniformInt x:Key="uniformInt" Min="0.0" Max="2.0"  Seed="0" />
+    <my:Triangular x:Key="triang" Min="0.0" Mode="1.0" Max="2.0"  Seed="0.0" />
+    <my:Weibull x:Key="weibull" Alpha="0.0" Beta="1.0" Seed="0.0" />
+    <!-- Sonstige Verteilungen -->
+    <my:Fixed x:Key="fixed" Value="5"  />
+    <my:NoEvent x:Key="noEvent" />          
+  </my:SimulationContainer.Resources>
+</my:SimulationContainer>
+\end{lstlisting}
+
+Auch wenn diese Verteilungsfunktionen derzeit nur für die Kalkulation der Wartezeiten von Aktivitäten eingesetzt werden, so ist eine erweiterte Anwendung durchaus denkbar. So sollte für nachfolgende Versionen der \Gls{SimNetUI}-Bibliothek über eine Verwendung von Mengenverteilungen nachgedacht werden. Beispielsweise wäre es vorstellbar, dass zu einem Zeitpunkt eine zufällige Anzahl von Entitäten gleichzeitig in der Simulation eintrifft. Für diese Modellierungsmöglichkeiten könnten dieselben Klassen eingesetzt werden. 
+
+\subsection{Events}\label{kap3:entity}
+
+Wie bereits in der Einleitung erwähnt, reicht ein rein grafisches System für viele Anwendungsfälle nicht aus. Der Nutzer eines Simulationswerkzeugs wird oft nicht umhin kommen, selbst zusätzlichen Programmcode zu schreiben. Da die Simulationsbibliothek, die aus dieser Arbeit hervorgeht, bereits aufgrund ihrer technischen Grundlage in ein System eingebettet ist, welches eine Erweiterung durch den Programmierer erlaubt, erscheint es nur sinnvoll, Events bereitzustellen, welche der Programmierer nutzen kann, um zusätzlichen Programmcode auszuführen. Dieses Konzept findet sich auch in den untersuchten Simulations-Applikationen wieder und tritt besonders deutlich in Micro Saint Sharp zum Vorschein, da die dort verwendeten sogenannten Effekte einen wesentlichen Bestandteil der Simulationslogik ausmachen. Durch die Einbindung der Simulationsbibliothek in Visual Studio tritt dieser Aspekt ebenso in den Vordergrund.
+
+Für Ereignisse gibt es drei konkrete Anwendungsfälle
+\begin{itemize}
+	\item Der Programmierer möchte Entitäten mit zusätzlichen Informationen ausstatten.
+	\item Der Programmierer möchte Zustände überwachen und auf Veränderungen reagieren, um beispielsweise selbst Ereignisse auszulösen oder Modelleigenschaften dynamisch anzupassen.
+	\item Steuerungslogik lässt sich besonders gut über Ereignisse realisieren, da sie dem Programmierer eine erweiterte Mächtigkeit gibt, die sich über zusätzliche Eigenschaften nur begrenzt ausdrücken ließe. 
+\end{itemize}
+
+Die nun folgenden Abschnitte gehen auf die, in die Aktivitäten der Simulationsbibliothek {\em \Gls{SimNetUI}} integrierten Events näher ein. Es sei noch angemerkt, dass nicht jede Aktivität notwendigerweise jedes dieser Ereignisse besitzen muss.
+
+\subsubsection{EntityLeft}
+
+\input{csharp.tex}
+\begin{lstlisting}[caption={Prototyp des Eregnisses, welches beim Verlassen einer Aktivität durch eine Entität ausgelöst wird.},label={list:event_entity_left}]
+void EntityLeft(object sender, EntityLeavingEventArgs e)
+\end{lstlisting}
+Noch bevor eine Entität eine Aktivität verlässt, wird dieses Ereignis ausgelöst. Über eine Instanz der Klasse {\em EntityLeavingEventArgs} kann auf eine Referenz der verlassenden Entität und auf eine Referenz auf die Zielaktivität zugegriffen werden.
+
+Dieses Ereignis eignet sich insbesondere dafür, Eigenschaften von Entitäten zu manipulieren. Zum Beispiel kann die visuelle Darstellung der Entität dynamisch angepasst werden, bevor die Entität die Aktivität verlässt.
+
+Die Aktivität {\em Exit} stellt insofern eine Ausnahme dar, denn für diese Aktivität existiert dieses Ereignis nicht, da sie keine ausgehenden Verbindungen erlaubt.
+
+\subsubsection{EntityEntered}
+
+
+\begin{lstlisting}[caption={Prototyp des Eregnisses, welches von einer Aktivität beim Eintreffen einer Entität ausgelöst wird.},label={list:event_entity_routed}]
+void EntityEntered(object sender, EntityEnteringEventArgs e)
+\end{lstlisting}
+
+Dieses Ereignis wird ausgelöst, nachdem eine Entität eine Aktivität erreicht hat. Über eine Instanz der Klasse {\em EntityEnteringEventArgs} erhält der Programmierer Zugriff auf eine Referenz der Aktivität, von welcher die eben eingetroffene Entität stammt. Weiterhin kann ebenso wie beim {\em EntityLeft}-Event auf die Eigenschaften der Entität direkt eingewirkt werden.
+
+Lediglich für die {\em Generator}-Aktivität wird dieses Ereignis nie ausgelöst, da die {\em Generator}-Aktivität keine eingehenden Verbindungen besitzt.
+
+\subsubsection{EntityRouted}
+
+
+\begin{lstlisting}[caption={Prototyp des Eregnisses, welches zur Steuerung der Weiterleitung verwendet wird},label={list:event_entity_entered}]
+void EntityRouted(object sender, EntityRoutingEventArgs e)
+\end{lstlisting}
+
+Das {\em EntityRouted} Event erlaubt die Programmierung von Steuerungslogik, um Einfluss auf die Wahl der Folgeaktivität zu nehmen. Dieses Ereignis ist immer dann sinnvoll, wenn an eine Aktivität {\em mehrere} Folgeaktivitäten angeschlossen sind. Es wird ausgelöst, nachdem die Aktivität bereit ist, die Entität zum Verlassen freizugeben und noch bevor das Ereignis {\em EntityLeft} ausgelöst worden ist.
+
+Über eine Instanz der Klasse {\em EntityRoutingEventArgs} erhält der Entwickler Zugriff auf die Entität selbst sowie einer Liste mit möglichen Zielen. Um Einfluss auf das {\em Routing} zu nehmen, muss das Property {\em TargetIndex} den Index für ein Ziel erhalten, welcher die Nummer des Eintrags in der Liste der möglichen Ziele darstellt.
+
+Zur besseren Veranschaulichung soll dies im folgenden Quelltext dargestellt werden. Im konkreten Beispiel sind an die Folgeaktivität mehrere Aktivitäten vom Typ {\em Wait} angeschlossen. Die Entität wird in der Folge an eine Aktivität weitergeleitet, die entweder noch nicht belegt ist oder die kürzeste Warteschlange besitzt.\\
+
+\begin{lstlisting}[caption={Beispiel für die Verwendung des EntityRouted Events},label={list:event_entity_routed_example}]
+private void generator1_EntityRouted(object sender, EntityRoutingEventArgs e)
+{
+  // Den kleinsten Wert auswählen.
+  var minInQueue = e.Targets.Min(
+    (target) => target.GetActivity<Wait>().Statistics.InQueue + 
+      target.GetActivity<Wait>().Statistics.InWork);
+
+  // Aktivitäten auswählen, die das Kritierum minInQueue erfüllen.
+  var selection = (from target in e.Targets
+    where target.GetActivity<Wait>().Statistics.InQueue +
+      target.GetActivity<Wait>().Statistics.InWork == minInQueue
+    select target).ToArray();
+
+  // Setzen des ZielIndex auf einen zufälligen Wert aus der Vorselektion
+  e.TargetIndex = selection[r.Next(selection.Count())].index;
+ }
+\end{lstlisting}
+
+Insofern dieses Ereignis nicht weiter über Benutzercode beschrieben wird, werden die Entitäten abwechselnd der Reihe nach zu einer der angeschlossenen Aktivitäten weitergeleitet.
+
+Da die Aktivität {\em Exit} keine ausgehenden Verbindungen erlaubt, existiert für diese das Ereignis {\em EntityRouted} nicht.
+
+\subsection{Realisierte Aktivitäten}
+
+\subsubsection{Generator}\label{kap3:generator}
+
+Generatoren dienen in einem Simulationsmodell als Quelle. Die Aufgabe von Generatoren ist es, neue Entitäten zu erzeugen. Die Eigenschaften eines Generators, wie er für die \Gls{SimNetUI}-Bibliothek realisiert wurde, kann der Tabelle \ref{tab:SimNetUI_Bibliothek_Generator} entnommen werden.\\
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Eigenschaft} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Eigenschaften eines {\em Generators} aus der \Gls{SimNetUI}-Bibliothek}
+\label{tab:SimNetUI_Bibliothek_Generator}%
+
+\endfoot
+
+Schedule &
+
+Der Schedule stellt einen Plan zur Erzeugung von neuen Entitäten dar. Es kann ein globaler Anfangs- sowie Endzeitpunkt definiert werden. Der eigentliche Plan besteht aus einer Liste von statistischen Verteilungsfunktionen, die mit einer fest definierten Dauer versehen werden können. Der Generator verwendet die in dieser Liste definierten Verteilungsfunktionen nacheinander, bis zum jeweiligen Ablauf der festgelegten Dauer. Falls der für den gesamten Schedule bestimmte Endzeitpunkt erreicht wird, bevor der Plan komplett abgearbeitet worden ist, wird die Erzeugung von weiteren Entitäten eingestellt.\tabularnewline\hline
+
+Entity &
+
+Für die vom Generator zu erzeugenden Entitäten können deren Attribute angepasst werden. Dies kann dynamisch im Code erfolgen, nachdem das EntityLeft Ereignis ausgelöst worden ist oder direkt in der Modellbeschreibung im \Gls{xaml}-Code angepasst werden.\tabularnewline\hline
+
+\end{longtable}
+
+
+\subsubsection{Exit}
+
+Die {\em Exit}-Aktivität wird in einem Simulationsmodell als Senke verwendet. Ankommende Entitäten verlassen das Simulationsmodell über solch einen Knotenpunkt.\\
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Eigenschaft} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Eigenschaften der {\em Exit}-Aktivität aus der \Gls{SimNetUI}-Bibliothek}
+\label{tab:SimNetUI_Bibliothek_Exit}%
+
+\endfoot
+
+Entitäten Schranke &
+
+Für die {\em Exit}-Aktivität kann eine Schranke definiert werden, deren Erreichen zum unweigerlichen Ende der Simulation führt.\tabularnewline\hline
+
+\end{longtable}
+
+\subsubsection{Wait}\label{kap3:wait}
+
+Die {\em Wait}-Aktivität wird zum Simulieren von Prozessen verwendet, welche Simulationszeit verbrauchen.
+Diese Aktivität besitzt zudem eine integrierte Warteschlange, die Entitäten auffängt, die zur Zeit nicht zur Verarbeitung
+vorgesehen sind.\\
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Eigenschaft} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Eigenschaften der {\em Wait}-Aktivität aus der \Gls{SimNetUI}-Bibliothek}
+\label{tab:SimNetUI_Bibliothek_Wait}%
+
+\endfoot
+
+Verarbeitungs-kapazität &
+
+Eine {\em Wait}-Aktivität ist imstande, mehrere Entitäten für einen Zeitraum zu blockieren. Die normale Kapazität ist auf eine Entität festgelegt. Für gewisse Anwendungsszenarien macht es aber durchaus Sinn, diese Grenze zu erhöhen\tabularnewline\hline
+
+Distribution &
+
+Eine {\em Wait}-Aktivität ist imstande, mehrere Entitäten für einen Zeitraum festzuhalten. Die normale Kapazität ist auf eine Entität festgelegt. Für gewisse Anwendungsszenarien macht es aber durchaus Sinn, diese Grenze zu erhöhen.\tabularnewline\hline
+
+Resourcen &
+
+Eine {\em Wait}-Aktivität kann von Ressourcen abhängig sein. Erst wenn alle notwendigen Ressourcen zur Verfügung stehen, nimmt diese Aktivität ihre Funktion wieder wahr. Eintreffende Entitäten werden bis dahin in der Warteschlange aufgehalten.\tabularnewline\hline
+
+\end{longtable}
+
+\subsubsection{Assign Resource}\label{kap3:assign_resource}
+
+Mit der Aktivität {\em Assign Resource} wird es Entitäten ermöglicht, Ressourcen zu belegen. Sofern nicht alle definierten Ressourcen zur Verfügung stehen, werden eintreffende Entitäten in der Warteschlange solange aufgehalten, bis sich dieser Sachverhalt verändert hat.
+
+\subsubsection{Release Resource}\label{kap3:release_resource}
+
+Das Gegenstück zur Aktivität {\em Assign Resource} stellt die {\em Release Resource}-Aktivität dar. Diese Aktivität löst die Verbindung von Entitäten zu Ressourcen wieder auf. Es ist unbedingt zu empfehlen, dass für jede Ressource, die über eine {\em Assing Resource}-Aktivität Entitäten zugewiesen wird, eine {\em Release Resource}-Aktivität mit in das Modell übernommen wird. Andernfalls können sehr schnell Deadlocks im Simulationsmodell entstehen, da Ressourcen nicht mehr freigegeben werden.
+
+
+\section{Entitäten}
+
+Der Begriff Entität bezeichnet die Elemente, die sich während einer Simulation im Modell zwischen verbundenen Aktivitäten bewegen.
+Die konkrete Bedeutung, die einer Entität in einer Simulation zukommt, hängt von deren Aufgabe im Simulationsmodell ab. Denkbare Zuordnungen sind beispielsweise Personen,  Atome oder materielle Güter jeder Art. Entitäten werden über ihre Attribute beschrieben. Eine Auswahl von gängigen Attributen, die für alle Arten von Entitäten sinnvoll sind, sind in der \Gls{SimNetUI}-Bibliothek bereits implementiert. In nachfolgender Tabelle sind diese Attribute beschrieben.\\
+
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Attribut} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Eigenschaften von Entitäten aus der \Gls{SimNetUI}-Bibliothek}
+\label{tab:SimNetUI_Entity}%
+
+\endfoot
+
+Priorität &
+Über eine Priorität ist es möglich, einzelnen Entitäten mit eine Gewichtung zu bewerten. Unter anderem kann die Priorität Einfluss auf die Sortierung in einer Warteschlange nehmen. \footnote{Siehe hierzu Kapitel \ref{kap3:warteschlangen}}
+\tabularnewline\hline
+Typ &
+Oft ist es dienlich, zwischen verschiedenen Arten von Entitäten innerhalb eines Modells zu unterscheiden. Über das
+Typ-Attribut wird diese Unterscheidung möglich. Der Typ einer Entität wird als Zeichenkette notiert.
+\tabularnewline\hline
+
+Erscheiungsbild &
+Die grafische Repräsentation einer Entität kann über das Property {\em Visual Appearance} angepasst werden. Dem Entwickler sind an dieser Stelle keine Grenzen auferlegt. Jedes WPF-Steuerelement, das von der Klasse {\em FrameworkElement} erbt, kann als visuelle Darstellung einer Entität verwendet werden.
+\tabularnewline\hline
+
+Aktivität betreten &
+Sobald eine Entität eine Aktivität erreicht, wird das Property {\em ActivityEntered} mit einem neuen Zeitstempel versehen. Für Simulationsentwickler ist dieses Property allerdings schreibgeschützt.
+\tabularnewline\hline
+
+Aktivität verlassen &
+Ebenso wie beim Betreten einer Aktivität erhält eine Entität auch beim Verlassen einer Aktivität einen neuen Zeitstempel. Dieser kann über das schreibgeschützte Property {\em ActivityLeft} ausgelesen werden.
+\tabularnewline\hline
+
+\end{longtable}
+
+Für einen Generator können Attribute für zu erzeugende Entitäten wie folgt definiert werden.\\
+
+\input{xaml.tex}
+
+\begin{lstlisting}[caption={Festlegung von Eigenschaften für Entitäten wie sie von einem Generator erzeugt werden},label={list:xaml_generator_entity}]
+<my:Generator>
+  <my:Generator.Entity>
+    <my:Entity Priority="3" Type="Anrufer">
+	    <!-- Das Erscheinungsbild für Entitäten kann an dieser Stelle direkt als untergeordnetes Element definiert werden -->
+	    <Image Source="entity.png" />
+    </my:Entity>
+  </my:Generator.Entity>
+</my:Generator>
+\end{lstlisting}
+
+\subsection{Entwurfsmuster für eigene Entitätstypen}
+
+Nun mag es eher die Ausnahme sein, dass die im letzten Abschnitt vorgestellten Attribute für Entitäten allen Anforderungen komplexer Modelle  gereichen. Vielmehr ist es sehr wahrscheinlich, dass für konkrete Anwendungsfälle Entitäten mit zusätzlichen Informationen ausgestattet werden müssen.
+
+Hierfür bietet es sich an, von der aus der \Gls{SimNetUI}-Bibliothek bekannten Klasse {\em Entity} direkt abzuleiten.\\
+
+\input{csharp.tex}
+
+\begin{lstlisting}[caption={Eigene Entitätsklasse auf Basis der {\em Entity}-Klasse in C\#}]
+using SimNetUI.View.Entity;
+namespace Example
+{
+    public class CustomEntity : Entity
+    {
+        public double value { get; set; }
+    }
+}
+\end{lstlisting}
+
+Nun ist es möglich, dieses Attribut auch in \Gls{xaml} einzusetzten. Das Beispiel aus Quelltext \ref{list:xaml_generator_entity} wird hierzu ein wenig angepasst.\\
+
+\input{xaml.tex}
+
+\begin{lstlisting}[caption={Eigene Entitätsklasse in \Gls{xaml} verwenden}]
+<my:Generator xmlns:local="clr-namespace:Example">
+  <my:Generator.Entity>
+    <local:CustomEntity value="10" Priority="3" Type="Anrufer">
+	    <Image Source="entity.png" />
+    </my:Entity>
+  </my:Generator.Entity>
+</my:Generator>
+\end{lstlisting}
+
+Sofort ersichtlich ist die Verwendung des Kürzels {\em local} als eigener {\em Namespace} im \Gls{xaml}-Dokument. Darüber hinaus gibt es nichts weiter zu beachten.
+
+Wer eigene Attribute definiert, wird diese aller Wahrscheinlichkeit nach an gegebener Stelle manipulieren wollen. Hierfür bietet es sich an, die Events, die im Kapitel \ref{kap3:entity} beleuchtet worden sind, zu verwenden. Hierzu ist noch eine Umwandlung in den richtigen Datentyp, wie im Quelltext \ref{list:customentity_event} gezeigt, notwendig.\\
+
+\input{csharp.tex}
+
+\begin{lstlisting}[label={list:customentity_event},caption={Verwendung eigener Entitätensklassen in C\#}]
+private void wait1_EntityLeft(object sender, SimNetUI.View.Activities.Events.EntityLeavingEventArgs e)
+{
+    var customEntity = e.Entity as CustomEntity;
+    if (customEntity != null)
+    {
+        customEntity.value = customEntity.ActivityLeft - customEntity.ActivityEntered;
+    }
+}
+\end{lstlisting}
+
+\section{Ressourcen}\label{kap3:resourcen}
+
+Aus den vorrangegangen Abschnitten lässt sich bereits entnehmen, dass Resourcen beim Modellaufbau eine bedeutende Rolle zukommt. 
+Ressourcen stellen ein vorzügliches Mittel dar, um Abhängigkeiten zwischen verschiedenen Aktivitäten zu simulieren. Weiterhin eignen sich Ressourcen hervorragend, um kritische Abschnitte abzusichern. Sodass beispielsweise gewährleistet werden kann, dass zu jeder Zeit nur eine begrenzte Anzahl von Entitäten sich innerhalb eines solchen kritischen Abschnitts befinden können. Für den Modellaufbau lassen sich somit 2 Gruppen von Ressourcen unterscheiden.
+
+\begin{enumerate}
+	\item Resourcen, die an Aktivitäten gebunden sind
+	\item Resourcen, die an Entitäten gebunden sind
+\end{enumerate}
+
+Zum ersten Punkt sei angemerkt, dass Ressourcen sicherlich nicht für jede Aktivität sinnvoll eingesetzt werden können. Eine Voraussetzung dafür, dass Aktivitäten in eine Beziehung mit Ressourcen treten können ist, dass zunächst einmal geregelt sein muss, wie mit Entitäten verfahren wird, falls der Aktivität benötigte Ressourcen nicht zur Verfügung stehen. Dies hat den Hintergrund, dass Aktivitäten wie sie in der \Gls{SimNetUI}-Bibliothek konzipiert sind, ohne Rücksicht auf den Zustand der Folgeaktivität Entitäten versenden. Im Falle der {\em Wait}-Aktivität, die derzeit die einzige Aktivität darstellt, an welche Ressourcen gebunden werden können, ist dies durch eine Warteschlange gelöst.
+
+Punkt 2 ist durch die Aktivitäten {\em Assign Resource} und {\em Release Resource}, wie in den Abschnitten \ref{kap3:assign_resource} und \ref{kap3:release_resource} bereits beschrieben, realisiert.
+
+\subsection{Definition von Simulationsressourcen in XAML}
+
+Damit Ressourcen Entitäten oder Aktivitäten zugewiesen werden können, müssen diese zunächst einmal definiert werden. Daher wird nun ein Blick auf den \Gls{xaml}-Code geworfen, der hierfür notwendig ist. 
+
+In der WPF lassen sich Objekte, die häufiger wiederverwendet werden sollen, als Ressourcen mit einem Namen (engl. {\em key}) versehen. \footnote{Da es hier bezüglich der verwendeten Begriffe zu Verwirrung kommen kann, erfolgt in diesem Abschnitt eine Unterscheidung zwischen Ressourcen, wie sie im Kontext der WPF-Technologie eingesetzt werden und Simulationsressourcen, wie sie für die Modellierung in der \Gls{SimNetUI}-Bibliothek Anwendung finden.}
+Hierzu besitzt jedes Steuerelement (engl. {\em Control}) eine eigene Liste für Ressourcen (engl. {\em resource collection}) 
+Jedes Element in der Hierarchie unterhalb des sogenannten {\em logical three} eines solchen Elementes erhält damit Zugriff auf diese Ressource. Diese Möglichkeit macht sich auch die \Gls{SimNetUI}-Bibliothek zunutze.\\
+
+\input{xaml.tex}
+
+\begin{lstlisting}[caption={\Gls{xaml}-Quellcode für die Definition von Simulationsressourcen},label={list:xaml_resourcen}]
+<my:SimulationContainer> 
+<my:SimulationContainer.Resources>
+  <my:Resource x:Key="Arbeiter" Capacity="5" />
+  <my:Resource x:Key="Angestellter" Capacity="10" />
+</my:SimulationContainer.Resources>
+</my:SimulationContainer>
+\end{lstlisting}
+
+Eine Empfehlung für die Definition von Simulationsressourcen ist es, diese direkt dem Simulationscontainer unterzuordnen, so wie dies auch aus dem Quelltext \ref{list:xaml_resourcen} zu entnehmen ist.
+
+Wiederum wurde Gebrauch von den Erweiterungsmöglichkeiten des Designers der WPF gemacht, sodass diese Funktionalität in Form eines Editors nachgerüstet wurde, womit dem Entwickler lästige Tipparbeit abgenommen und ihm zudem ein einheitliches Entwurfsmuster vorgegeben wird.
+
+Über die XAML-Markuperweiterung {\em StaticResource} können Aktivitäten auf eine gemeinsame Simulationsressource zugreifen. Beispielhaft dargestellt wird dies im Quelltext \ref{list:xaml_resourcen_access}.\\
+\newpage
+\begin{lstlisting}[caption={\Gls{xaml}-Quellcode für den Zugriff auf Simulationsressourcen},label={list:xaml_resourcen_access}]
+<my:Wait Name="wait1">
+  <my:Wait.ResourceDependencies>
+    <my:ResourceDependency Count="5" Resource="{StaticResource Angestellter}" />
+  </my:Wait.ResourceDependencies>
+</my:Wait>
+\end{lstlisting}
+
+Die Klasse {\em ResourceDependency} dient als Container, um Ressourcen Aktivitäten oder Entitäten zuzuweisen. 
+Mittels des Attributs {\em Count} kann in \Gls{xaml} die Anzahl der benötigten Elemente festgelegt werden. Über die Eigenschaft {\em Resource} sollte eine Referenz auf eine Simulationsressource gesetzt werden.
+
+
+\section{Begleitobjekte}
+
+Neben den bisher betrachteten Komponenten, die für den Aufbau eines Simulationsmodells unentbehrlich sind, können Begleitobjekte dazu beitragen, die Präsentation einer Simulation erheblich aufzuwerten. Begleitobjekte sind Objekte, die auf das eigentliche Simulationsmodell nicht einwirken, aber in der Lage sind, Zustände für solch ein Modell innerhalb einer Simulation grafisch zu virtualisieren. Hierzu werden Begleitobjekte mit Aktivitäten durch Datenbindung in eine Beziehung gesetzt.
+
+\subsection{QueueCompanion}
+
+Das Begleitobjekt für Warteschlangen stellt derzeit das einzige implementierte Begleitobjekt für die \Gls{SimNetUI}-Bibliothek dar.
+Wie bereits im Kapitel \ref{kap3:warteschlangen} aufgezeigt, besitzen ausgewählte Aktivitäten eine eingebaute Warteschlange. Über eine Datenbindung zu genau solchen Aktivitäten wird dem Begleitobjekt ermöglicht, die Warteschlange dieser Aktivitäten darzustellen. Konkret bedeutet dies, dass die grafische Repräsentation aller Entitäten, die sich in der Warteschlange einer an das Begleitobjekt gebundene Aktivität befinden, in der Reihenfolge ihrer Sortierung innerhalb der Warteschlange von rechts nach links angeordnet, dargestellt werden.
+
+Wiederum soll demonstriert werden, wie diese Datenbindung im \Gls{xaml}-Code zu bewerkstelligen ist.\\
+\newpage
+\begin{lstlisting}[caption={\Gls{xaml}-Quellcode zur Demonstration der Datenbindung eines Begleitsobjektes für Warteschlangen},label={list:xaml_databinding_queuecompanion}]
+<my:Wait Name="wait1" />
+<my:QueueCompanion Name="queueCompanion1" ActivityQueue="{Binding ElementName=wait1}" />
+\end{lstlisting}
+
+Aus Quelltext \ref{list:xaml_databinding_queuecompanion} wird ersichtlich, dass das {\em ActivityQueue} Property des {\em QueueCompanion} Objektes eine Referenz auf eine Aktivität mit eingebauter Warteschlange benötigt, welche es in diesem Beispiel über eine Datenbindung erhält.
+
+\section{Statistiken}\label{kap3_statistiken}
+
+Für die Auswertung von Simulationen sind Statistiken über den Verlauf einer Simulation unentbehrlich. Die Konzeption für die \Gls{SimNetUI}-Bibliothek sieht vor, dass Statistiken für Aktivitäten und Ressourcen jederzeit abrufbar sind. Hierzu ist es vorgesehen, dass WPF-Entwickler Statistiken an beliebiger Stelle mittels Datenbindung sich anzeigen lassen können. Es ist angedacht, dieses Konzept für eine spätere Version der \Gls{SimNetUI}-Bibliothek auch auf Entitäten auszudehnen.
+
+\subsection{Aktivitäten}
+
+Jede Aktivität besitzt ein eigenes Property {\em Statistics}. Da sich Statistiken von Aktivität zu Aktivität unterscheiden können,
+existiert für jede Aktivität jeweils eine eigene Statistik-Klasse. Statistiken sind schreibgeschützt, da diese für Simulationsentwickler nicht zum Bearbeiten vorgesehen sind. Im folgenden Beispiel wird demonstriert, wie über Datenbindung auf statistische Informationen zugegriffen werden kann.\\
+
+\begin{lstlisting}[caption={\Gls{xaml}-Quellcode zur Demonstration der Datenbindung an Statistiken von Aktivitäten},label={list:xaml_statistics_activity}]
+<my:Generator Name="generator1" />
+<TextBlock  Text="{Binding ElementName=generator1, Path=Statistics.DepartedEntities, StringFormat='Generated Entities:   {0}'}" />
+\end{lstlisting}
+
+\subsection{Ressourcen}
+
+Ebenso wie Aktivitäten besitzen Ressourcen ein Property {\em Statistics}. Im Quelltext \ref{list:xaml_statistics_resources} wird demonstriert wie auf Statistiken von Ressourcen mittels Datenbindung zugegriffen werden kann.\\
+
+\begin{lstlisting}[caption={\Gls{xaml}-Quellcode zur Demonstration der Datenbindung an Statistiken von Ressourcen},label={list:xaml_statistics_resources}]
+<my:SimulationContainer Name="simulation1">     
+  <my:SimulationContainer.Resources>
+    <my:Resource x:Key="shopping cart" Capacity="10" />
+  </my:SimulationContainer.Resources>
+  <TextBlock Text="{Binding Source={StaticResource shopping cart}, Path=Statistics.AvailableResources}" />
+</my:SimulationContainer>
+\end{lstlisting}
+
+
+\section{Simulationssteuerung}
+
+Notwendigerweise müssen Applikationen, die auf Basis der \Gls{SimNetUI}-Bibliothek entwickelt werden, mit Bedienelementen zur Steuerung der Simulation ausgestattet werden. In der gegenwärtigen Version sind die Bedienmöglichkeiten allerdings noch stark eingeschränkt. 
+Klar ist, dass die Steuerung einer Simulation nur über einen zugehörigen Simulationscontainer funktionieren kann. Zum einen kann eine Datenbindung zu Eigenschaften des Simulationscontainers aufgebaut werden, zum anderen besteht aber auch die Möglichkeit, eine Bindung an \Gls{wpf}-Kommandos aufzubauen. 
+
+\subsection{Kommandos}
+
+In der \Gls{wpf} stellen Kommandos eine bequeme Möglichkeit dar, um Aktionen an Bedienelemente zu binden. Einige wesentliche Vorteile, die dazu geführt haben, auch in der \Gls{SimNetUI}-Bibliothek von dieser Technik Gebrauch zu machen, sollen zunächst erörtert werden.
+
+\begin{itemize}
+	\item Steuerelemente können direkt im \Gls{xaml}-Dokument an Kommandos gebunden werden. Entwickler, die sich nur der Kommandos bedienen, müssen keinen zusätzlichen Programmcode schreiben. Darüber hinaus kann eine beliebige Anzahl von Bedienelementen an dasselbe Kommando gebunden werden.
+	\item Kommandos besitzen eine erweiterte Funktionalität, die es erlaubt, auf Zustände zu reagieren. Wenn es Bedingungen gibt, die die Ausführung von Aktionen verhindern, können zugehörige Kommandos deaktiviert werden. \Gls{wpf}-Steuerelemente sind entsprechend in der Lage, zu reagieren und diese veränderten Zustände dem Nutzer optisch anzuzeigen.
+	\item Durch die Verwendung von Standardkommandos stehen darüber hinaus lokalisierte Bezeichnungen für Bedienelemente zur Verfügung.
+\end{itemize}
+
+
+
+
+\subsubsection{Simulation starten}
+
+\input{xaml.tex}
+
+Das von der \Gls{wpf} vordefinierte Kommando {\em MediaCommands.Play} wird für den Start einer Simulation verwendet. Sollte die Simulation laufen, ist dieses Kommando deaktiviert, was dazu führt, dass eine an das Kommando gebundene Schaltfläche nicht mehr betätigt werden kann.
+Wie im Quelltext \ref{list:xaml_commandbinding_start} demonstriert, ist die Schaltfläche an den lokalisierten Text des Kommandos gebunden, sodass je nach Einstellung im Betriebssystem die Sprache des Nutzers als Bezeichnung für das Bedienelement verwendet wird.\\
+
+\begin{lstlisting}[caption={Kommandobindung für ein Bedienelement, um eine Simulation zu starten},label={list:xaml_commandbinding_start}]
+<Button Content="{Binding RelativeSource={RelativeSource self},Path=Command.Text}" Command="MediaCommands.Play" CommandTarget="{Binding ElementName=simulation1}" Name="btnStart"  />
+\end{lstlisting}
+
+\subsubsection{Simulation beenden}
+
+Über das Kommando {\em MediaCommands.Stop} kann es einem Bedienelement ermöglicht werden, eine Simulation vorzeitig zu beenden. Dieses Kommando ist nur aktiv, wenn die Simulation läuft. Ähnlich wie das Kommando {\em MediaCommands.Play} kann das Kommando {\em MediaCommands.Stop} an ein Bedienelement gebunden werden und ebenso wird der Darstellungstext der Schaltfläche in die Sprache des Nutzers übersetzt.\\
+
+\begin{lstlisting}[caption={Kommandobindung für ein Bedienelement, um eine Simulation zu beenden},label={list:xaml_commandbinding_end}]
+<Button Content="{Binding RelativeSource={RelativeSource self},Path=Command.Text}" Command="MediaCommands.Stop" CommandTarget="{Binding ElementName=simulation1}" Name="btnEnd" />
+\end{lstlisting}
+
+\subsection{Simulationseigenschaften}
+
+\subsubsection{Animationsgeschwindigkeit}
+
+Auch auf die Animationsgeschwindigkeit kann Einfluss genommen werden. Der Simulationscontainer stellt hierzu ein eigenes Property zur Verfügung mit dem es möglich ist, einen Beschleunigungsfaktor zu bestimmen. Im Normalfall dauert jede Bewegung einer Entität von einer Aktivität zur nächsten eine Sekunde. Mittels \Gls{xaml}-Code können Steuerelemente an dieses Property gebunden werden.\\
+
+\begin{lstlisting}[label={list:xaml_commandbinding_end},caption={Datenbindung für ein Bedienelement, um die Animationsgeschwindigkeit zur Laufzeit zu manipulieren}]
+<Slider Name="slider1" Width="260" Value="{Binding Path=AnimationClockSpeed, ElementName=simulation1}" TickFrequency="1" Maximum="25" />
+\end{lstlisting}
+
+\section{Designer Erweiterungen}\label{kap3_erweiterungen}
+
+In diesem Abschnitt soll die Benutzung der Erweiterungen, die für den Visual Studio \Gls{wpf}-Designer entwickelt worden sind, thematisiert werden. Von Anbeginn war es eine wichtige Zielstellung dieser Arbeit, eine möglichst einfache Entwicklung von Simulationsmodellen zu ermöglichen. Um so erfreulicher war es festzustellen, dass für den \Gls{wpf}-Designer ein Framework zur Verfügung gestellt wird, mit dessen Hilfe eine Erweiterung des \Gls{wpf}-Designers problemlos möglich ist. Damit lassen sich viele Programmierarbeiten, welche andernfalls nur manuell durch schreiben von Programmcode zu bewerkstelligen gewesen wären, durch grafische Bedienelemente erledigen. Hierdurch wird die \Gls{SimNetUI}-Bibliothek für Programmierer wesentlich zugänglicher, da sich die Verwendung der \Gls{SimNetUI}-Bibliothek auch ohne eingehende Betrachtung der Dokumentation schneller erschließen lässt.
+
+Zusätzlichen Funktionalitäten werden über eine Bedienleiste, die durch auswählen des Simulationscontainers eingeblendet werden, zur Verfügung gestellt.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{pic_simnetui_bedienleiste}
+	\caption{Bedienleiste zum Zugriff auf Funktionalitäten des Designers für die Entwicklung von Simulationsmodellen mit der \Gls{SimNetUI}-Bibliothek}
+  \label{fig:pic_simnetui_bedienleiste}
+\end{figure}
+
+\subsection{Aufbau der Modelltopologie}
+
+\subsubsection{Verbindungsmodus}
+
+Um eine Verbindung zwischen zwei Aktivitäten aufzubauen, muss zunächst eine Aktivierung des Verbindungsmodus erfolgen. Dies geschieht durch Anwählen einer der 3 Schaltflächen, die sich hinter dem Bezeichnungsfeld {\em Connection Mode} in der Bedienleiste befinden. Im Verbindungsmodus werden die Verbindungsstellen der Aktivitäten farblich hervorgehoben. Dabei stehen rote Bereiche für Verbindungsstellen für ausgehende Verbindungen und blaue Bereiche für Verbindungsstellen für eingehende Verbindungen. Neue Verbindungen lassen sich ausschließlich zwischen Verbindungsstellen unterschiedlichen Typs erstellen.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{pic_simnetui_connectionmode_example}
+	\caption{Aktivierter Verbindungsmodus im Visual Studio \Gls{wpf}-Designer}
+  \label{fig:pic_simnetui_connectionmode}
+\end{figure}
+
+Klickt man nun auf eine Verbindungsstelle, so wird eine Linie ausgehend vom Mittelpunkt des Verbindungsstück gezeichnet. Durch loslassen der Maustaste über eine weitere Verbindungsstelle wird eine Verbindung zwischen zwei Aktivitäten aufgebaut.
+
+Drei unterschiedliche Darstellungsarten von Verbindungslinien stehen zur Wahl.
+
+\begin{longtable}{m{14mm}|m{131mm}}\hline
+\footnotesize\textbf{Variante} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Sortierungsarten von Warteschlangen}
+\label{tab:SimNetUI_Bibliothek_Queue}%
+
+\endfoot
+
+\centering\includegraphics[height=0.7cm]{pic_simnetui_arrow1.png} & Die einfachste Variante zeichnet lediglich eine einfache Verbindungslinie zwischen 2 Verbindungsstellen.\tabularnewline\hline
+\centering\includegraphics[height=0.7cm]{pic_simnetui_arrow2.png} & Die 2. Variante verwendet 2 Stützstellen, wodurch diagonale Linien vermieden werden.\tabularnewline\hline
+\centering\includegraphics[height=0.7cm]{pic_simnetui_arrow3.png} & Die 3. Option verwendet Splines, um eine Verbindung zwischen zwei Aktivitäten darzustellen.\tabularnewline\hline
+\end{longtable}
+
+
+\subsubsection{Linienmodus}
+
+Eigenschaften bestehender Verbindungen können im Linienmodus bearbeitet werden. Der Linienmodus wird durch anwählen der Schaltfläche hinter dem Bezeichnungsfeld {\em Line mode} aktiviert. Befindet sich der Mauszeiger über einer Verbindung, kann durch einen Rechtsklick auf diese Verbindung ein Kontextmenü geöffnet werden. Neben der Möglichkeit die Darstellungsform der Linie zu verändern, besteht außerdem die Möglichkeit eine Linie zur Laufzeit der Anwendung ausblenden zu lassen. Durch Auswahl dieser Option wird die Linie zur Entwicklungszeit im Visual Studio \Gls{wpf}-Designer gestrichelt dargestellt. Weiterhin lässt sich über dieses Kontextmenü eine bestehende Verbindung zwischen zwei Aktivitäten löschen.
+
+\subsection{Werkzeuge}
+
+\subsubsection{Ressourcen Editor}
+
+Für die Erstellung von Simulationsressourcen wird ebenso ein Editor zur Verfügung gestellt. Im Abschnitt {\em Tools} in der Bedienleiste befindet sich hierzu eine Schaltfläche, die die Bezeichnung {\em Open Resource Editor} trägt. Die Bedienung dieses Editors ist relativ selbst erklärend. Jede Ressource ist durch eine Zeile in einer Liste dargestellt. Durch einen Doppelklick auf einen Zelleintrag lässt sich eine Eigenschaft einer Ressource bearbeiten. Neue Ressourcen können durch Betätigen der Schaltfläche {\em Add Ressource} erzeugt werden, sofern im Textfeld links neben dieser Schaltfläche eine gültige Bezeichnung für die neue Ressource gewählt worden ist.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{pic_simnetui_resource_editor}
+	\caption{Ressourcen Editor der \Gls{SimNetUI}-Bibliothek für den \Gls{wpf}-Designer}
+  \label{fig:pic_simnetui_ressource_editor}
+\end{figure}
+
+\subsubsection{Aktualisierung der Darstellung}
+
+Sehr selten kann es zu Darstellungsfehlern kommen. In diesen Fällen ist es sehr nützlich, die Darstellung des Simulationscontainers aktualisieren zu können. Im Abschnitt {\em Tools} der Bedienleiste befindet sich daher eine Schaltfläche, die die Bezeichnung {\em Reload this control} trägt, wodurch bei einem Klick ein komplettes Neuzeichnen des Simulationscontainers erzwungen wird. 
+
+\subsection{Property-Grid}
+
+\parpic(4cm,8cm)[r][rt]{\includegraphics[width=4cm]{pic_simnetui_propertygrid.png}}
+
+Nicht unerwähnt sollen die zahlreichen Anpassungen des Eigenschaftsfensters bleiben. Da Objekte der \Gls{wpf} von Haus aus sehr viele Eigenschaften besitzen, die durch Vererbung auch auf Aktivitäten der \Gls{SimNetUI}-Bibliothek übertragen werden, hat es sich angeboten all die Properties, die auf das Simulationsmodell einwirken, in eine eigene Kategorie {\em Simulation} zu packen. Weiterhin ist es durch das \Gls{wpf}-Extensibility-Framework auch möglich, Einfluss auf die Art und Weise der Modifizierungen von Eigenschaften über das Property-Grid zu nehmen. Solche Änderungen sind an vielen Stellen notwendig gewesen, da die Standardwerkzeuge im Property-Grid von Visual Studio nicht für alle Konstellationen gleich gut geeignet sind.
+

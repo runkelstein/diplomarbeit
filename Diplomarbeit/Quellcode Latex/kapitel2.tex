@@ -1,0 +1,1142 @@
+\chapter{Analyse etablierter Simulationspakete für ereignisorientierte Simulationen}\label{kap_analyse}
+
+Um ein beständiges und nachhaltiges Konzept zu entwickeln, ist eine fundierte Analyse unabdingbar. Hierbei erscheint es zweckmäßig, sich an am Markt etablierten Lösungen für DES zu orientieren. Anhand ausgewählter Basiskonzepte, die der ereignisorientierten Simulation zu eigen sind, sollen einzelne Simulationsprogramme verglichen werden. Hierbei ist es nicht Zielstellung das beste Simulationspaket am Markt zu bestimmen, sondern vielmehr gewonnene Erkenntnisse über sinnvolle Funktionalitäten in die Planung der Eigenentwicklung einfließen zu lassen.  
+
+Da es auf dem Markt eine Vielzahl von Softwarelösungen für ereignisorientierte Computersimulationen gibt, musste eine Auswahl getroffen werden. Die Simulationssoftwarepakete Simul8, Simprocess und Micro Saint Sharp wurden für diesen Zweck gewählt. Die in diesem Kapitel verwendeten englischen Terminologien sind jeweils aus den untersuchten Applikationen übernommen wurden.
+
+\section{Simulationszeit}
+
+Bei der DES geht es um die Simulation einer Abfolge von Prozessen über einen endlichen Zeitraum. Eine Simulation am Computer erfolgt niemals in Echtzeit. Die Dauer (Simulationszeit) von Computersimulationen kann sich abhängig von der Problemstellung über Sekunden,Minuten,Stunden, Tage, Wochen oder gar Jahre erstrecken. Eine Flexibilität bei der Planung von Ereignissen ist daher sehr wichtig.
+
+Eine Simulation wird beendet, wenn keine weiteren Ereignisse mehr geplant sind oder die Maximaldauer der zentral festgelegten 
+Simulationsdauer überschritten worden ist. Es besteht darüber hinaus die Möglichkeit, die Simulation explizit zu beenden, wenn gewisse Zustände im System erreicht worden sind. Dies kann z.B. über Programmcode, der zu einem festgelegten Simulationszeitpunkt ausgeführt wird, erreicht werden. Ebenso bieten einige Modellbausteine die Möglichkeit, die Simulation bei Erreichen eines Zustandes vorzeitig zu beenden.
+
+\subsection{Zeitangaben}
+
+Bei der Planung von Ereignissen ist der richtige Umgang mit der Simulationszeit essentiell. Die Genauigkeit von Zeitangaben kann abhängig vom verwendeten Simulationspaket bis auf eine Nanosekunde genau festgelegt werden. Ein Gegensatz stellt die Verwendung von Einheitslosen Datentypen dar, wodurch Modellentwickler die Möglichkeit erhalten, ihre eigene Basiseinheit zu definieren. In diesem Abschnitt soll es darum gehen, die verfolgten Ansätze, der dieser Analyse zugrunde liegenden Simulationspakete, zu bewerten.
+
+\subsubsection{Simul8}
+Die Basiseinheit für Simul8 wird zentral definiert. Zur Auswahl stehen
+Sekunden, Minuten, Stunden und Tage. Alle Zeitangaben in Simul8 beziehen sich immer ausschließlich auf diese Basiseinheit.
+
+Es erfolgt eine direkte Festlegung der Simulationsdauer für eine definierte Zeiteinheit. Feinere Granularität ist durch Angaben von Bruchzahlen möglich.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.75\textwidth]{pic_simul8_clock}
+	\caption{Dialog zur Konfiguration der Simulationszeit in Simul8}
+	\label{fig:pic_simul8_clock}
+\end{figure}
+
+Bei Simul8 besteht zusätzlich die Möglichkeit, für die Dauer eines Tages die Anzahl der Stunden festzulegen. Weiterhin lässt sich auch die Anzahl der Wochentage festlegen. Eine fünf Tage Arbeitswoche á acht Stunden kann  beispielsweise wie in Abbildung \ref{fig:pic_simul8_clock} dargestellt für eine Simulationsdauer (Result Collecations Period) von 2400 Minuten definiert werden.
+
+\subsubsection{Simprocess}
+
+In Simprocess wird keine Basiseinheit zentral definiert. Dafür kann jede Zeitangabe in der Simulationssoftware Simprocess exakter und ohne Umrechnung in Bruchzahlen angegeben werden.
+
+Die Simulationsdauer wird durch die Bestimmung der Start- und Endzeit der gesamten Simulation durch Angabe eines konkreten Datums und einer konkreten Uhrzeit festgelegt.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{pic_simprocess_clock}
+	\caption{Dialog zur Konfiguration der Simulationszeit in Simprocess}
+  \label{fig:pic_simprocess_clock}
+\end{figure}
+
+\subsubsection{Micro Saint Sharp}
+
+Simulationszeit wird in Micro Saint Sharp lediglich über einen {\em Double}-Wert repräsentiert.
+
+\subsubsection{Bewertung}
+
+Die verwendeten Ansätze zur Verwaltung der Simulationszeit unterscheiden sich in allen untersuchten Applikationen recht deutlich voneinander. So mag es sinnvoll sein, sich einmal vor Augen zu führen, welche Kriterien eine Verwaltung der Simulationszeit erfüllen soll. Insbesondere die Softwareanwendungen Simprocess und Simul8 sind mit dem Ziel erschaffen worden, Menschen, die begrenzte Kenntnisse in der Programmierung besitzen, anzusprechen. Somit überrascht es nicht, dass diese Softwaresysteme konkrete Zeitangaben verwenden. Der Vorteil, der sich hieraus ergibt ist eine Art Selbstdokumentation des Simulationsmodells. Weiterhin wird der Modellentwickler dadurch praktisch an die Hand genommen und spart sich verwirrende Umrechnungen in Bruchzahlen. Für die Präsentation einer Simulation ist damit auch weniger Erklärungsbedarf vorhanden. Ein nicht zu verachtender Nachteil, der sich aus dieser Herangehensweise ergibt, ist allerdings die Einschränkung auf spezielle Anwendungsgebiete. Für gewisse Anwendungsfälle kann es sich als nützlich erweisen, Basiseinheiten zu verwenden, die unter oder über dem Bereich liegen als das, was von der Simulationssoftware ermöglicht wird.
+
+Mirco Saint Sharp verwendet einen Einheitslosen Datentyp, womit größtmögliche Flexibilität gewahrt bleibt. Dokumentation darüber, welche Zeiteinheit auf diese Einheitslosen Datentyp abgebildet wird, obliegt aber dem Modellentwickler selbst. Schaut man genauer hin, erkennt man, dass die Software Simul8 eine Mischlösung verwendet, die es Anwendern erlaubt eine Basiseinheit aus vordefinierten Typen zu wählen. Die Auswahlmöglichkeiten sind allerdings auch sehr Eingeschränkt, sodass der zuvor genannte Nachteil  nicht aufgehoben wird.
+
+Um Zeiteinheiten abzubilden, die zwischen einem Zeitschritt einer gewählten Basiseinheit liegen, verwenden Simul8 sowie Micro Saint Sharp Gleitkommazahlen. Gleitkommazahlen sind jedoch nur eine angenäherte Darstellung von den aus der Mathematik bekannten {\em reelen Zahlen}. Ein Vorteil von Gleitkommazahlen ist deren großer Wertebereich. Dieser wird allerdings durch eine ungenaue Abbildung auf {\em reelle Zahlen} erkauft. Zwei nahe beieinander liegende reelle Zahlen können daher in einem ungünstigen Fall auch auf die selbe Gleitkommazahl abgebildet werden. Auf die Zeitplanung von Ereignissen, die eng beieinander liegen, kann sich das durchaus auswirken. Denn im Zweifelsfall muss die Software entscheiden, welches Ereignis Vorrang hat und in Ermangelung genauer Daten kann dies zu einem Tausch der Reihenfolge führen. Fehler können sich fortsetzen und letztlich das Gesamtergebnis einer Simulation verfälschen. Betrachtet werden muss also die Wahrscheinlichkeit, mit welcher solch ein Problem auftreten kann und welche Auswirkungen dies auf das Ergebnis hat.
+Nun handelt es sich bei dem hier verfolgten Ansatz der Computersimulation  keinesfalls um eine exakte Wissenschaft, als vielmehr um eine Annäherung an die Realität. Somit bleibt es Ermessenssache, inwieweit diese Ungenauigkeiten das Ergebnis einer Computersimulation verfälschen können. Generell ist es aber sehr schwierig diese Art von Programmfehlern zu finden. Daher würde sich die Verwendung eines stabileren Datentyps anbieten. Ein stabilere Datentyp der einen ebenso großen Wertebereich umfasst, wie beispielsweise der Datentyp Double, würde selbstredend mit hohen Performance-Einbußen einhergehen. Da die meisten modernen Prozessoren 64 Bit-Register besitzen, sind für die Verwendung von Datentypen, die größer als 64 Bit sind, mehr Rechenzyklen für sonst gleichwertige Operationen notwendig.
+
+Zusammenfassend soll festgehalten werden, dass die konkrete Wahl eines Ansatzes für die Verwaltung von Simulationszeit vom Anwendungsgebiet abhängig ist. Da die \Gls{SimNet}-Bibliothek bereits den Datentyp {\em Double} verwendet , ist für die angestrebte Eigenentwicklung bereits eine Vorgabe in dieser Angelegenheit gegeben, von der ohne Änderungen in der \Gls{SimNet}-Bibliothek auch nicht abgewichen werden kann. Das .Net Umfeld bietet als einzige Alternative für Gleitkommazahlen den 128-Bit Datentyp {\em Decimal}. Dieser besitzt mehr signifikante Stellen als beispielsweise der Datentyp {\em Double}, dafür ist der verwendete Wertebereich weniger Umfangreich.
+
+\subsection{Aufwärmphase}
+
+Ziel einer Aufwärmphase ist es, das System in einen typischen Urzustand zu versetzen. Statistische Daten über den Verlauf der Simulation sind ein wichtiges Hilfsmittel, um die Simulation auszuwerten. Solche Daten werden erst nach einer sogenannten {\em WarmUp-Phase} erfasst.  
+Eine Aufwärmphase ist nicht für jede Simulation notwendig und wird deshalb von einigen Softwaresystemen optional zur Verfügung gestellt.\\
+
+\subsubsection{Simul8}
+
+Bei Simul8 geht die Aufwärmphase nicht in die festgelegte Simulationsdauer mit ein, sondern verlängert die tatsächliche Dauer zusätzlich. Alternativ besteht die Möglichkeit, nach dem Warmup die Simulationszeit auf den Initialwert zurückzusetzen.
+
+\subsubsection{Simprocess}
+
+Die Dauer der Aufwärmphase kann für Simprocess direkt festgelegt werden.
+Es ist zu beachten, dass die Warmup-Phase direkt mit in die Simulationszeit eingeht
+und somit die Statistiken erst nach \begin{math}Startzeit + Warmupzeit\end{math} für den Zeitraum \begin{math}Endzeit - Warmupzeit - Startzeit\end{math} erfolgen.
+
+\section{Wahrscheinlichkeitsverteilungen}\label{kap2:verteilungsfunktionen}
+
+Die meisten Ereignisse lassen sich nicht oder nur ungenügend mit statischen Zeitpunkten und Häufigkeiten modellieren.
+Um beispielsweise die Abläufe in einem Callcenter zu simulieren, sind Unregelmäßigkeiten beim Eintreffen der Anrufer und der jeweiligen Gesprächsdauer zu berücksichtigen. Statistische Verteilungsfunktionen sind dabei ein vorzügliches Werkzeug, um solche Problemstellungen anzugehen. Der Tabelle \ref{tab:Distribution} kann entnommen werden, welche Verteilungsfunktionen in welchem Softwarepaket zur Verfügung stehen. Bei der Bibliothek \Gls{SimNet} handelt es sich um die zugehörige Bibliothek für die Spracherweiterung der Programmiersprache C\#, welche an der HTW-Dresden entwickelt worden ist. \\
+
+\begin{longtable}{p{55mm}|c|c|c|c}\hline
+
+\footnotesize\textbf{Verteilungsfunktion} & \footnotesize\textbf{Simprocess} & \footnotesize\textbf{Simul8} & \footnotesize\textbf{Micro Saint Sharp} & \footnotesize\textbf{\Gls{SimNet}} \tabularnewline\hline
+
+\endhead
+
+\caption{Statistische Verteilungsfunktionen}
+\label{tab:Distribution}%
+
+\endfoot
+
+Bernoulli &
+
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Beta			& 
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+
+Binomial &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Erlang &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} \tabularnewline\hline
+
+Exponential &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} \tabularnewline\hline
+
+Extreme Value Type A &
+
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Extreme Value Type B &
+
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Gamma &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Geometric  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Hyper Exponential  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Inverse Gaussian  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Inverted Weibull  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Johnson SB  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Johnson SU  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Log-Laplace  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Log-Logistic  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Log-Normal  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} \tabularnewline\hline
+
+Negative Binomial  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Normal  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} \tabularnewline\hline
+
+Pareto  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Pearson Type V  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Pearson Type VI  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Poisson  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Random Walk  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} &
+\includegraphics[width=0.4cm, height=0.4cm]{unchecked} \tabularnewline\hline
+
+Triangular  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} \tabularnewline\hline
+
+Uniform  &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} \tabularnewline\hline
+
+Weibull &
+
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} &
+\includegraphics[width=0.4cm, height=0.4cm]{checked} \tabularnewline\hline
+
+
+\end{longtable}
+
+Wie zu erwarten war, sind in allen drei Systemen die wichtigsten Verteilungsfunktionen implementiert. 
+Darunter auch einige exotische Varianten, die in der Praxis evtl. nicht so häufig Anwendung finden.
+Diese Liste zeigt allerdings auch, dass bei der \Gls{SimNet}-Bibliothek in diesem Punkt noch etwas nachgerüstet werden kann.
+
+\section{Modell}
+
+Die umfangreichsten und zugleich bedeutendsten Unterschiede zwischen den einzelnen Simulationswerkzeugen sind beim eigentlichen Simulationsmodell zu erkennen. Um nicht den Rahmen zu sprengen, kann dieser Abschnitt nur als Zusammenfassung der wesentlichsten Merkmale dienen. Bevor auf die Details der Realisierung zwischen den einzelnen Simulationspaketen eingegangen werden kann, ist eine Betrachtung der Basiskonzepte notwendig.
+
+\subsection{Basiskonzepte}\label{kap_analyse_modell_basiskonzepte}
+
+Jedes Computermodell besteht aus einer Anzahl von Kanten und Knoten. Zwischen den Knoten entlang der Kanten bewegen sich Token. Die Simulationsbausteine, die im Modell als Knoten dargestellt werden, werden auch als Aktivitäten bezeichnet und haben einen maßgeblichen Einfluss auf den Verlauf einer Simulation. Die Funktionalitäten, die durch Aktivitäten repräsentiert werden, können sehr vielseitig sein. So können Aktivitäten in das Modell neue Token, d.h. \Glspl{Entitaet}, einführen, eingehende Entitäten vernichten oder an einen anderen verbundenen Zielknoten, d.h. an eine Folgeaktivität, weiterleiten. Aktivitäten werden durch eine Fülle von Merkmalen beschrieben, sodass Modellentwickler über die Manipulation der Zustände dieser Merkmale das Verhalten einer Aktivität innerhalb eines Simulationsmodells beeinflussen können. Daher werden Aktivitäten auch nach ihrer Aufgabe voneinander unterschieden. Ein Simulationsmodell besitzt üblicher Weise min. eine Quelle zum Eintritt neuer Entitäten in das Modell sowie min. eine Senke zum Austritt von Entitäten aus dem Modell. Unüblich ist hingegen die Modellierung von geschlossenen Systemen ohne Quelle und Senke, denn in solch einem System können Entitäten die Simulation weder betreten noch verlassen. Einige Simulationsprogramme, wie beispielsweise Simul8, erlauben allerdings auch die Modellierung von geschlossenen Systemen. In diesem Fall können Entitäten bereits für den Initialzustand der Simulation als Bestandteil in das Modell integriert sein.
+ 
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{pic_modell}
+	\caption{Aufbau eines Simulationsmodells}
+  \label{fig:pic_modell}
+\end{figure}
+
+Der größte Unterschied zwischen den untersuchten Simulationspaketen liegt in der Varietät bei der Gestaltung der Aktivitäten.
+Durch die angestrebte Spezialisierung bzw. Generalisierung bei der Bereitstellung von Modellbausteinen, erklärt sich der unterschiedliche Umfang bezüglich der Menge bereitgestellter Aktivitäten. In der nun folgenden Betrachtung soll daher gezeigt werden, wie sich die unterschiedlichen Ansätze in der Praxis bewähren.
+
+\subsection{Simul8}
+
+Wie so oft besitzt auch die Simulationssoftware Simul8 ihre eigene Terminologie. In den allermeisten Fällen stellen die verwendeten Bezeichnungen nur Synonyme für bereits vorgestellte Begriffe dar. Um Verwirrung zu vermeiden, ist daher zu erwähnen, dass Entitäten in Simul8 als {\em Work Items} bezeichnet werden.
+
+Da sich die Aktivitäten aus Simul8 recht deutlich voneinander unterscheiden, ist eine Vorbetrachtung gemeinsamer Eigenschaften an dieser Stelle nicht notwendig. 
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=\textwidth]{pic_simul8_modell}
+	\caption{Beispiel für ein Modell in Simul8}
+  \label{fig:pic_simul8_modell}
+\end{figure}
+
+\subsubsection{Simulationsbausteine}
+
+\paragraph{Work Entry Point}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simul8_work_entry_point}}
+
+Der Eintrittspunkt für jedes {\em Work Item} stellt der Work Entry Point dar. Dieser kann mit den Generatoren aus anderen \Gls{des}-Systemen verglichen werden. Die wichtigsten Eigenschaften des {\em Work Entry Points} sind in der Tabelle \ref{tab:Work_Entry_Point} aufgeführt. \\
+
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Eigenschaft} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Eigenschaften des Work Entry Points}
+\label{tab:Work_Entry_Point}%
+
+\endfoot
+
+Interarrival Time &
+Die Ankunftszeiten neuer {\em Work Items} können über Verteilungsfunktionen beschrieben werden. \tabularnewline\hline
+
+Batching &
+Die Anzahl der {\em Work Items}, die zum selben Zeitpunkt eintreffen, kann ebenfalls über eine Verteilungsfunktion beschrieben werden. \tabularnewline\hline
+
+Routing &
+Wenn ein {\em Work Entry Point} mit mehreren Folgeaktivitäten verbunden ist, muss definiert werden, zu welcher \Gls{Aktivitaet} das {\em Working Item} weitergeleitet wird \tabularnewline\hline
+
+Label Actions &
+Vor dem Verlassen eines {\em Work Entry Points} können Attribute des {\em Work Items} manipuliert werden. Dies kann
+insbesondere für den späteren Programmfluss nützlich sein, da diese Attribute von anderen Aktivitäten ausgewertet werden können. \tabularnewline\hline
+
+Finance &
+
+Für die Kostenkalkulation bietet sich eine Festsetzung von Fixkosten ({\em Capital Cost}) für den {\em Work Entry Point} und ein Festsetzung von variablen Kosten für jede im System eintreffende Einheit an.\tabularnewline\hline
+
+Carbon &
+Der Treibhauseffekt wird durch die Festlegung von erzeugten CO2 Emissionen berücksichtigt. Analog zu den Finanzen kann ein fester Wert für den {\em Work Entry Point} und ein variabler Wert für jede im System eintreffende Einheit festgelegt werden.\tabularnewline\hline
+
+Results &
+
+Für diese Aktivität werden unter anderem die folgenden Statistiken gesammelt:
+\begin{itemize}
+	\item Anzahl eingetroffener {\em Work Items}
+	\item Anzahl verloren gegangener {\em Work Items}
+	\item Anzahl {\em Work Items}, welche den {\em Work Entry Point} verlassen haben, ohne dabei verloren gegangen zu sein.
+\end{itemize}
+\tabularnewline\hline
+
+\end{longtable}
+
+\paragraph{Storage Bin}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simul8_queue}}
+
+Warteschlangen stellen in Simul8 eines der wichtigsten Bestandteile dar. Diese werden am sinnvollsten vor {\em Work Center} plaziert, um {\em Work Items}, die für die Bearbeitung in einem Work Center vorgesehen sind, aufzufangen und bereitzuhalten. Tabelle \ref{tab:Storage_Bin} führt die wichtigsten Eigenschaften einer Warteschlange aus Simul8 auf.
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Eigenschaft} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+
+
+\endhead
+
+\caption{Eigenschaften einer Warteschlange in Simul8}
+\label{tab:Storage_Bin}%
+
+\endfoot
+
+Capacity & Die Kapazität der Warteschlange ist in der Regel unbegrenzt, kann aber auch auf einen Limit gesetzt werden. \tabularnewline\hline
+
+Shelf Life & Die maximale Verweilszeit eines {\em Work Items} in der Warteschlange kann begrenzt werden.
+\tabularnewline\hline
+
+Finance &
+
+Für die Kostenkalkulation bietet sich eine Festsetzung von Fixkosten ({\em Capital Cost}) für die {\em Storage Bin} und eine Festsetzung von variablen Kosten für jedes in der Warteschlange befindliche {\em Work Item} pro Zeiteinheit an.\tabularnewline\hline
+
+Carbon &
+Der Treibhauseffekt wird durch die Festlegung der von der Warteschlange erzeugten CO2 Emissionen berücksichtigt. Analog zu den Finanzen kann ein fester Wert für die {\em Storage Bin} und ein variabler Wert für jedes in der Warteschlange befindliche {\em Work Item} je Zeiteinheit festgelegt werden.\tabularnewline\hline
+
+Start - Up &
+ 
+Festlegung der Anzahl von {\em Work Items}, welche sich bei Beginn der Simulation in der Warteschlange befinden.\tabularnewline\hline
+
+\Gls{fifo}, PRIORITIZE, LIFO &
+
+Die Reihenfolge, in welcher {\em Work Items} in einer Warteschlange sortiert werden, kann nach folgenden Kriterien erfolgen
+
+\begin{itemize}
+	\item First In First Out (Standard)
+	\item Last In First Out
+	\item Prioritize (Sortierung nach Priorität über ein {\em Label} (Attribut) des {\em Work Items})
+\end{itemize}\tabularnewline\hline
+Results &
+
+Auflistung statistischer Werte hinsichtlich der Anzahl von {\em Work Items} in der Warteschlange über die Dauer der Simulation.
+(Minimum,Maximum,Durchschnitt,Anzahl von eingetroffenen {\em Work Items})
+
+Auflistung statistischer Werte hinsichtlich der Verweildauer von {\em Work Items} in der Warteschlange
+(Minimum, Durchschnitt, Maximum, Standardabweichung)\tabularnewline\hline
+
+\end{longtable}
+
+\paragraph{Work Center}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simul8_work_center}}
+
+Bei dem {\em Work Center} handelt es sich um eine weitere entscheidende Kernkomponente eines jeden Simul8-Modells. Die Bezeichnung {\em Work Center} ist äußerst passend, denn diese Aktivität kann zur Simulation von Arbeit genutzt werden, da Simulationszeit durch das Festhalten von {\em Work Items} voranschreitet, noch bevor ein {\em Work Item} die Aktivität wieder verlässt. Die Möglichkeiten für ein {\em Work Center} auf Simulationen einzuwirken sind daher immens. Aufgrund der Komplexität dieses Modellbausteins eignet sich ein {\em Work Center} für eine Vielzahl von Anwendungsfällen. Beispielsweise kann ein {\em Work Center} dazu verwendet werden, den Zusammenbau von Einzelkomponenten bei der Fertigung von Produkten zu simulieren. Damit unterscheidet sich Simul8 im Vergleich zu anderen Simulationsprogrammen insofern, dass für viele der Anwendungsfälle, die ein {\em Work Center} abdecken kann, in anderen Softwareprodukten mehrere einzelne Bausteine verwendet werden müssen. Insbesondere ist die optimierte Zusammenarbeit mit Warteschlangen und Ressourcen zu erwähnen. Die wichtigsten Eigenschaften können aus der Tabelle \ref{tab:Work_Center} entnommen werden.\\
+
+
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Eigenschaft} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Eigenschaften eines {\em Work Centers} in Simul8}
+\label{tab:Work_Center}%
+
+\endfoot
+
+Distribution & Mittels statistischer Verteilungsfunktionen kann die zu verbrauchende Simulationszeit festgelegt werden,  mit welcher Arbeitszeit simuliert werden soll.
+\tabularnewline\hline
+Efficency & Es kann festgelegt werden, mit welcher Auslastung das {\em Work Center} arbeitet. Zusätzlich können Reparaturzeiten simuliert werden.
+\tabularnewline\hline
+Priority & Eine Priorität kann vergeben werden. Dies ist insbesondere wichtig, wenn mehrere {\em Work Center} um die selben Ressourcen konkurrieren.
+\tabularnewline\hline
+Label Actions &
+Ebenso wie beim {\em Work Entry Point} können Attribute des {\em Work Items} vor dem verlassen des {\em Work Centers} verändert werden.
+\tabularnewline\hline
+Replicate &
+Festlegung der Anzahl der {\em Work Items}, die im {\em Work Center} gleichzeitig bearbeitet werden können.
+\tabularnewline\hline
+
+Routing In &
+
+Einige Einstellungsoptionen, die regeln, nach welchen Vorgaben ein {\em Work Center} von vorgeschalteten Aktivitäten {\em Work Items} annimmt. Viele dieser Einstellungen sind nur in Verbindung mit einer Warteschlange sinnvoll. Eine weitere interessante Möglichkeit besteht darin, ein {\em Work Center} durch Arbeit von einem anderen {\em Work Center} unterbrechen zu lassen. Dabei wird das aktuelle {\em Work Item} in eine mit dem {\em Work Center} verbundene Warteschlange geschoben, um später die Arbeit wieder aufnehmen zu können.
+\tabularnewline\hline
+
+Routing Out &
+
+Wenn ein {\em Work Center} mit mehreren Folgeaktivitäten verbunden ist, muss definiert werden zu welcher Aktivität das {\em Work Item} weitergeleitet wird. \tabularnewline\hline
+
+Contents &
+
+Wenn die Simulation angehalten wird, kann der Inhalt des {\em Work Centers}, dass heißt die darin befindlichen {\em Work Items} sowie deren Attribute, betrachtet werden.
+\tabularnewline\hline
+
+Results &
+
+Während der Simulation werden vom {\em Work Center} Statistiken gesammelt. U.a. sind eine Reihe von Informationen bezüglich der Anzahl der {\em Work Items} im {\em Work Center} verfügbar. (Aktuell, Maximum, Minimum, Durchschnitt, Anzahl beendeter Jobs).
+Viel interessanter sind sicherlich die Werte über die Auslastung des {\em Work Centers}. Diese werden in Prozent angegeben und ergeben somit zusammen 100 Prozent. Mit diesen Größen kann man neben der tatsächliche Arbeitszeit erkennen, wie lange und weshalb das {\em Work Center} nicht im Betrieb war.
+\tabularnewline\hline
+
+Finance &
+
+Für die Kostenkalkulation bietet sich eine Festsetzung von Fixkosten ({\em Capital Cost}) für das {\em Work Center} und eine Festsetzung von Stückkosten für jedes im {\em Work Center} bearbeitete {\em Work Item} an. Außerdem können Kosten für jede vergangene Zeiteinheit berücksichtigt werden.\tabularnewline\hline
+
+\end{longtable}
+
+\paragraph{Work Exit Point}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simul8_work_exit_point}}
+
+
+{\em Work Exit Points} dienen in einem Simul8-Modell als Senke. Wenn beispielsweise ein {\em Work Item} einen {\em Work Exit Point} erreicht hat, so verlässt es über diesen die Simulation.
+Im Vergleich zu anderen Modellbausteinen in Simul8 ist der {\em Work Exit Point} weniger komplex. In der Tabelle \ref{tab:Work_Exit_Point} werden die wichtigsten Eigenschaften des {\em Work Exit Points} aufgezählt \\
+
+
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Eigenschaft} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Eigenschaften eines {\em Work Exit Points} in Simul8}
+\label{tab:Work_Exit_Point}%
+
+\endfoot
+
+Halt Simulation at Limit & Nach Erreichen einer definierten maximalen Anzahl von {\em Work Items} die am {\em Work Exit Point} eintreffen, wird die Simulation beendet\tabularnewline\hline
+
+Finance &
+Festsetzung von Fixkosten ({\em Capital Cost}) für den {\em Work Exit Point}. Weiterhin können Einnahmen in Form eines Stückpreises({\em Revenue Costs}) pro {\em Work Item}, welche über diese Senke die Simulation verlassen, definiert werden\tabularnewline\hline
+
+Carbon &
+
+Der Treibhauseffekt wird durch die Festlegung der erzeugten CO2 Emissionen berücksichtigt.  Analog zu den Finanzen kann ein Wert für den {\em Work Exit Point} festgelegt werden. Zudem ist es möglich, eine Verringerung der CO2 Emissionen für jede die Simulation verlassende Einheit zu definieren.\tabularnewline\hline
+
+Results &
+
+\begin{itemize}
+	\item Statistiken über die Verweildauer der {\em Work Items} in der Simulation (Minimum, Durchschnitt, Maximum, Standardabweichung)
+	\item Anzahl {\em Work Items}, die über diesen {\em Work Exit Point} die Simulation verlassen haben
+\end{itemize}
+\tabularnewline\hline
+ 
+
+
+
+\end{longtable}
+
+\paragraph{Resource}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simul8_resources}}
+
+Ressourcen können in Simul8 als grafischer Baustein in das Modell integriert werden. Aber im Gegensatz zu den bisher vorgestellten Simulationsbausteinen sind Ressourcen keine Aktivitäten und daher nicht über Kanten mit anderen Simulationsbausteinen verbunden. {\em Work Center} können um Ressourcen konkurrieren. Damit eignen sich Ressourcen vorzüglich, um Abhängigkeiten zu simulieren. Die Tabelle \ref{tab:Simul8_Resources} enthält eine Auflistung der wichtigsten Eigenschaften von Ressourcen in Simul8. \\
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Eigenschaft} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Eigenschaften einer {\em Ressource} in Simul8}
+\label{tab:Simul8_Resources}%
+
+\endfoot
+
+
+Travel & Definition von Reisezeiten für Ressourcen. \tabularnewline\hline
+Availability & Festlegung eines Prozentsatzes für die Verfügbarkeit der Ressource. \tabularnewline\hline
+Shifts & Ein sehr hilfreiches Feature ist die Bestimmung von Arbeitsschichten, womit die Verfügbarkeit von Ressourcen ebenfalls eingeschränkt werden kann.\tabularnewline\hline
+Finance & Definition von Fixkosten für jede Einheit und variable Kosten je Zeiteinheit. \tabularnewline\hline
+Carbon & Der Treibhauseffekt wird durch die Festlegung der erzeugten CO2 Emissionen berücksichtigt. Es kann ein fester Wert für jede Einheit einer Ressource festgelegt werden. Außerdem kann die Erzeugung von CO2 Emissionen je Zeiteinheit, für die eine Ressourceneinheit belegt ist, definiert werden.\tabularnewline\hline
+Results & Es werden Statistiken über die Auslastung und Reisezeiten für alle Einheiten der Resource erfasst.\tabularnewline\hline
+
+
+\end{longtable}
+
+
+\subsubsection{Bewertung}
+
+Die Anzahl der Aktivitäten im Simulationspaket Simul8 ist recht überschaubar. Insgesamt gibt es lediglich sechs verschiedene Bausteine, wovon die fünf wichtigsten in dem vorangegangen Abschnitt betrachtet worden sind. Dies hat zur Folge, dass es kaum Elemente gibt, auf die man für ein Simulationsmodell verzichten wird. Ein Vorteil ist sicherlich die schnellere und unkompliziertere Erlernbarkeit der Anwendung. Allerdings muss auch berücksichtigt werden, dass evtl. umfangreiche Simulationen intensiver kommentiert werden müssen. Denn die Wirkungsweise einzelner Komponenten ist nicht in jedem Fall selbsterklärend, da vieles was in anderen Simulationspaketen wie z.B.: Simprocess über zusätzliche Aktivitäten (u.a. Routing, Assembling) realisiert wird, in einzelne Simulationsbausteine von Simul8 direkt integriert ist. Abgesehen von Quellen und Senken ist ein Simulationsmodell in Simul8 somit hauptsächlich aus Warteschlangen und {\em Work Center} aufgebaut. Ein weiterer Nachteil, der aus dieser Herangehensweise resultiert, ist, dass nicht jede Aktivität mit jeder anderen Aktivität gleich gut zusammenarbeitet. So sind viele Optionen des {\em Work Centers} für die Zusammenarbeit mit Warteschlangen ausgelegt. Einige dieser Optionen machen im Zusammenhang mit anderen Komponenten allerdings keinen Sinn und können sogar für Deadlocks sorgen. Es ist anzumerken, dass aus dieser Betrachtung einige Erkenntnisse für die angestrebte Eigenentwicklung gewonnen werden konnten. Viele der hier vorgestellten Funktionalitäten, die in Simul8 existieren, werden auch ihren Weg in die aus dieser Arbeit hervorgehende Softwarelösung finden. Allerdings erscheint es mit Bezug auf die eigene Implementation  als ein konsistenterer Ansatz, Funktionalitäten auf mehrere Simulationsbausteine aufzuteilen. Dies erleichtert insbesondere auch die Programmierung der Kommunikation der verschiedenen Komponenten untereinander, womit die Endlösung weniger fehleranfällig sein sollte.
+
+\subsection{Simprocess}
+
+In Simprocess werden Token, die sich durch das Simulationsmodell bewegen als Entitäten (engl. Entity) bezeichnet.
+
+Viele Aktivitäten besitzen ähnliche Eigenschaften, sodass die allgemeinen Besonderheiten vor der Betrachtung der einzelnen Aktivitäten in diesem Abschnitt vorweggenommen werden sollen.
+
+Für die Kommunikation untereinander besitzen Aktivitäten sogenannte Pads. Dabei kann eine Aktivität mehrere Input-Pads sowie Output-Pads
+mit unterschiedlichen Aufgaben besitzen. Input-Pads erlauben eine unbegrenzte Anzahl an eingehenden Verbindungen, während die meisten Output-Pads hingegen nur auf eine ausgehende Verbindung beschränkt sind. Es gibt allerdings auch Ausnahmen, wie beispielsweise bei der Split-Aktivität, die in Kapitel \ref{kap:simprocess_split} auf Seite \pageref{kap:simprocess_split} näher beschrieben wird.
+
+Eine elementare Eigenschaft der meisten Aktivitäten ist es, Simulationszeit verbrauchen zu können, indem die Dauer eines Prozesses, der durch die Aktivität repräsentiert wird, mittels einer Wahrscheinlichkeitsverteilung beschrieben wird. Eine Besonderheit in Simprocess ist, dass es keinen extra Baustein für Warteschlangen gibt. Stattdessen ist in allen Aktivitäten, die Simulationszeit verbrauchen können, eine Warteschlange integriert.
+Generatoren stellen in diesem Zusammenhang eine Ausnahme dar, da diese als Quelle keine Input-Pads besitzen. 
+
+Auch in Simprocess spielen Ressourcen eine wichtige Rolle. Aktivitäten können von Ressourcen abhängig sein und ihre Arbeit blockieren, bis ihnen die nötigen Ressourcen zur Verfügung stehen. Zudem können für Ressourcen ebenfalls Kosten definiert werden, womit diese auch als ein Werkzeug für die Kalkulation von Lohn und Betriebskosten eingesetzt werden können. Mittels eines sogenannten {\em Schedules} lässt sich überdies die Verfügbarkeit von Ressourcen einschränken, um beispielsweise Arbeitszeiten zu simulieren.
+
+Simprocess erlaubt es für Entitäten, Aktivitäten und Ressourcen eine Vielzahl von Statistiken zu sammeln. Ausgewählte Statistiken können nach einem Simulationslauf in Form eines Protokolls in einem Texteditor betrachtet werden.
+
+Die folgende Tabelle \ref{tab:simprocess_activities} fasst die Einzelheiten für die in dieser Arbeit betrachteten Aktivitäten aus der Simulationssoftware Simprocess zusammen.\\\begin{longtable}{m{0.35cm}|m{2.5cm}|m{2.5cm}|m{2.6cm}|m{1.8cm}|m{1.35cm}|m{1.30cm}}\hline
+ & \footnotesize\textbf{Aktivität} & \footnotesize\textbf{Warteschlange} & \footnotesize\textbf{Simulationszeit} & \footnotesize\textbf{Ressourcen} & \footnotesize\textbf{Input-Pads} & \footnotesize\textbf{Output-Pads} \tabularnewline\hline
+
+ 
+\endhead
+
+\caption{Aktivitäten in Simprocess}
+\label{tab:simprocess_activities}%
+
+\endfoot
+
+
+ 
+\centering\includegraphics[width=0.4cm]{pic_simprocess_generator.png} &
+Generate &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering 0 & 
+\centering 1 \tabularnewline\hline
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_dispose.png} &
+Dispose & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering 1 &
+\centering 0 \tabularnewline\hline 
+
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_delay.png} &
+Delay & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering 1 &
+\centering 1 \tabularnewline\hline 
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_assemble.png} &
+Assemble & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering 2 &
+\centering 2 \tabularnewline\hline 
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_branch.png} &
+Branch & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering 1 &
+\centering 1 \tabularnewline\hline
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_branch.png} &
+Merge & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering 1 &
+\centering 1 \tabularnewline\hline
+
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_batch.png} &
+Batch & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering 1 &
+\centering 1 \tabularnewline\hline 
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_unbatch.png} &
+Unbatch & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering 1 &
+\centering 1 \tabularnewline\hline
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_split.png} &
+Split & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering 1 &
+\centering 2 \tabularnewline\hline 
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_join.png} &
+Join & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering 1 &
+\centering 2 \tabularnewline\hline
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_transform.png} &
+Transform & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering 1 &
+\centering 1 \tabularnewline\hline
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_transfer.png} &
+Transfer & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering 0/1 &
+\centering 0/1 \tabularnewline\hline
+
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_gate.png} &
+Gate & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering 2 &
+\centering 1 \tabularnewline\hline
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_assign.png} &
+Assign & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering 1 &
+\centering 1 \tabularnewline\hline 
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_synchronize.png} &
+Synchronize & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering variabel &
+\centering variabel \tabularnewline\hline
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_getresource.png} &
+Get Resource & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering 1 &
+\centering 1 \tabularnewline\hline
+
+
+\centering\includegraphics[height=0.4cm]{pic_simprocess_freeresource.png} &
+Free Resource & 
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{unchecked} &
+\centering\includegraphics[width=0.45cm, height=0.45cm]{checked} &
+\centering 1 &
+\centering 1 \tabularnewline\hline 
+
+\end{longtable}
+
+\subsubsection{Simulationsbausteine}
+
+\paragraph{Generate}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_generator.png}}
+
+Generatoren dienen in Simprocess als Quelle für das Simulationsmodell. Diese erzeugen gemäß eines Plans (engl. {\em Schedule}) neue Entitäten.
+Hiervon existieren eine Reihe von unterschiedlichen Arten, wovon die wichtigsten in der Tabelle \ref{tab:simprocess_schedule} zusammengefasst werden.
+Eine Besonderheit ist, dass einem Generator mehrere solcher {\em Schedules} zugewiesen werden können. Womit ein Generator in die Lage versetzt wird, verschiedene Typen von Entitäten zu erzeugen. \\
+
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Scheduletyp} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Schedulearten in Simprocess}
+\label{tab:simprocess_schedule}%
+
+\endfoot
+
+Periodic & 
+Der {\em Periodic Schedule} ist wohl der am häufigsten verwendete Scheduletyp in Simprocess.
+Über statistische Verteilungsfunktionen kann über solch einen Plan der Rhythmus zur Erzeugung von Entitäten bestimmt werden. Ebenfalls kann über eine Verteilungsfunktion die Anzahl der Entitäten bestimmt werden, die zum selben Zeitpunkt im Simulationsmodell eintreffen. \tabularnewline\hline
+Calendar &
+Der {\em Calendar Schedule} kann wie der {\em Periodic Schedule} über statistische Verteilungsfunktionen die Anzahl der Entitäten bestimmen, die zum selben Zeitpunkt erzeugt werden sollen. Die Besonderheit liegt aber darin, dass feste Zeitpunkte bestimmt werden können, wann neue Entitäten im Simulationsmodell eintreffen. Beispielsweise kann ein exaktes Datum oder aber eine exakte Definition von monatlich, wöchentlich, täglich oder stündlich verwendet werden.  
+\tabularnewline\hline
+Weekly &
+Der {\em Weekly Schedule} ist im Prinzip eine Erweiterung des {\em Periodic Schedules}. Einzig wird die Möglichkeit ergänzt, Zeiträume festzulegen, innerhalb welcher dieser Schedule aktiv ist. Nützlich ist dies, um beispielsweise Arbeitszeiten zu simulieren.\tabularnewline\hline
+
+\end{longtable}
+
+\paragraph{Dispose}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_dispose.png}}
+
+Das Gegenstück zu {\em Generate} ist der {\em Dispose} Baustein. Über diesen verlassen Entitäten das Simulationsmodell. {\em Dispose} kann auch dazu verwendet werden, die Simulation vorzeitig abzubrechen, indem eine Maximalanzahl von Entitäten bestimmt wird. Dabei muss es sich nicht um einen festen Wert handeln, denn auch die Verteilungsfunktionen, die in der Tabelle \ref{tab:Distribution} auf Seite \pageref{tab:Distribution} in der Spalte Simprocess aufgelistet worden sind, können verwendet werden.
+
+\newpage
+\paragraph{Delay}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_delay.png}}
+
+Eine der elementarsten Komponente ist sicherlich die {\em Delay}-Aktivität. Diese wird eingesetzt, um ankommende Entitäten für einen festgelegten Zeitraum zu blockieren.
+
+\paragraph{Assemble}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_assemble.png}}
+
+{\em Assemble} kann verwendet werden, um beispielsweise den Zusammenbau von Komponenten zu simulieren. Notwendige Materialien werden in Form von Entitäten gesammelt. Die Gesamtheit der benötigten Materialien kann sich aus unterschiedlichen Entitätstypen zusammensetzen. Dabei lässt sich auch die Anzahl der notwendigen Entitäten über statistische Verteilungsfunktionen definieren. Sobald eine {\em Assemble}-Aktivität die notwendigen Materialien hat, beginnt diese mit der Arbeit. Zuletzt muss noch der Entitätstyp für die zu erzeugende Entität festgelegt werden. Da es im Gegensatz zu vielen anderen Aktivitäten mehrere Input- und Output-Pads gibt, werden diese in der Tabelle \ref{tab:simprocess_assemble_pads} aufgeführt.\\
+
+\begin{longtable}{p{3.8cm}|p{1.4cm}|p{9.3cm}}\hline
+\footnotesize\textbf{Pad} & \footnotesize\textbf{Typ} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+
+\endhead
+
+\caption{Schedulearten in Simprocess}
+\label{tab:simprocess_assemble_pads}%
+
+\endfoot
+
+
+Trigger (Optional) & Input & 
+Die {\em Assemble}-Aktivität kann zusätzlich auf einen Trigger warten, dieser wird ausgelöst, sobald die Aktivität von einer Entität über
+den Trigger-Pad erreicht worden ist. Die eintreffende Entität wird sofort vernichtet und landet damit nicht in der Warteschlange der {\em Assemble}-Aktivität.
+\tabularnewline\hline
+Component & Input &
+Entitäten, die als Material für die Fertigung verwendet werden sollen, erreichen die {\em Assemble}-Aktivität über dieses Pad.
+\tabularnewline\hline
+Out & Output &
+Erzeugte Entitäten verlassen die {\em Assemble}-Aktivität über dieses Pad.
+\tabularnewline\hline
+NoMatch (Optional) & Output &
+Entitäten, die für den Fertigungsprozess nicht verwendet werden können, können über dieses Pad die {\em Assemble}-Aktivität wieder verlassen
+\tabularnewline\hline
+
+\end{longtable}
+
+
+\paragraph{Branch}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_branch.png}}
+
+Die {\em Branch}-Aktivität kann als Abzweigung eintreffende Entitäten auf verschiedenen Wegen zu verbundenen Aktivitäten weiterleiten. Die Tabelle \ref{tab:simprocess_branch} listet die möglichen Arten der Abzweigung auf. \\
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Abzweigungsart} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Abzweigungsvarianten für die {\em Branch}-Aktivität in Simprocess}
+\label{tab:simprocess_branch}%
+
+\endfoot
+
+Probability & Die Wahrscheinlichkeit bestimmt, welcher Weg  gewählt wird. Die Wahrscheinlichkeit für alle angeschlossenen Verbindungen muss insgesamt 1.0 betragen.  \tabularnewline\hline
+
+Attribute & Für die Wahl des Weges können auch Attribute von Entitäten der Aktivität oder dem Modell herangezogen werden. Über Vergleichsoperationen wird entschieden, welchen Weg eine Entität wählt.
+\tabularnewline\hline
+
+Entity Type & Der Typ der Entität kann ebenfalls als ausschlaggebendes Kriterium bei der Wahl des Weges herangezogen werden.
+\tabularnewline\hline
+
+Priority & Bei der Priorität handelt es sich lediglich um eine Komfortfunktion, denn diese ist im Grunde auch nur ein Attribut der Entität.\tabularnewline\hline
+
+\end{longtable}
+
+\paragraph{Merge}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_merge.png}}
+
+Die {\em Merge}-Aktivität kann als Gegenstück zur {\em Branch}-Aktivität betrachtet werden. Alle eintreffenden Entitäten werden auf dem selben Weg weiter versandt. Diese Aktivität ist nicht unbedingt notwendig, da alle InputPads genau nach eben diesem Prinzip arbeiten. Allerdings hilft sie, die  Struktur des Simulationsmodells übersichtlicher zu gestalten. Außerdem erhalten alle eintreffenden Entitäten, wie bei jeder anderen Aktivität, einen neuen Zeitstempel \footnote{Vgl. \cite{USM20008} S. 141}. Im Gegensatz zu den meisten anderen Aktivitäten kann die {\em Merge} Aktivität daher auch keine Simulationszeit verbrauchen oder Ressourcen verwenden.
+
+\newpage
+\paragraph{Batch}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_batch.png}}
+
+Die {\em Batch}-Aktivität fasst eine zuvor bestimmte Anzahl von Entitäten zu einer neuen Entität zusammen.
+Je nach Einstellung müssen zusätzliche Kriterien erfüllt sein, bevor mit dem {\em Batch}-Prozess begonnen wird. 
+Ist die maximale Aufenthaltsdauer für Entitäten in der Warteschlange erreicht sowie das Kriterium für die minimale Anzahl von Entitäten in der Warteschlange erfüllt, wird der {\em Batch}-Prozess gestartet. Weiterhin können eingehende Entitäten nach der Priorität oder dem Typ der Entität getrennt werden.
+
+\paragraph{Unbatch}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_unbatch.png}}
+
+Die {\em Unbatch}-Aktivität kehrt den Prozess der {\em Batch}-Aktivität um, indem sie Entitäten, die sich in eintreffenden Container-Entitäten befinden, auspackt. Dabei besteht die Option, auch verschachtelte Pakete zu berücksichtigen. Container-Entitäten können je nach Einstellung ebenfalls erhalten bleiben.
+
+\paragraph{Split}
+\label{kap:simprocess_split}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_split.png}}
+
+Mit der {\em Split}-Aktivität lassen sich von einer eintreffenden Entität beliebig viele Kopien erstellen. Für das spätere Zusammenführen der Kopien mit dem Original wird ein Familienname vergeben. Eine Beschreibung der beiden Output-Pads kann der Tabelle \ref{tab:simprocess_split_pads} entnommen werden.\\
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Output-Pad} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+
+\endhead
+
+\caption{Output-Pads der {\em Split}-Aktivität}
+\label{tab:simprocess_split_pads}%
+
+\endfoot
+
+Original &
+Über dieses Pad verlassen Original-Entitäten die {\em Split}-Aktivität.
+\tabularnewline\hline
+
+Clones &
+Kopien des Originals verlassen über dieses Pad die {\em Split}-Aktivität.
+Mit diesem Pad können über einen {\em Connector} beliebig viele Aktivitäten verbunden werden. 
+Die Anzahl der Verbindungen entspricht somit der Anzahl der Klone.\tabularnewline\hline
+
+\end{longtable}
+
+
+\paragraph{Join}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_join.png}}
+
+Die {\em Join}-Aktivität dient zur Zusammenführung der Originale mit ihren Kopien, wie sie von der {\em Split}-Aktivität erzeugt worden sind. Dabei befinden sich Kopien und Originale so lange in der Warteschlange der {\em Join}-Aktivität, bis alle zugehörigen Komponenten eingesammelt worden sind. Die Join-Aktivität besitzt zwei Output-Pads, deren Beschreibung der Tabelle \ref{tab:simprocess_join_pads} entnommen werden kann.\\
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Output-Pad} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+
+\endhead
+
+\caption{Output-Pads der {\em Join}-Aktivität}
+\label{tab:simprocess_join_pads}%
+
+\endfoot
+
+Join &
+Über dieses Pad verlassen Original-Entitäten die {\em Join}-Aktivität.
+\tabularnewline\hline
+
+NoMatch &
+Dieses Output-Pad dient zur Aussortierung von Entitäten, die für eine Join-Operation nicht in Frage kommen.\tabularnewline\hline
+
+\end{longtable}
+
+\paragraph{Transform}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_transform.png}}
+
+Die {\em Transform}-Aktivität wandelt den Typ von eintreffenden Entitäten in einen anderen Typ um. Dabei können globale Attribute sowie der Erstellungszeitpunkt, die Zeitstempel und die Priorität der ursprünglichen Entität übernommen werden.
+
+
+\paragraph{Transfer}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_transfer.png}}
+
+Die {\em Transfer}-Aktivität unterscheidet sich von allen bisher vorgestellten Aktivitäten entscheidend. {\em Transfer}-Aktivitäten stellen
+eine Möglichkeit dar, auch ohne Verbindungen Entitäten an andere {\em Transfer}-Aktivitäten weiterzuleiten. Bei {\em Transfer}-Aktivitäten muss zwischen zwei verschiedenen Zuständen unterschieden werden. In der Tabelle \ref{tab:simprocess_transfer_modus} werden die Unterschiede erläutert.\\
+
+\begin{longtable}{p{3.5cm}|p{11cm}}\hline
+\footnotesize\textbf{Modus} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Zustände der {\em Transfer}-Aktivität}
+\label{tab:simprocess_transfer_modus}%
+
+\endfoot
+
+Send & Befindet sich eine {\em Transfer}-Aktivität im {\em Send}-Zustand, besitzt diese ein Input-Pad und es werden alle eingehenden Entitäten an die {\em Transfer}-Aktivität weitergeleitet, die als Empfänger definiert worden ist. \tabularnewline\hline
+
+Receive & Eine {\em Transfer}-Aktivität, die sich im {\em Receive}-Zustand befindet, kann von beliebig vielen {\em Transfer}-Aktivitäten Entitäten empfangen. In der Folge werden alle eingetroffenen Entitäten an die über das Output-Pad angebundene Aktivität weitergeleitet.\tabularnewline\hline
+
+\end{longtable}
+
+\paragraph{Gate}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_gate.png}}
+
+Die {\em Gate}-Aktivität sammelt eingehende Entitäten und hält diese solange in ihrer Warteschlange auf, bis entweder die Anzahl der Entitäten in der Warteschlange größer als eine definierte Schranke ist oder eine Entität über das {\em Trigger}-Pad die {\em Gate}-Aktivität erreicht hat.
+
+\paragraph{Assign}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_assign.png}}
+
+Die {\em Assign}-Aktivität stellt eine einfache Möglichkeit dar, um Werte von benutzerdefinierten Attributen sowie Prioritäten für Entitäten zu definieren.
+
+
+\paragraph{Synchronize}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_synchronize.png}}
+
+Die {\em Synchronize}-Aktivität besitzt eine variable Anzahl von Input- und Output-Pads. Sobald an jedem Eingang der Aktivität jeweils mindestens eine Entität eingetroffen ist, werden an allen korrespondierenden Ausgängen Entitäten wieder freigelassen.
+
+\newpage
+\paragraph{Get Resource}
+
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_getresource.png}}
+
+Häufig ist es eine Notwendigkeit, eine Ressource für eine Abfolge von Aktivitäten zu belegen. Mit der Aktivität {\em Get Resource} ist dies möglich. Wenn eine Entität bei dieser Aktivität angelangt ist und sofern eine Ressource bereitsteht, darf die Entität die {\em Get Resource} Aktivität wieder verlassen. In jedem anderen Fall werden eingehende Entitäten in der Warteschlange der Aktivität aufbewahrt.
+
+\paragraph{Free Resource}
+
+\parpic(1cm,1cm)[l][rt]{\includegraphics[width=1cm]{pic_simprocess_freeresource.png}}
+
+Um eine Ressource wieder freizugeben, wird die Aktivität {\em Free Resource} benötigt. Sobald eine Entität diese Aktivität betritt, werden alle von ihr belegten Ressourcen wieder freigegeben. 
+
+
+\subsubsection{Bewertung}
+
+Die Simulationssoftware Simprocess bietet eine enorme Anzahl unterschiedlicher Simulationsbausteine, die sich jeweils durch ihre Spezialisierung auszeichnen. Ein netter Nebeneffekt ist es, dass komplexe Modelle dadurch wesentlich übersichtlicher erscheinen und somit die Abläufe in einem Simulationsmodell bedeutend schneller nachvollzogen werden können. Es hat sich außerdem herausgestellt, dass die integrierten Warteschlangen ebenfalls dazu beitragen, das Modell aufzuräumen. Zudem ist die Kommunikation der Aktivitäten untereinander damit deutlich vereinheitlicht. Eine weitere interessante Komponente stellen auch die Pads für die Beschreibung der Ein- und Ausgänge der Aktivitäten dar. Denn durch dieses Konzept ist es möglich, mehrere Eingänge mit unterschiedlichen Aufgaben für eine Aktivität zu definieren. Dies ist ein Ansatz, welcher sich auch für die aus dieser Diplomarbeit hervorgehenden Eigenlösung empfiehlt. 
+Anhand der Analyse der von Aktivitäten bereitgestellten Funktionalitäten ist außerdem gut zu erkennen, welchen Platz Simulationsbausteine in der Vererbungshierarchie einnehmen.
+
+\subsection{Micro Saint Sharp}
+
+In Simul8 und Simprocess ist ein rein grafischer Modellaufbau möglich, wenngleich für viele erweiterte Szenarien auch mit zusätzlichem Programmcode Einfluss auf das geschehen in der Simulation genommen werden kann. Das Simulationssoftwarepaket Micro Saint Sharp geht dagegen einen etwas anderen Weg. Bei der Entwicklung eines Simulationsmodells in Micro Saint Sharp kann auf Programmierkenntnisse in C\# nicht verzichtet werden, da viele Eigenschaften der Simulationsbausteine über Programmcode als Funktion in eigens dafür vorgesehenen Codefenstern beschrieben werden müssen.
+
+Diese Simulationsbausteine nennt man im Micro Saint Sharp {\em Tasks}. Das Verhalten einer {\em Task} ist sehr universell angelegt. Neben der Standard-{\em Task} gibt es noch eine kleine Anzahl weiterer Tasks, welche sich aber nur in Detail unterscheiden, da diese häufig nur wenige Eigenschaften ergänzen.
+
+Token, die sich durch das Simulationsmodell bewegen, werden wie in Simprocess als Entität ({\em Entity}) bezeichnet. Diese verfügen über Attribute, auf welche eine Task zugreifen kann. Es lassen sich überdies jederzeit eigene Attribute einer Entität hinzufügen. Ebenfalls können globale Variablen für das gesamte Modell definiert werden. 
+
+Für die Wahl der Datentypen steht für Attribute und globale Variablen gleichermaßen nur eine begrenzte Auswahl zur Verfügung . Neben den aus C\# bekannten Datentypen Boolean, Integer, FloatingPoint (double), Object, String, Hashtable kann aber zusätzlich auch der Datentyp Entitity genutzt werden. Weiterhin können Listen und Arrays verwendet werden, die aber ebenfalls auf die eben benannten Datentypen beschränkt sind. Diese Einschränkungen gelten hingegen nicht für lokale Variablen, die in den in die Oberfläche der Software eingebetteten Codefenstern verwendet werden können.
+
+\subsubsection{Simulationsbausteine}
+
+\paragraph{Task}
+
+\includegraphics[width=2cm]{pic_microsaintsharp_task.png}
+
+\subparagraph{Release Condition}
+
+Bevor eine Entität zur Bearbeitung freigegeben wird, wird zunächst die {\em Release Condition} ausgewertet. Bei der {\em Release Condition} handelt es sich um eine Funktion, die einen Wahrheitswert ({\em Boolean}) zurückgibt.
+
+\subparagraph{Effects}
+
+Wenn eine Entität eine Task erreicht, werden sogenannte Effekte ausgelöst. Diese Effekte können mittels Programmcode beschrieben werden. Effekte können zum Beispiel genutzt werden, um Attribute von Entitäten zu setzen oder globale Variablen zu aktualisieren.\\
+
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Effekt} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Effekte einer {\em Task} in Micro Saint Sharp}
+\label{tab:microsaintsharp_effects}%
+
+\endfoot
+
+Beginning Effect & 
+Der  {\em Beginning Effect} wird ausgelöst bevor die Task ausgeführt wird. Erst im Anschluss wird die Ausführungszeit der Task berechnet.\footnote{Vgl. \cite{MSSUG2005} S. 95}\tabularnewline\hline
+
+End Effect & Der {\em End Effect} wird ausgelöst wenn die Task die Ausführung beendet und bevor die Entität die Task verlässt.\footnote{Vgl. \cite{MSSUG2005} S. 95}\tabularnewline\hline
+
+Launch Effect & Der {\em Launch Effect} wird ausgeführt, nachdem die Ausführungszeit berechnet wurde.\footnote{Vgl. \cite{MSSUG2005} S. 96}
+\tabularnewline\hline
+
+
+\end{longtable}
+
+\subparagraph{Timing}
+
+Wahrscheinlichkeitsverteilungen dienen zur Modellierung der Ausführungszeit einer Task. Die Eigenschaften einer solchen Verteilungsfunktion werden jeweils über den Rückgabewert({\em Double}) einer C\#-Funktion definiert.
+
+\subparagraph{Paths}
+
+Eine Task kann über eine unbegrenzte Zahl von ausgehenden Verbindungen mit Folgetasks verbunden sein. Wenn eine Entität eine Task verlässt, wird diese gemäß einer zuvor definierten Strategie eine oder mehrere dieser Verbindungen wählen. Als Entscheidungsgrundlage dienen hierbei Callback-Funktionen, wovon für jede Verbindung eine existiert. Je nach Wahl der Strategie ({\em Multiple},{\em Probabilistic},{\em Tactical}) erfüllen diese Callback-Routinen unterschiedliche Aufgaben. Eine Auflistung dieser findet sich in der Tabelle \ref{tab:microsaintsharp_paths} wieder.\\
+
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Decision Type} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Routing-Strategien in Micro Saint Sharp}
+\label{tab:microsaintsharp_paths}%
+
+\endfoot
+
+Multiple & Alle verbundenen Tasks erhalten eine Kopie der Entität, für die die jeweilige Callback-Routine den Wahrheitswert {\em true} liefert. Auch eine Rückverbindung zur selben Task kann gewählt werden. In diesem Fall kann eine Task wie ein Generator verwendet werden, wenngleich es dafür auch einen spezialisierten Task-Typ gibt, der diesen Vorgang vereinfacht.\tabularnewline\hline
+
+Probalistic & Jede Callback-Routine gibt einen Wert zurück, der die Wahrscheinlichkeit angibt, über welchen Weg Entitäten die Task verlassen. Die Summierung aller Werte muss durch eine Zehnerpotenz teilbar sein. .\tabularnewline\hline
+
+Tactical & Es wird die Verbindung gewählt, deren Callback-Routine den höchsten Wert zurück gegeben hat.\tabularnewline\hline
+
+
+\end{longtable}
+
+\subparagraph{Queues}
+
+
+
+Warteschlangen sind ein integrierter Bestandteil einer Task. Es existieren 4 verschiedene Typen von Warteschlangen\\
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Typ} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Arten einer Warteschlange in Micro Saint Sharp}
+\label{tab:microsaintsharp_effects}%
+
+\endfoot
+None & Auch wenn die Bezeichnung {\em None} impliziert, dass damit für die Task keine Warteschlange vorhanden ist, ist dies nicht der Fall. Lediglich die Einflussmöglichkeiten mittels Effekte sind bei dieser Voreinstellung nicht gegeben. Entitäten werden nach dem \Gls{fifo}-Prinzip in der Warteschlange aufgehalten, bis die Task wieder bereit ist.\tabularnewline\hline
+\Gls{fifo} & Entitäten verlassen die Warteschlange in der Reihenfolge, wie sie diese betreten haben. \tabularnewline\hline
+\Gls{lifo} & Entitäten verlassen die Warteschlange in der umgekehrten Reihenfolge, wie sie diese betreten haben. \tabularnewline\hline
+Sorted & Entitäten werden innerhalb der Warteschlange gemäß einer über eine Funktion kalkulierten Priorität sortiert. \tabularnewline\hline
+
+\end{longtable}
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Effekt} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Effekte einer {\em Task} mit integrierter Warteschlange in Micro Saint Sharp}
+\label{tab:microsaintsharp_effects}%
+
+\endfoot
+
+Queue Entering Effect & Wird ausgeführt, wenn eine Entität die Warteschlange betritt.\tabularnewline\hline
+
+Queue Departing Effect & Wird ausgelöst, wenn eine Entität die Warteschlange verlässt. \tabularnewline\hline
+
+\end{longtable}
+
+
+\paragraph{Generator Task}
+
+\parpic(2cm,0.5cm)[l][rt]{\includegraphics[width=2cm]{pic_microsaintsharp_generator.png}}
+
+Die Generator Task kann im Simulationsmodell ausschließlich als Quelle für neue Entitäten verwendet werden. Mit Ausnahme der Warteschlange und den Effekten sowie der {\em Release Condition}, erbt diese Task alle sonstigen Eigenschaften, die eine normale Task besitzt. \\
+
+\begin{longtable}{p{35mm}|p{11cm}}\hline
+\footnotesize\textbf{Eigenschaft} & \footnotesize\textbf{Beschreibung} \tabularnewline\hline
+
+\endhead
+
+\caption{Spezielle Eigenschaften eines Generators in Micro Saint Sharp}
+\label{tab:microsaintsharp_effects}%
+
+\endfoot
+
+Start Time & Startzeitpunkt des Generators \tabularnewline\hline
+
+Repeat Type & Durch die Festlegung dieser Eigenschaft werden Einschränkungen für den Generator verfügbar.
+
+					
+\begin{itemize}
+	\item {\em RepeatForever} Der Generator läuft, bis die Simulation beendet wird.
+	\item {\em RepeatToCount} Der Generator läuft, bis die definierte Anzahl von Entitäten erzeugt wurde.
+	\item {\em RepeatToTime} Der Generator läuft, bis zu einem festgelegten Zeitpunkt.
+\end{itemize}
+
+\tabularnewline\hline
+
+Entity Generation Code & Hierbei handelt es sich um eine Routine, die bei der Generation einer Entität ausgeführt wird. Dies ist hilfreich, um zum Beispiel Attribute einer erzeugten Entität zu manipulieren.\tabularnewline\hline
+
+
+
+\end{longtable}
+
+\paragraph{Resource Task}
+
+\parpic(2cm,0.5cm)[l][rt]{\includegraphics[width=2cm]{pic_microsaintsharp_resource.png}}
+
+Auch bei der {\em Resource Task} handelt es sich um eine Modifikation der regulären Task. Globale Variablen vom Typ Integer können in Micro Saint Sharp als Ressourcen verwendet werden. Deren Initialwert gibt dabei die maximale Anzahl an verfügbaren Einheiten an. Jede {\em Resource Task} benötigt für die Ausführung eine Einheit der zugewiesenen Ressource. Für eine {\em Resource Task} können allerdings keine weiteren Einschränkungen über eine {\em Release Condition} definiert werden, wie dies bei der allgemeinem Task der Fall ist. Abgesehen davon gibt es keine Unterschiede zur Standard-Task.
+
+\paragraph{Capacity Task}
+
+\parpic(2cm,0.5cm)[l][rt]{\includegraphics[width=2cm]{pic_microsaintsharp_capacity.png}}
+
+Die {\em Capacity Task} ist eine Erweiterung der regulären Task. Diese Task kann bis zu einem festgesetzten Limit für mehrere Entitäten gleichzeitig ausgeführt werden.
+
+\subsubsection{Bewertung}
+
+Micro Saint Sharp bietet einen allgemeineren Ansatz beim Modellaufbau als die bisher vorgestellten Softwarepakete. Prinzipiell kann durch den gewählten Ansatz beim Modellaufbau und der Programmiersprache C\# jeder Sachverhalt in Form eines Task-Netzwerkes abgebildet werden. Für die Realisierung vieler Anwendungsfälle steigt aber auch der Aufwand beim Aufbau des Modells. Denn die allermeisten Dinge müssen letztlich über Code realisiert werden, womit der eigentliche Task-Graph nur begrenzt lesbar ist. Für die Virtualisierung durch eine Animation stellt Micro Saint Sharp dafür aber spezialisierte Werkzeuge zur Verfügung, welche jedoch bei der Betrachtung des eigentlichen Modellaufbaus und deren Bewertung an dieser Stelle keine Rolle spielen. Für die Eigenimplementierung wird hingegen ein deklarativerer Ansatz mittels mehrerer unterschiedlicher Modellbausteine angestrebt. Allein die Integration in das Entwicklungsumfeld von Visual Studio erfordert aber von Entwicklern Kenntnisse in der Programmierung. Insofern werden auch einige Konzepte aus der Software Micro Saint Sharp übernommen, wenn es darum geht, zusätzlichen Programmcode über Modellbausteine auszuführen. Ebenso wie bei der Simulationssoftware Simprocess wurde der Ansatz einer integrierten Warteschlange auch für die Tasks in Micro Saint Sharp gewählt. Im Vergleich zu Simul8 tritt damit auch nicht das Problem auf, dass Entitäten verloren gehen können, weil keine Warteschlangen verwendet werden, die Entitäten (in diesem Fall {\em Work Items} genannt) auffangen und für deren weitere Verarbeitung bereithalten.

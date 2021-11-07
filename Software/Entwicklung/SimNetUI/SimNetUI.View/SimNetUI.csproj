@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{64EE47D2-B4FC-4186-BEF6-B36E81199103}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SimNetUI</RootNamespace>
+    <AssemblyName>SimNetUI</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SimNetUI.View.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Activities\Base\ActivityRouteBase.cs" />
+    <Compile Include="Activities\Events\IEntityRouting.cs" />
+    <Compile Include="Activities\PropertyObjects\Statistics\ActivityRouteBaseStatisticInfo.cs" />
+    <Compile Include="Base\SimNetUIViewException.cs" />
+    <Compile Include="Companions\Controls\QueueCompanion.xaml.cs">
+      <DependentUpon>QueueCompanion.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converter\ActivityDistributionValueConverter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Activities\Base\ActivityBase.cs" />
+    <Compile Include="Activities\Base\ActivityDelayBase.cs" />
+    <Compile Include="Activities\Base\ActivityQueueBase.cs" />
+    <Compile Include="Activities\ControlParts\Connection\Connector.cs" />
+    <Compile Include="Activities\ControlParts\Connection\InConnector.cs" />
+    <Compile Include="Activities\ControlParts\Connection\OutConnector.cs" />
+    <Compile Include="Activities\Events\ConnectionInfo.cs" />
+    <Compile Include="Activities\Events\EntityEnteringEventArgs.cs" />
+    <Compile Include="Activities\Events\EntityEventArgs.cs" />
+    <Compile Include="Activities\Events\EntityLeavingEventArgs.cs" />
+    <Compile Include="Activities\Events\IEntityEntering.cs" />
+    <Compile Include="Activities\Events\IEntityLeaving.cs" />
+    <Compile Include="Activities\Events\EntityRoutingEventArgs.cs" />
+    <Compile Include="Activities\PropertyObjects\Connections\ConnectionPath.cs" />
+    <Compile Include="Activities\PropertyObjects\Connections\Out.cs" />
+    <Compile Include="Activities\PropertyObjects\Connections\Target.cs" />
+    <Compile Include="Activities\PropertyObjects\Distributions\DistributionBase.cs" />
+    <Compile Include="Activities\PropertyObjects\Distributions\Erlang.cs" />
+    <Compile Include="Activities\PropertyObjects\Distributions\Exponential.cs" />
+    <Compile Include="Activities\PropertyObjects\Distributions\Fixed.cs" />
+    <Compile Include="Activities\PropertyObjects\Distributions\LogNormal.cs" />
+    <Compile Include="Activities\PropertyObjects\Distributions\NoEvent.cs" />
+    <Compile Include="Activities\PropertyObjects\Distributions\Normal.cs" />
+    <Compile Include="Activities\PropertyObjects\Distributions\ProbabilityDistributionBase.cs" />
+    <Compile Include="Activities\PropertyObjects\Distributions\Triangular.cs" />
+    <Compile Include="Activities\PropertyObjects\Distributions\UniformDouble.cs" />
+    <Compile Include="Activities\PropertyObjects\Distributions\UniformInt.cs" />
+    <Compile Include="Activities\PropertyObjects\Distributions\Weibull.cs" />
+    <Compile Include="Activities\PropertyObjects\Queue\QueueType.cs" />
+    <Compile Include="Activities\PropertyObjects\Resources\ResourceDependency.cs" />
+    <Compile Include="Activities\PropertyObjects\Schedule\Schedule.cs" />
+    <Compile Include="Activities\PropertyObjects\Statistics\ActivityQueueBaseStatisticInfo.cs" />
+    <Compile Include="Activities\PropertyObjects\Statistics\ExitStatisticInfo.cs" />
+    <Compile Include="Activities\PropertyObjects\Statistics\GeneratorStatisticInfo.cs" />
+    <Compile Include="Activities\PropertyObjects\Statistics\ActivityDelayBaseStatisticInfo.cs" />
+    <Compile Include="Activities\PropertyObjects\Statistics\AssignResourceStatisticInfo.cs" />
+    <Compile Include="Activities\PropertyObjects\Statistics\ReleaseResourceStatisticInfo.cs" />
+    <Compile Include="Activities\PropertyObjects\Statistics\WaitStatisticInfo.cs" />
+    <Compile Include="Base\StatisticInfoBase.cs" />
+    <Compile Include="Activities\Controls\Exit.xaml.cs">
+      <DependentUpon>Exit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Activities\Controls\Generator.xaml.cs">
+      <DependentUpon>Generator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Activities\Controls\AssignResource.xaml.cs">
+      <DependentUpon>AssignResource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Activities\Controls\ReleaseResource.xaml.cs">
+      <DependentUpon>ReleaseResource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Activities\Controls\Wait.xaml.cs">
+      <DependentUpon>Wait.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SimulationContainer.cs" />
+    <Compile Include="Entity\Entity.cs" />
+    <Compile Include="Resources\Resource.cs" />
+    <Compile Include="Resources\ResourceStatisticInfo.cs" />
+    <Compile Include="Util\RegisterEvent.cs" />
+    <Compile Include="Converter\StandardMultiValueConverter.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="SimNetUI.View.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Activities\Controls\Exit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Activities\Controls\Generator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Activities\Controls\AssignResource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Activities\Controls\ReleaseResource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Activities\Controls\Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Activities\Controls\Wait.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Companions\Controls\QueueCompanion.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimNetUI.ModelLogic\SimNetUI.ModelLogic.csproj">
+      <Project>{3F1C88C3-26E7-44F3-A677-9BFC95D37C27}</Project>
+      <Name>SimNetUI.ModelLogic</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,113 @@
+﻿<Window x:Class="Example.PhoneCell.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="519" Width="775" xmlns:my="SimNetUI" xmlns:local="clr-namespace:Example.PhoneCell">
+    <Window.Resources>
+        <local:StatisticsValueConverter x:Key="StatisticsValueConverter" />
+    </Window.Resources>
+
+
+    <my:SimulationContainer  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="simulation1" >
+        <Button Content="{Binding RelativeSource={RelativeSource self},Path=Command.Text}" Command="MediaCommands.Play" CommandTarget="{Binding ElementName=simulation1}" Canvas.Left="12" Canvas.Top="12" Height="23" HorizontalAlignment="Left" Name="button1" VerticalAlignment="Top" Width="83" />
+        <Button Content="{Binding RelativeSource={RelativeSource self},Path=Command.Text}" Command="MediaCommands.Stop" CommandTarget="{Binding ElementName=simulation1}" Canvas.Left="101" Canvas.Top="12"  Height="23" HorizontalAlignment="Left" Name="button2" VerticalAlignment="Top" Width="75" />
+        <TextBlock Canvas.Left="563" Canvas.Top="12" Height="23" Text="Simulationszeit:" Width="90" />
+        <Slider Canvas.Left="182" Canvas.Top="12" Height="23" Name="slider1" Width="260" Value="{Binding Path=AnimationClockSpeed, ElementName=simulation1}" TickFrequency="1" Maximum="25" />
+        <TextBlock Canvas.Left="462" Canvas.Top="12" Height="23" Name="textBlock5" Text="{Binding ElementName=simulation1, Path=AnimationClockSpeed}" Width="61" TextAlignment="Center" />
+        <TextBlock Canvas.Left="563" Canvas.Top="31" Height="18" HorizontalAlignment="Left" Name="textBlock10" Text="{Binding ElementName=simulation1, Path=SimulationTime,StringFormat={}{0:0.0000}}" TextAlignment="Center" VerticalAlignment="Top" Width="78" />
+        <my:Generator Canvas.Left="39" Canvas.Top="252" Height="56" HorizontalAlignment="Left" Name="generator1" VerticalAlignment="Top" Width="56" Visibility="Hidden" EntityRouted="generator1_EntityRouted">
+            <my:Generator.Entity>
+                <my:Entity>
+                    <Image Source="man.png" Height="47" Width="21" />
+                </my:Entity>
+            </my:Generator.Entity>
+            <my:Generator.Schedule>
+                <my:Schedule Stop="500">
+                    <my:UniformDouble Max="10" Min="0.5" my:Schedule.Duration="Infinity" Seed="1" />
+                </my:Schedule>
+            </my:Generator.Schedule>
+            <my:Out Connector="Out">
+                <my:Target Activity="cell1" ConnectionPoints="C 179.67,280 179.67,140.5" Connector="In" ConnectionVisibility="False" />
+                <my:Target Activity="cell2" ConnectionPoints="C 179.67,280 179.67,232.5" Connector="In" ConnectionVisibility="False" />
+                <my:Target Activity="cell3" ConnectionPoints="C 179.67,280 179.67,323.5" Connector="In" ConnectionVisibility="False" />
+                <my:Target Activity="cell4" ConnectionPoints="C 179.67,280 179.67,418.5" Connector="In" ConnectionVisibility="False" />
+            </my:Out>
+        </my:Generator>
+
+        <my:Wait Height="115" Width="62" Canvas.Left="349" Canvas.Top="83" HorizontalAlignment="Left" Name="cell1" VerticalAlignment="Top" ConnectorsVisible="False">
+            <my:Wait.VisualAppearanceTemplate>
+                <Grid>
+                    <Image Source="cell.png" Canvas.Left="293" Canvas.Top="43" />
+                    
+                </Grid>
+            </my:Wait.VisualAppearanceTemplate>
+            <my:Wait.Distribution>
+                <my:UniformDouble Max="30" Min="5.5" Seed="1" />
+            </my:Wait.Distribution>
+            <my:Out Connector="Out">
+                <my:Target Activity="exit1" ConnectionPoints="C 496.33,140.5 496.33,280" Connector="In" ConnectionVisibility="False" />
+            </my:Out>
+        </my:Wait>
+        <my:Exit Canvas.Left="667" Canvas.Top="252" Height="56" HorizontalAlignment="Left" Name="exit1" VerticalAlignment="Top" Width="56" Visibility="Hidden" />
+        <my:Wait Canvas.Left="349" Canvas.Top="173" Height="119" HorizontalAlignment="Left" Name="cell2" VerticalAlignment="Top" Width="62" ConnectorsVisible="False">
+            <my:Wait.Distribution>
+                <my:UniformDouble Max="30" Min="5.5" Seed="1" />
+            </my:Wait.Distribution>
+            <my:Wait.VisualAppearanceTemplate>
+                <Image Canvas.Left="328" Canvas.Top="210" Source="cell.png" />
+            </my:Wait.VisualAppearanceTemplate>
+            <my:Out Connector="Out">
+                <my:Target Activity="exit1" ConnectionPoints="C 496.33,232.5 496.33,280" ConnectionVisibility="False" Connector="In" />
+            </my:Out>
+        </my:Wait>
+        <my:Wait Canvas.Left="349" Canvas.Top="264" Height="119" HorizontalAlignment="Left" Name="cell3" VerticalAlignment="Top" Width="62" ConnectorsVisible="False">
+            <my:Wait.Distribution>
+                <my:UniformDouble Max="30" Min="5.5" Seed="1" />
+            </my:Wait.Distribution>
+            <my:Wait.VisualAppearanceTemplate>
+                <Image Canvas.Left="328" Canvas.Top="210" Source="cell.png" />
+            </my:Wait.VisualAppearanceTemplate>
+            <my:Out Connector="Out">
+                <my:Target Activity="exit1" ConnectionPoints="C 496.33,323.5 496.33,280" ConnectionVisibility="False" Connector="In" />
+            </my:Out>
+        </my:Wait>
+        <my:Wait Canvas.Left="349" Canvas.Top="359" Height="119" HorizontalAlignment="Left" Name="cell4" VerticalAlignment="Top" Width="62" ConnectorsVisible="False">
+            <my:Wait.Distribution>
+                <my:UniformDouble Max="30" Min="5.5" Seed="1" />
+            </my:Wait.Distribution>
+            <my:Wait.VisualAppearanceTemplate>
+                <Image Canvas.Left="328" Canvas.Top="210" Source="cell.png" />
+            </my:Wait.VisualAppearanceTemplate>
+            <my:Out Connector="Out">
+                <my:Target Activity="exit1" ConnectionPoints="C 496.33,418.5 496.33,280" ConnectionVisibility="False" Connector="In" />
+            </my:Out>
+        </my:Wait>
+        <my:QueueCompanion Canvas.Left="168" Canvas.Top="117" HorizontalAlignment="Left" Name="queueCompanion1" VerticalAlignment="Top" ActivityQueue="{Binding ElementName=cell1}" Height="53" Width="179" />
+        <my:QueueCompanion ActivityQueue="{Binding ElementName=cell2}" Canvas.Left="168" Canvas.Top="211" Height="53" HorizontalAlignment="Left" Name="queueCompanion2" VerticalAlignment="Top" Width="179" />
+        <my:QueueCompanion ActivityQueue="{Binding ElementName=cell3}" Canvas.Left="168" Canvas.Top="302" Height="53" HorizontalAlignment="Left" Name="queueCompanion3" VerticalAlignment="Top" Width="179" />
+        <my:QueueCompanion ActivityQueue="{Binding ElementName=cell4}" Canvas.Left="168" Canvas.Top="397" Height="53" HorizontalAlignment="Left" Name="queueCompanion4" VerticalAlignment="Top" Width="179" />
+        <TextBlock Canvas.Left="12" Canvas.Top="63" Height="23" HorizontalAlignment="Left" Text="{Binding ElementName=generator1, Path=Statistics.DepartedEntities, StringFormat='People Entered:   {0}'}" VerticalAlignment="Top" Width="148" FontFamily="Verdana" FontStretch="Normal" />
+        <TextBlock Canvas.Left="192" Canvas.Top="63" Height="23" HorizontalAlignment="Left" Text="{Binding ElementName=exit1, Path=Statistics.ArrivedEntities,      StringFormat='People Left:   {0}'}" VerticalAlignment="Top" Width="119" FontFamily="Verdana" />
+        <TextBlock Canvas.Left="349" Canvas.Top="63" FontFamily="Verdana" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119">
+        <TextBlock.Text>
+            <MultiBinding Converter="{StaticResource StatisticsValueConverter}" StringFormat="People Calling:   {0}">
+                <Binding ElementName="cell1" Path="Statistics.InWork"/>
+                <Binding ElementName="cell2" Path="Statistics.InWork"/>
+                <Binding ElementName="cell3" Path="Statistics.InWork"/>
+                <Binding ElementName="cell4" Path="Statistics.InWork"/>
+            </MultiBinding>
+        </TextBlock.Text>
+        </TextBlock>
+        <TextBlock Canvas.Left="522" Canvas.Top="63" FontFamily="Verdana" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119">
+            <TextBlock.Text>
+                <MultiBinding Converter="{StaticResource StatisticsValueConverter}" StringFormat="People Waiting:   {0}">
+                    <Binding ElementName="cell1" Path="Statistics.InQueue" />
+                    <Binding ElementName="cell2" Path="Statistics.InQueue" />
+                    <Binding ElementName="cell3" Path="Statistics.InQueue" />
+                    <Binding ElementName="cell4" Path="Statistics.InQueue" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+        <!--<TextBlock Canvas.Left="434" Canvas.Top="63" FontFamily="Verdana" Height="23" HorizontalAlignment="Left" Text="{Binding ElementName=exit1, Path=Statistics.ArrivedEntities, StringFormat='People Calling: {0}'}" VerticalAlignment="Top" Width="119" />-->
+    </my:SimulationContainer>
+
+</Window>

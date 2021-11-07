@@ -1,0 +1,58 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+
+    <Style x:Key="ToolTipStyle" TargetType="{x:Type ToolTip}">
+
+        <Setter Property="Padding" Value="5" />
+
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1">
+                    <GradientStop Offset="0" Color="White" />
+                    <GradientStop Offset="1" Color="PowderBlue" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToolTip}">
+                    <ControlTemplate.Resources>
+                        <Style x:Key="ToolTipHeaderStyle" TargetType="{x:Type TextBlock}">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush EndPoint="0,1">
+                                        <GradientStop Offset="0" Color="CornflowerBlue" />
+                                        <GradientStop Offset="0.5" Color="DarkBlue" />
+                                        <GradientStop Offset="1" Color="CornflowerBlue" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="FontWeight" Value="Normal" />
+                            <Setter Property="FontSize" Value="15" />
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Style>
+                    </ControlTemplate.Resources>
+
+
+                    <Border Margin="10" CornerRadius="2" BorderThickness="{TemplateBinding BorderThickness}"
+                  BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Style="{StaticResource ToolTipHeaderStyle}">Activity Statistics</TextBlock>
+                            <ContentPresenter Margin="{TemplateBinding Padding}" />
+                        </StackPanel>
+                        <Border.Effect>
+                            <DropShadowEffect ShadowDepth="0" Color="Blue" BlurRadius="10" />
+                        </Border.Effect>
+
+                    </Border>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

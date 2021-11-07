@@ -1,0 +1,117 @@
+Building documentation...
+Initializing...
+Merging XML documentation...
+Building file mapping...
+Loading XSLT files...
+    namespace.xslt
+    namespacehierarchy.xslt
+    type.xslt
+    typehierarchy.xslt
+    allmembers.xslt
+    individualmembers.xslt
+    event.xslt
+    member.xslt
+    memberoverload.xslt
+    property.xslt
+    field.xslt
+    htmlcontents.xslt
+Generating HTML pages...
+Enhancer.html
+EnhancerHierarchy.html
+Enhancer.ILAsm.html
+Enhancer.ILAsmMembers.html
+Enhancer.ILAsmConstructor.html
+Enhancer.ILAsmMethods.html
+Enhancer.ILAsm.DoIt.html
+Enhancer.ILAssemblyExternElement.html
+Enhancer.ILAssemblyExternElementMembers.html
+Enhancer.ILAssemblyExternElementConstructor.html
+Enhancer.ILAssemblyExternElementMethods.html
+Enhancer.ILAssemblyExternElement.ReadToEnd.html
+Enhancer.ILDasm.html
+Enhancer.ILDasmMembers.html
+Enhancer.ILDasmConstructor.html
+Enhancer.ILDasmMethods.html
+Enhancer.ILDasm.DoIt.html
+Enhancer.ILFile.html
+Enhancer.ILFileMembers.html
+Enhancer.ILFileConstructor.html
+Enhancer.ILFileProperties.html
+Enhancer.ILFile.ExternAssemblies.html
+Enhancer.ILFile.Lines.html
+Enhancer.ILFile.Methods.html
+Enhancer.ILFileMethods.html
+Enhancer.ILFile.AnalyzeFile.html
+Enhancer.ILFile.RemoveShortOffset.html
+Enhancer.ILFile.Write.html
+Enhancer.ILLineElement.html
+Enhancer.ILLineElementMembers.html
+Enhancer.ILLineElementConstructor.html
+Enhancer.ILLineElementProperties.html
+Enhancer.ILLineElement.Line.html
+Enhancer.ILMethodElement.html
+Enhancer.ILMethodElementMembers.html
+Enhancer.ILMethodElementConstructor.html
+Enhancer.ILMethodElementProperties.html
+Enhancer.ILMethodElement.Declaration.html
+Enhancer.ILMethodElement.EndElement.html
+Enhancer.ILMethodElement.IsPInvoke.html
+Enhancer.ILMethodElement.KindOfMethod.html
+Enhancer.ILMethodElement.LastLocalInitElement.html
+Enhancer.ILMethodElement.MaxStackElement.html
+Enhancer.ILMethodElement.Name.html
+Enhancer.ILMethodElement.NamesOfLocalVar.html
+Enhancer.ILMethodElement.ReturnElement.html
+Enhancer.ILMethodElement.TypesOfLocalVar.html
+Enhancer.ILMethodElement.WaitCalls.html
+Enhancer.ILMethodElementMethods.html
+Enhancer.ILMethodElement.AdjustMaxStack.html
+Enhancer.ILMethodElement.ReadToEnd.html
+Enhancer.ILSimNetExtensions.html
+Enhancer.ILSimNetExtensionsMembers.html
+Enhancer.ILSimNetExtensionsConstructor.html
+Enhancer.ILSimNetExtensionsProperties.html
+Enhancer.ILSimNetExtensions.CheckLabelExt.html
+Enhancer.ILSimNetExtensions.LocalVarExt.html
+Enhancer.ILSimNetExtensions.NopRetExt.html
+Enhancer.ILSimNetExtensions.RemoveCurrSchedObjExt.html
+Enhancer.ILSimNetExtensions.RestoreLocalVarExt.html
+Enhancer.ILSimNetExtensions.StoreLocalVarExt.html
+Enhancer.ILSimNetExtensions.StoreParamsExt.html
+Enhancer.ILSimNetExtensionsMethods.html
+Enhancer.ILSimNetExtensions.AfterWaitLabelExt.html
+Enhancer.ILSimNetExtensions.CreateTypesOfLocalVar.html
+Enhancer.ILSimNetExtensions.GetOpcodeNameForType.html
+Enhancer.ILSimNetExtensions.InitAfterWaitLabelExtension.html
+Enhancer.ILSimNetExtensions.InitCheckLabelExtension.html
+Enhancer.ILSimNetExtensions.InitLocalVarExtension.html
+Enhancer.ILSimNetExtensions.InitNopRetExtension.html
+Enhancer.ILSimNetExtensions.InitRemoveCurrSchedObjExtension.html
+Enhancer.ILSimNetExtensions.InitRestoreLocalVarExtension.html
+Enhancer.ILSimNetExtensions.InitStoreLocalVarExtension.html
+Enhancer.ILSimNetExtensions.InitStoreParamsExtension.html
+Enhancer.ILSimNetExtensions.InitStoreWaitLabelExtension.html
+Enhancer.ILSimNetExtensions.SetLabels.html
+Enhancer.ILSimNetExtensions.StoreWaitLabelExt.html
+Generating HTML content file...
+transform the HHC contents file into html
+Compiling HTML Help file...
+Compiling Html Help file
+Microsoft HTML Help Compiler 4.74.8702
+
+Compiling c:\Studium\Projekte\Enhancer\doc\ndoc_msdn_temp\Enhancer.chm
+
+
+Compile time: 0 minutes, 3 seconds
+79	Topics
+478	Local links
+369	Internet links
+3	Graphics
+
+
+Created c:\Studium\Projekte\Enhancer\doc\ndoc_msdn_temp\Enhancer.chm, 69,587 bytes
+Compression decreased file by 280,253 bytes.
+
+Html Help compile complete
+Writing documentation to output path
+Done.

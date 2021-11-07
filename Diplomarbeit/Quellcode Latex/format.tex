@@ -1,0 +1,612 @@
+%% fleqn -> alle Formeln linksbündig
+%% oneside -> einseitig, wichtig für Kopf- und Fusszeilen
+%% smallheadings -> Überschriften sind nicht riesen groß, sondern ca. 2 größer als section-Überschriften
+%\documentclass[listof=totoc,12pt,a4paper,twoside,idxtotoc,normalheadings,bibtotoc]{scrreprt}
+\documentclass[listof=totoc,12pt,a4paper,twoside,idxtotoc,normalheadings,bibtotoc,open=left]{scrbook}
+\listfiles
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Formate für die Seitendarstellung der gesamten Arbeit
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Anpassen des Seitenlayouts
+\usepackage{geometry}
+%% nach HTW-Layoutanforderung
+\geometry{verbose,a4paper,tmargin=3cm,bmargin=3cm,lmargin=35mm,rmargin=2cm}
+%% Um z.B. eine Seite im Querformat darzustellen
+\usepackage{lscape}
+%% leere letzte Seite
+\usepackage{lastpage}
+%% Elemente auch fest positionieren 
+\usepackage{float}
+\usepackage{floatflt}
+\usepackage{wrapfig} % Alternative zu floatflt
+\usepackage{picins} % Alternative zu floatflt und wrapfig
+%\usepackage{nonfloat}
+%% Befehl, damit alle Float-Elemente bis zu dem Punkt positioniert werden -> \FloatBarrier
+\usepackage{placeins}
+
+%% Abstand zwischen Abschnitten und Zeilen
+\setlength{\parindent}{0ex} %% Einzug erste Zeile neues Kapitel bzw. Absatz
+\setlength{\parskip}{2.0ex plus 0.9ex minus 0.4ex} %% Lücke zwischen 2 Absätzen
+%% Zeilenabstand
+% Variante 1 -> linespread
+%\linespread{1.3} %% 1,3*1,2 = 1,56fach ---> vielleicht am Besten!
+% Variante 2 -> onehalfspacing
+\usepackage{setspace}
+\onehalfspacing
+
+
+
+
+%% Hurenkinder / Schusterjungen
+\clubpenalty = 10000
+\widowpenalty = 10000 \displaywidowpenalty = 10000
+
+%Sorgt beim Dokumenttyp book dafür, daß kein Ausgleich des unteren Seitenrandes durch Dehnung der Absatzabstände durchgeführt wird. \raggedbottom ist bei den Dokumenttypen article, report und letter bereits voreingestellt. 
+\raggedbottom
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Tabellen
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Überlange Tabellen
+% http://www.ctan.org/tex-archive/macros/latex/contrib/xcolor/
+\usepackage[table]{xcolor}
+\usepackage{longtable}
+\usepackage{array}
+
+%% Mehrere Zeilen zusammenfassen
+\usepackage{multirow}
+%% Farbige Tabellenzellen
+\usepackage{colortab}
+\usepackage{colortbl}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Schriftarten
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Zeilenabstand
+\renewcommand{\baselinestretch}{1.2}\normalsize
+
+%% Use T1-fontencoding, u.a. um Schrift auf Bildschirm gut anzuzeigen
+\usepackage[T1]{fontenc}  % T1-Font
+%% Latin1 Codepage, u.a. für Umlaute
+%\usepackage[latin1]{inputenc}  % Latin
+\usepackage[ansinew]{inputenc}  % ANSI
+% Damit erscheinen Umlaute auch wirklich als Umlaute im PDF
+\usepackage{ae}
+%% A package to use PostScript Times Roman as the default font.
+%%\usepackage{times}\usepackage{mathptmx}
+%% Verbatim-Umgebung
+%\usepackage{verbatim}
+%% Einbinden der Ding-Sonderzeichen
+\usepackage{pifont}
+\usepackage{textcomp}
+%% Sonderzeichen & Mathe
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{wasysym} 
+%%\usepackage{marvosym}
+%% Euro-Zeichen
+\usepackage{eurosym}
+%% Anderer Pfeil für Listen
+\renewcommand{\labelitemi}{\ding{226}}
+
+%% Erweiterung der Listen
+\usepackage{enumitem}
+\usepackage{expdlist}
+
+\newcommand{\pro}{\ensuremath{+}}
+\newcommand{\contra}{\ensuremath{-}}
+\newcommand{\procon}{\ensuremath{+-}}
+%\renewcommand{\labelitemii}{\ding{218}}
+
+%\setlength{\labelsep}{5cm}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Regionale Anpassungen
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% für deutsche Silbentrennung
+%\usepackage{ngerman}
+%% Multilanguage Support for LaTeX, oder hier mit Umlauten...
+\usepackage[ngerman]{babel}
+%% Anführungszeichen
+%% sorgt dafür, daß es einheitlich ist
+\usepackage[babel,german=quotes]{csquotes}
+\usepackage[ngerman]{translator}
+
+%\usepackage[babel,german=quotes]{csquotes} % Deutsche
+%\usepackage[babel,german=swiss]{csquotes} % Schweizer
+%\usepackage[babel,german=guillemets]{csquotes} % Französische
+%\usepackage[babel,english=american]{csquotes} % Amerikanische
+%\usepackage[babel,english=british]{csquotes} % Englische
+%Demo Hallo \enquote{World}!
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Inhaltsverzeichnis, Titelseite
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% zum Verändern der Verzeichnisse Inhalt, Abbildung, Tabellen
+\usepackage{titletoc}
+
+%% Index, TableOfContents und TheBibliography mit ins Inhaltsverzeichnis aufnehmen
+%\usepackage[nottoc]{tocbibind}
+
+%% Im Inhaltsverzeichnis zwei Ebenen tiefer anzeigen, z.B. 3.4.1.1 ermöglichen
+% von \chapter an 3 Ebenen tiefer
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Abkürzungsverzeichnis
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage[intoc,german]{nomencl}
+%% Umbenennen
+%\renewcommand{\nomname}{Abk\"urzungsverzeichnis}
+
+%\let\abk\nomenclature
+%\setlength{\nomlabelwidth}{.20\hsize}
+%\renewcommand{\nomlabel}[1]{#1 \dotfill}
+%\setlength{\nomitemsep}{-\parsep}
+%\makenomenclature
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Glossar
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Glossary für Glossare (veraltet)
+%\usepackage[cols=3,toc=true,header=plain,style=super]{glossary}
+%\renewcommand{\glossaryname}{Glossar}
+%\renewcommand{\entryname}{Begriff}
+%\renewcommand{\descriptionname}{Beschreibung}
+%\makeglossary
+
+\usepackage[
+toc,
+nonumberlist, %keine Seitenzahlen anzeigen
+acronym,      %ein Abkürzungsverzeichnis erstellen
+toc,          %Einträge im Inhaltsverzeichnis
+section]      %im Inhaltsverzeichnis auf section-Ebene erscheinen
+{glossaries}
+
+
+%Den Punkt am Ende jeder Beschreibung deaktivieren
+\renewcommand*{\glspostdescription}{}
+
+
+
+%Glossar-Befehle anschalten
+\makeglossaries
+
+%Diese Befehle sortieren die Einträge in den
+%einzelnen Listen:
+%makeindex -s datei.ist -t datei.alg -o datei.acr datei.acn
+%makeindex -s datei.ist -t datei.glg -o datei.gls datei.glo
+%makeindex -s datei.ist -t datei.slg -o datei.syi datei.syg
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Index
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% .idx-Datei erstellen für Sachregister
+\usepackage{makeidx}
+
+%% Aufforderung zum Suchen der Index-Begriffe
+\makeindex
+%% Umbenennung von Index zu Stichwortverzeichnis (u.a. wichtig für Seitentitel)
+\renewcommand{\indexname}{Stichwortverzeichnis}
+% einzelne Seite kursiv und fett, neue Befehle: idxbf / idxit
+\newcommand{\idxit}[1]{{\it #1}} 
+%% \newcommand{\idxit}[1]{\it{#1}} - funkt nicht sauber
+\newcommand{\idxbf}[1]{{\bf #1}}
+% anstelle siehe, nur s.
+\renewcommand{\seename}{s.}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Fußnoten
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Speichern von Fußnotennummern
+\usepackage{savefnmark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Zitate / Literaturverzeichnis
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Festlegung Art der Zitierung - Havardmethode: Abkuerzung Autor + Jahr
+%\bibliographystyle{alphadin}
+% fuer Zitate
+%\usepackage[round]{natbib}
+%\bibpunct{[}{]}{;}{}{}{,}
+
+%% Biblatex
+\usepackage[backend=biber,style=alphabetic-verb]{biblatex} %Zitierpacket laden, Stil lässt sich über "style" bestimmen
+
+\bibliography{verzeichniss}
+	
+	
+%Alle Bücher werden eingebunden
+%\nocite{*}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Listings (Code) nativ darstellen
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{listings}
+
+\lstloadlanguages{[Sharp]C}
+
+
+
+
+
+
+\renewcommand{\lstlistlistingname}{Auflistungen}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[font=small,labelfont=bf,format=hang]{caption}
+% ,justification=RaggedRight -> geht ni
+%% später änderbar mit \captionsetup
+%% Überschrift für Tabellen, funktioniert aber nicht,
+%% darum \caption vor \tabular für jede Tabelle einzeln
+\captionsetup[table]{position=above,belowskip=5pt,aboveskip=5pt}
+\captionsetup[figure]{position=below,belowskip=5pt,aboveskip=5pt}
+\usepackage{tabularx}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Kopf- und Fusszeilen
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Kopf- und Fusszeilen mit KOMA
+\usepackage[automark,headsepline,nouppercase]{scrpage2}
+%% Abstand der Kapitelüberschrift von der Kopfzeile
+\renewcommand*{\chapterheadstartvskip}{\vspace*{-\topskip}}
+%% auch bei Kapitelüberschriften Kopfzeile anwenden
+\renewcommand*{\chapterpagestyle}{scrheadings}
+\renewcommand*{\indexpagestyle}{scrheadings}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Kopfzeilen anpassen (package scrpage2)
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% KOMA-Skript Kopfzeilen auf den Seiten
+\pagestyle{scrheadings}
+%% automatisch Kapitelüberschriften (Kolumnentitel) in Kopfzeile aktualisieren
+\automark[section]{chapter}
+%% alle Felder beider Seitenstile auf leere Inhalte setzen
+\clearscrheadfoot
+%% linke Kopfzeile (bei 2seitig --> Book)
+\rohead{\headmark}{\headmark}
+%% rechte Kopfzeile - Überschrift ausgeben
+\lehead[\headmark]{\headmark}
+%durch Angabe des optionalen Parameters ändert man scrplain mit!
+%% rechte Fusszeile - Seitenzahl (\thepage)
+\ofoot[\pagemark]{\pagemark}
+%% Kopfzeilentext + Linie: Verschiebung vom linken Rand weg, Breite der Kopfzeile
+\setheadwidth[0pt]{text}
+%% Stärke der Trennlinie zum Text
+\setheadsepline{.4pt}
+%% Schriftgröße der Kopfzeile kleiner machen (10) -> bringt Warnung
+\setkomafont{pagehead}{\small}
+%\setkomafont{pagefoot}{\normalsize}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Überschriften formatieren
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand*{\theparagraph}{\thesubsubsection.\arabic{paragraph}}
+
+\usepackage[clearempty]{titlesec} % weiß nicht, was clearempty macht
+  \titleformat{\chapter}%
+    {\normalfont\Large\bfseries}% \Large sollte Größe 16 sein, relativ zu Normal (12)
+    {\thechapter}%
+    {1em}% Abstand Nummerierung zum Überschriftstext
+    {}%
+    %% Chapter-Überschrift ein Stück weiter unten als Section-Überschriften oder 
+    %% restlicher Text --> 2. Klammernpaar
+    %\titlespacing{\chaptaer}{0pt}{*0}{*5}
+    \titlespacing{\chapter}{0pt}{-1.5em}{*5}
+    %% {Einzug (Abstand zum linken Rand)} / 
+    %% {Abstand zur Kopfzeile als Multiplikator zu ? bzw. als explizite Angabe} / 
+    %% {Abstand Überschrift zum folgenden Text}
+  \titleformat{\section}%
+    {\normalfont\large\bfseries}% \large sollte Größe 14 sein
+    {\thesection}%
+    {1em}%
+    {}%
+  \titleformat{\subsection}%
+    {\normalfont\normalsize\bfseries}%
+    {\thesubsection}%
+    {1em}%
+    {}%
+	\titleformat{\subsubsection}%
+    {\normalfont\small\bfseries}%
+    {\thesubsubsection}%
+    {1em}%
+    {}%
+  \titleformat{\paragraph}% ohne [runin] steht paragraph-Text extra mit Leerzeile
+  	%% zum Folgetext
+    {\normalfont\small\itshape}%
+    {\theparagraph}%
+    {1em}%
+    {}%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PDF-Generierung
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{pdfpages}
+\usepackage{pst-pdf}
+\usepackage{pstricks, pst-node, pst-plot, pst-math, pst-optic, pst-lens, pst-text, pst-xkey, pstricks-add}
+\usepackage{ifpdf}
+\ifpdf
+%		\usepackage[pdftex]{graphicx}
+%		\DeclareGraphicsExtensions{.eps,.jpg,.png,.pdf}
+		\usepackage[
+			pdftex=true
+			,hyperfigures=true
+			,backref=false
+			,hyperindex=true
+			,bookmarksnumbered=true
+			,bookmarksopen=true
+			,colorlinks=true
+			,citecolor=black
+			,linkcolor=black
+			,urlcolor=black
+			,filecolor=magenta
+			,pdfborder={0 0 0}
+			,pdfstartview=FitH
+			,plainpages=false
+			]{hyperref}
+		\pdfinfo{
+			/Title (Diplomarbeit)
+			/Subject (Titel)
+			/Author (Martin Domnick)
+			/Keywords ()
+		}		
+		\else
+%			\usepackage[dvips]{graphicx}
+%			\DeclareGraphicsExtensions{.png,.eps,.gz}
+			\usepackage[
+				hypertex=true
+				,hyperref=true
+				%,hyperfigures=true
+				,backref=true
+				,hyperindex=true
+				,bookmarksnumbered=true
+				,colorlinks=true
+				,linkcolor=blue
+				,urlcolor=blue
+				,filecolor=magenta
+				,german
+			]{hyperref}
+\fi
+
+%% Gesataltung von Hyperlinks
+%\package{url}
+\urlstyle{same}
+
+\def\UrlFont{\em}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Sonstige Klassen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Befehle wiederholbar
+\usepackage{multido}
+%% Drehung von einzelnen Objekten
+\usepackage{rotating}
+
+
+%% ????
+\makeatletter
+  \renewenvironment{itemize}{\begin{list}{\csname\itemitem\endcsname}{
+ \advance\@itemdepth 1 \edef\itemitem{labelitem\romannumeral\the\@itemdepth}
+ \labelwidth 1em \itemindent 0em \leftmargin 2em \rightmargin 1em
+ \parsep 0pt \itemsep 1pt plus 0.5pt minus 0.5pt
+ \topsep 0pt minus 3.5pt \partopsep 0pt  minus 1.5pt}}{\end{list}} 
+\makeatother 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Spezielle Ergänzungen für PS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Farben für PSforPDF definieren
+\usepackage{color}
+
+
+\definecolor{hellgrau}{gray}{0.85}
+\definecolor{dunkelgrau}{gray}{0.4}
+\definecolor{orange}{rgb}{1.,0.65,0}
+\definecolor{dunkelgruen}{rgb}{0,0.5,0}
+\definecolor{dunkelblau}{rgb}{0,0,0.5}
+\definecolor{dunkelrot}{rgb}{0.5,0.0,0.0}
+\definecolor{hellrot}{rgb}{1.0,0.5,0.5}
+\definecolor{hellblau}{rgb}{0.25,0.25,1}
+\definecolor{hellgruen}{rgb}{0.25,1,0.25}
+\definecolor{schwarz}{rgb}{0,0,0}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Eigene Boxen definieren
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%% Eigenen Boxtyp Box definiert
+\makeatletter
+\def\RPBox{\pst@object{RPBox}}
+\def\RPBox@i#1#2#3{{%
+\use@par                        % Local parameters
+\if@star\solid@star\fi          % Stared version
+\pssetlength{\pst@dimc}{-\psframesep}
+\psaddtolength{\pst@dimc}{-\psframesep}
+\psaddtolength{\pst@dimc}{-\pslinewidth}
+\psaddtolength{\pst@dimc}{-\pslinewidth}
+\pssetlength{\pst@dima}{#1}
+\psaddtolength{\pst@dima}{\pst@dimc}
+\pssetlength{\pst@dimb}{#2}
+\psaddtolength{\pst@dimb}{\pst@dimc}
+\setbox\z@\vbox to\pst@dimb{\hsize\pst@dima\sloppy\vfil\scriptsize{\begin{center}#3\end{center}}\vfil}%
+%\psset{shadow=true}\psframebox{\box\z@}\psset{shadow=false}}}
+\psframebox{\box\z@}}}
+\makeatother
+
+%% Eigenen Boxtyp Box definiert
+\makeatletter
+\def\RPBoxB{\pst@object{RPBoxB}}
+\def\RPBoxB@i#1#2#3{{%
+\use@par                        % Local parameters
+\if@star\solid@star\fi          % Stared version
+\pssetlength{\pst@dimc}{-\psframesep}
+\psaddtolength{\pst@dimc}{-\psframesep}
+\psaddtolength{\pst@dimc}{-\pslinewidth}
+\psaddtolength{\pst@dimc}{-\pslinewidth}
+\pssetlength{\pst@dima}{#1}
+\psaddtolength{\pst@dima}{\pst@dimc}
+\pssetlength{\pst@dimb}{#2}
+\psaddtolength{\pst@dimb}{\pst@dimc}
+\setbox\z@\vbox to\pst@dimb{\hsize\pst@dima\sloppy\vfil\scriptsize{\begin{center}#3\end{center}}\vfil}%
+\psset{shadow=true}\psframebox{\box\z@}\psset{shadow=false}}}
+%\psframebox{\box\z@}}}
+\makeatother
+
+
+
+%% Eigenen Boxtyp DiaBox definiert
+\makeatletter
+\def\RPDiaBox{\pst@object{RPDiaBox}}
+\def\RPDiaBox@i#1#2#3{{%
+\use@par                        % Local parameters
+\if@star\solid@star\fi          % Stared version
+\pssetlength{\pst@dimc}{-\psframesep}
+\psaddtolength{\pst@dimc}{-\psframesep}
+\psaddtolength{\pst@dimc}{-\pslinewidth}
+\psaddtolength{\pst@dimc}{-\pslinewidth}
+\pssetlength{\pst@dima}{#1}
+\psaddtolength{\pst@dima}{\pst@dimc}
+\pssetlength{\pst@dimb}{#2}
+\psaddtolength{\pst@dimb}{\pst@dimc}
+\setbox\z@\vbox to\pst@dimb{\hsize\pst@dima\sloppy\vfil\scriptsize{\begin{center}#3\end{center}}\vfil}%
+\psdiabox{\box\z@}}}
+\makeatother
+
+%% Eigenen Boxtyp Fpnfeck definiert
+\makeatletter
+\def\PSPentBox{\pst@object{PSPentBox}}
+\def\PSPentBox@i#1#2{{%
+\use@par                        % Local parameters
+\if@star\solid@star\fi          % Stared version
+\pssetlength{\pst@dimc}{-\psframesep}
+\psaddtolength{\pst@dimc}{-\psframesep}
+\psaddtolength{\pst@dimc}{-\pslinewidth}
+\psaddtolength{\pst@dimc}{-\pslinewidth}
+\pssetlength{\pst@dima}{#1}
+\psaddtolength{\pst@dima}{\pst@dimc}
+\pssetlength{\pst@dimb}{#1}
+\psaddtolength{\pst@dimb}{\pst@dimc}
+\setbox\z@\vbox to\pst@dimb{\hsize\pst@dima\sloppy\vfil\scriptsize{\begin{center}#2\end{center}}\vfil}%
+\pscustom{
+	\psline(0.79385\pst@dima,0.0955\pst@dima)
+				(0.20615\pst@dima,0.0955\pst@dima)
+				(0.02445\pst@dima,0.6545\pst@dima)
+				(0.5\pst@dima,\pst@dima)%
+				(0.97555\pst@dima,0.6545\pst@dima)
+				(0.79385\pst@dima,0.0955\pst@dima)
+				(0.20615\pst@dima,0.0955\pst@dima)
+}{\box\z@}a
+}}
+\makeatother
+
+
+%% Abkürzungsverzeicnis - Punkte
+
+%\makeatletter% --> De-TeX-FAQ
+%\renewcommand*{\lstlistoflistings}{%
+%  \begingroup
+%    \if@twocolumn
+%      \@restonecoltrue\onecolumn
+%    \else
+%      \@restonecolfalse
+%    \fi
+%    \lol@heading
+%    \setlength{\parskip}{\z@}%
+%    \setlength{\parindent}{\z@}%
+%    \setlength{\parfillskip}{\z@ \@plus 1fil}%
+%    \@starttoc{lol}%
+%    \if@restonecol\twocolumn\fi
+%  \endgroup
+%}
+%\makeatother% --> \makeatletter
+
+
+%\newcommand{\kommentar}[1]{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Silbentrennung
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\hyphenation{End-an-wen-der}
+
+\setkomafont{sectioning}{\normalfont\bfseries}
+\setkomafont{captionlabel}{\normalfont\bfseries}
+\setkomafont{pagehead}{\normalfont\itshape}
+\setkomafont{descriptionlabel}{\normalfont\bfseries}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Bilder
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Anhang
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{appendix}
+%\renewcommand\appendix{\par
+%  \setcounter{chapter}{0}%
+%  \setcounter{section}{0}%
+%  \gdef\@chapapp{\appendixname}%
+%  \gdef\thechapter{\@Alph\c@chapter}}
+
+%% Quellcode
+
+%% Copyrights, Marken, etc...
+
+\def\TReg{\textsuperscript{\textregistered}}
+\def\TCop{\textsuperscript{\textcopyright}}
+\def\TTra{\textsuperscript{\texttrademark}}
+
+

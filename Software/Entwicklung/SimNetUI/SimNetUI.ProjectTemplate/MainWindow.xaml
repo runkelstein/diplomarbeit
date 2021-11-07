@@ -1,0 +1,16 @@
+﻿<Window x:Class="$safeprojectname$.$safeitemname$"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Discrete Event Simulation" Height="600" Width="800"  xmlns:my="SimNetUI"
+        
+        >
+
+    <my:SimulationContainer Name="simulation1">
+        <Button Content="{Binding RelativeSource={RelativeSource self},Path=Command.Text}" Command="MediaCommands.Play" CommandTarget="{Binding ElementName=simulation1}" Canvas.Left="12" Canvas.Top="12" Height="23" HorizontalAlignment="Left" Name="button1" VerticalAlignment="Top" Width="83" />
+        <Button Content="{Binding RelativeSource={RelativeSource self},Path=Command.Text}" Command="MediaCommands.Stop" CommandTarget="{Binding ElementName=simulation1}" Canvas.Left="101" Canvas.Top="12"  Height="23" HorizontalAlignment="Left" Name="button2" VerticalAlignment="Top" Width="75" />
+        <TextBlock Canvas.Left="563" Canvas.Top="12" Height="23" Text="Simulationszeit:" Width="90" />
+        <Slider Canvas.Left="182" Canvas.Top="12" Height="23" Name="slider1" Width="260" Value="{Binding Path=AnimationClockSpeed, ElementName=simulation1}" TickFrequency="1" Maximum="25" />
+        <TextBlock Canvas.Left="462" Canvas.Top="12" Height="23" Name="textBlock5" Text="{Binding ElementName=simulation1, Path=AnimationClockSpeed}" Width="61" TextAlignment="Center" />
+        <TextBlock Canvas.Left="645" Canvas.Top="12" Height="18" HorizontalAlignment="Left" Name="textBlock10" Text="{Binding ElementName=simulation1, Path=SimulationTime,StringFormat={}{0:0.0000}}" TextAlignment="Center" VerticalAlignment="Top" Width="78" />
+    </my:SimulationContainer>
+</Window>

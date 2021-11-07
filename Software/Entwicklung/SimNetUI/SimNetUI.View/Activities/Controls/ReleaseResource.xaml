@@ -1,0 +1,84 @@
+﻿<base:ActivityRouteBase x:Class="SimNetUI.Activities.Controls.ReleaseResource"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:base="clr-namespace:SimNetUI.Activities.Base"
+                   xmlns:con="clr-namespace:SimNetUI.Activities.ControlParts.Connection" mc:Ignorable="d"
+                   DataContext="{Binding RelativeSource={RelativeSource Self}}" ToolTipService.ShowDuration="120000">
+  <base:ActivityRouteBase.Resources>
+    <ResourceDictionary Source="Themes\Generic.xaml" />
+  </base:ActivityRouteBase.Resources>
+  <base:ActivityRouteBase.VisualAppearanceTemplate>
+        <Border BorderBrush="Black" Height="36" Width="36" BorderThickness="2">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Offset="0" Color="Goldenrod" />
+                    <GradientStop Offset="0.3" Color="Goldenrod" />
+                    <GradientStop Offset="1" Color="White" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="22"
+                   Text="RR" FontStretch="ExtraExpanded" Width="28" Height="32" />
+        </Border>
+    </base:ActivityRouteBase.VisualAppearanceTemplate>
+        
+   <base:ActivityRouteBase.Content>
+
+    <Grid>
+
+      <Grid.RowDefinitions>
+        <RowDefinition Height="10" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="10" />
+      </Grid.RowDefinitions>
+
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="10" />
+        <ColumnDefinition Width="*"  />
+        <ColumnDefinition Width="10" />
+      </Grid.ColumnDefinitions>
+
+      <ContentPresenter Grid.Row="1" Grid.Column="1" Content="{Binding VisualAppearanceTemplate}" />
+
+
+      <con:InConnector x:Name="In" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"
+                       VerticalAlignment="Center" />
+      <con:OutConnector x:Name="Out" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"
+                        VerticalAlignment="Center" />
+
+    </Grid>
+  </base:ActivityRouteBase.Content>
+
+  <base:ActivityRouteBase.ToolTip>
+    <ToolTip Style="{StaticResource ToolTipStyle}">
+
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="120" />
+          <ColumnDefinition Width="60" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+          <RowDefinition />
+          <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Entities processed:" />
+        <TextBlock Grid.Column="1" Grid.Row="0"
+                   Text="{Binding 
+                            Mode=OneWay,
+                            Path=Statistics.ProcessedEntities
+                          }" />
+
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Resources released:" />
+        <TextBlock Grid.Column="1" Grid.Row="1"
+                   Text="{Binding 
+                            Mode=OneWay,
+                            Path=Statistics.ReleasedResources
+                          }" />
+
+      </Grid>
+    </ToolTip>
+  </base:ActivityRouteBase.ToolTip>
+
+</base:ActivityRouteBase>

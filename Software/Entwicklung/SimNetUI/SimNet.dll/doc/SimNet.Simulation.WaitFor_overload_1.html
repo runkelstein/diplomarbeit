@@ -1,0 +1,64 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+    </meta>
+    <meta name="generator" content="NDoc 1.3" />
+    <title>Simulation.WaitFor Method (TellMethod, Double, Double, Object[], Boolean)</title>
+    <link rel="stylesheet" type="text/css" href="ndoc.css">
+    </link>
+    <script src="ndoc.js" type="text/javascript">
+    </script>
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <INPUT class="userDataStyle" id="userDataCache" type="hidden" />
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead" nowrap="true">Dokumentation SimNet - Bibliothek</td>
+            <td class="product" nowrap="true">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">Simulation.WaitFor Method (TellMethod, Double, Double, Object[], Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> WaitFor bedeutet, das das aktuelle Objekt seine Arbeit suspendiert und solange wartet bis die aufgerufene Methode tm (in diesem Fall eine Tell-Methode) beendet ist. </p>
+<PRE class="syntax"><SPAN class="lang">[Visual Basic]
+</SPAN><b>Shared  OverloadsPublic Sub WaitFor( _ 
+   ByVal <i>tm</i> As <a href="SimNet.TellMethod.html">TellMethod</a>, _ 
+   ByVal <i>t</i> As <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemDoubleClassTopic.asp">Double</a>, _ 
+   ByVal <i>priority</i> As <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemDoubleClassTopic.asp">Double</a>, _ 
+   ByVal <i>list</i> As <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemObjectClassTopic.asp">Object()</a>, _ 
+   ByRef <i>interrupt</i> As <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemBooleanClassTopic.asp">Boolean</a> _ 
+)
+</b><SPAN class="lang">[C#]
+</SPAN><b>public static <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemVoidClassTopic.asp">void</a> WaitFor(
+   <a href="SimNet.TellMethod.html">TellMethod</a> <i>tm</i>,
+   <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemDoubleClassTopic.asp">double</a> <i>t</i>,
+   <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemDoubleClassTopic.asp">double</a> <i>priority</i>,
+   <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemObjectClassTopic.asp">object[]</a> <i>list</i>,
+   ref <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemBooleanClassTopic.asp">bool</a> <i>interrupt</i>
+);
+</b><SPAN class="lang">[C++]
+</SPAN><b>public: static <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemVoidClassTopic.asp">void</a> WaitFor(
+   <a href="SimNet.TellMethod.html">TellMethod*</a> <i>tm</i>,
+   <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemDoubleClassTopic.asp">double</a> <i>t</i>,
+   <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemDoubleClassTopic.asp">double</a> <i>priority</i>,
+   <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemObjectClassTopic.asp">Object*</a> <i>list</i> __gc[],
+   * <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemBooleanClassTopic.asp">bool</a> <i>interrupt</i>
+);
+</b><SPAN class="lang">[JScript]
+</SPAN><b>public static function WaitFor(
+   <a href="SimNet.TellMethod.html">TellMethod</a> <i>tm</i>,
+   <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemDoubleClassTopic.asp">double</a> <i>t</i>,
+   <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemDoubleClassTopic.asp">double</a> <i>priority</i>,
+   <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemObjectClassTopic.asp">Object[]</a> <i>list</i>,
+   <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfSystemBooleanClassTopic.asp">bool</a> <i>interrupt</i>
+);
+</b></PRE><h4 class="dtH4">Parameters</h4><dl><dt><i>tm</i></dt><dd>Tell-Methode, die ausgeführt und auf die gewartet wird</dd><dt><i>t</i></dt><dd>Zeit t. Hiermit soll es möglich sein, das die aufgerufene Methode erst zu einem späteren Zeitpunkt gestartet wird.</dd><dt><i>priority</i></dt><dd>Priorität der Methode</dd><dt><i>list</i></dt><dd>Parameter der Tell-Methode</dd><dt><i>interrupt</i></dt><dd>Interrupt, wenn aufrufende Methode während Warten unterbrochen wird. Zur Auswertung muss nach dem Wait eine IF-Anweisung folgen.</dd></dl><h4 class="dtH4">See Also</h4><p><a href="SimNet.Simulation.html">Simulation Class</a> | <a href="SimNet.html">SimNet Namespace</a> | <a href="SimNet.Simulation.WaitFor_overloads.html">Simulation.WaitFor Overload List</a></p><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;"><param name="Keyword" value="WaitFor method"></param><param name="Keyword" value="WaitFor method, Simulation class"></param><param name="Keyword" value="Simulation.WaitFor method"></param></object><DIV CLASS="footer"><p><center><font color="red"><i></i></font></center></p></DIV><hr /><div id="footer"><p><a>(c) 2005 Torsten Wondrak</a></p><p></p></div></div>
+  </body>
+</html>
